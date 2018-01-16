@@ -18,14 +18,7 @@ Lumen::App.controllers do
         @conversations = @conversations.where(:id.in => conversation_posts.pluck(:conversation_id))
       end
     end    
-    @conversations = @conversations.order_by('pinned desc, updated_at desc').per_page(Config['WALL_STYLE_CONVERSATIONS'] ? 5 : 10).page(params[:page])
-    if current_account and Config['WALL_STYLE_CONVERSATIONS']
-      @conversations.each { |conversation|
-        conversation.visible_conversation_posts.each { |conversation_post|
-          conversation_post.conversation_post_read_receipts.create(account: current_account, web: true)
-        }
-      }
-    end      
+    @conversations = @conversations.order_by('pinned desc, updated_at desc').per_page(Config['WALL_STYLE_CONVERSATIONS'] ? 5 : 10).page(params[:page])      
     if request.xhr?
       partial :'conversations/conversations'
     else
@@ -228,28 +221,12 @@ Lumen::App.controllers do
     flash[:notice] = "The conversation was unmuted."
     redirect "/conversations/#{@conversation.slug}"
   end      
-    
-  get '/conversation_post_bccs/:id/read', :provides => :gif do
-    @conversation_post_bcc = ConversationPostBcc.find(params[:id]) || not_found
-    @conversation_post_bcc.read_receipt!
-    File.open("#{Padrino.root}/app/assets/images/pixel.gif", "r").read
-  end
-  
+      
   get '/conversation_posts/:id' do
     @conversation_post = ConversationPost.find(params[:id]) || not_found
     redirect "/conversations/#{@conversation_post.conversation.slug}#conversation-post-#{@conversation_post.id}"
   end  
-  
-  get '/conversation_posts/:id/read_receipts' do
-    sign_in_required!
-    @conversation_post = ConversationPost.find(params[:id])    
-    redirect "/conversations/#{@conversation_post.conversation.slug}#conversation-post-#{@conversation_post.id}" unless request.xhr?    
-    @accounts = Account.where(:id.in => @conversation_post.conversation_post_read_receipts.pluck(:account_id))
-    @accounts = @accounts.order(:name.asc).per_page(params[:per_page] || 50).page(params[:page])
-    @title = "People who read this"
-    partial :'accounts/results_compact', :layout => 'modal'
-  end
-    
+       
   get '/conversation_posts/:id/resend' do
     sign_in_required!
     @conversation_post = ConversationPost.find(params[:id])

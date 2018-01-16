@@ -18,7 +18,6 @@ class ConversationPost
   
   has_many :conversation_post_bccs, :dependent => :destroy
   has_many :conversation_post_bcc_recipients, :dependent => :destroy
-  has_many :conversation_post_read_receipts, :dependent => :destroy
   
   if Config['BCC_SINGLE']
     def conversation_post_bcc
@@ -57,8 +56,7 @@ class ConversationPost
       :link_description => :text_area,
       :link_picture => :text,
       :link_player => :text,      
-      :conversation_post_bccs => :collection,
-      :conversation_post_read_receipts => :collection      
+      :conversation_post_bccs => :collection
     }
   end
   
@@ -163,53 +161,5 @@ class ConversationPost
   def bcc_single    
     conversation_post_bccs.create(accounts: accounts_to_notify)
   end  
-  
-  def bcc_each
-    conversation_post = self
-        
-    array = conversation_post.accounts_to_notify
-    return if array.length == 0
-    
-    no_of_threads = Config['BCC_EACH_THREADS'] || 10
-    
-    slice_size = (array.length/Float(no_of_threads)).ceil
-    slices = array.each_slice(slice_size).to_a
-    puts "splitting into #{slices.length} groups of #{slices.map(&:length).join(', ')}"
-    threads = []
-
-    slices.each_with_index { |slice, i|
-      threads << Thread.new(slice, i) do |slice, i|
-        slice.each { |account|
-          begin
-            conversation_post.conversation_post_bccs.create(accounts: [account])
-          rescue => e
-            Airbrake.notify(e)
-          end
-        }      
-      end
-    }
-    threads.each { |thread| thread.join }  
-  end
-  
-  def self.check_for_missing_bccs_and_message_ids(since: 1.hour.ago)
-    ConversationPost.where(:created_at.gt => since).each { |conversation_post|
-      if conversation_post.conversation_post_bccs.empty?
-        begin
-          raise (r = "no bccs: #{conversation_post.conversation.subject} #{conversation_post.id}")
-        rescue => e
-          puts r
-          Airbrake.notify(e)
-        end      
-      end
-      if conversation_post.conversation_post_bccs.where(message_id: nil).count > 0
-        begin
-          raise (r = "bcc with no message_id: #{conversation_post.conversation.subject} #{conversation_post.id}")
-        rescue => e
-          puts r
-          Airbrake.notify(e)
-        end        
-      end
-    }    
-  end  
-  
+   
 end

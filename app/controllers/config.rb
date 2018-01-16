@@ -80,7 +80,6 @@ Lumen::App.controllers do
             
       :BCC_SINGLE => ['Send single BCC to conversation post subscribers'],
       :BCC_SINGLE_JOB => ['Handle single BCCs in the background'],      
-      :BCC_EACH_THREADS => 'Number of threads to use when sending individual BCCs (default 10)',
       :INCLUDE_SENDER_PROFILE => ['Include sender profile in conversation post emails'],
       
       :SSL => ['Site served via SSL'],

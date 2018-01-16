@@ -25,19 +25,7 @@ class ConversationPostBcc
       :conversation_post_bcc_recipients => :collection
     }
   end
-  
-  if !Config['BCC_SINGLE']
-    def conversation_post_bcc_recipient
-      conversation_post_bcc_recipients.first
-    end
-  end
-  
-  def read_receipt!
-    if !Config['BCC_SINGLE']
-      conversation_post.conversation_post_read_receipts.create(account: self.conversation_post_bcc_recipient.try(:account))
-    end
-  end
-
+    
   attr_accessor :accounts
   before_validation do    
     self.conversation = self.conversation_post.conversation if self.conversation_post

@@ -48,7 +48,6 @@ Lumen::App.controllers do
         group.conversations.where(:created_at.gte => @from).where(:created_at.lte => @to).count,
         group.conversation_posts.where(:created_at.gte => @from).where(:created_at.lte => @to).count,
         b = group.conversation_post_bccs.where(:created_at.gte => @from).where(:created_at.lte => @to).count,
-        if !Config['BCC_SINGLE'] and b > 0; r = group.conversation_post_read_receipts.where(:web.ne => true).where(:created_at.gte => @from).where(:created_at.lte => @to).count; (r.to_f/b); end,
         d = group.conversation_posts.where(:created_at.gte => @from).where(:created_at.lte => @to).pluck(:account_id).uniq.count,
         if m2 > 0; (d.to_f/m2); end
       ]      

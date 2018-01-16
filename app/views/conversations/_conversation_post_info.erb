@@ -5,11 +5,6 @@
   &middot;
 <% end %>
 
-<% if !Config['BCC_SINGLE'] %>  
-  <a class="edit modal-trigger" href="/conversation_posts/<%=conversation_post.id%>/read_receipts"><%=pluralize(conversation_post.conversation_post_read_receipts.count,'person')%> read this</a>
-  &middot;  
-<% end %>
-
 <span class="conversation-post-like">
   <%= partial :'conversations/like', :locals => {:conversation_post => conversation_post} %>
 </span>
