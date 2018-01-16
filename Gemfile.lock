@@ -248,7 +248,7 @@ DEPENDENCIES
   activate-admin!
   activate-tools!
   activemodel (~> 4.2)
-  airbrake
+  airbrake (~> 5.0)
   bcrypt
   capybara
   countries

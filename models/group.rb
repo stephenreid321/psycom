@@ -103,7 +103,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   has_many :didyouknows, :dependent => :destroy
   has_many :venues, :dependent => :destroy
   has_many :docs, :dependent => :destroy
-  has_many :classifieds, :dependent => :destroy
   
   def tags
     conversations.where(subject: /(?:\s|^)(?:#(?!(?:\d+|\w+?_|_\w+?)(?:\s|$)))(\w+)(?=\s|$)/i).map(&:tags).flatten.uniq.sort

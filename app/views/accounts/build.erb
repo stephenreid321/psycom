@@ -61,26 +61,6 @@
     <%= partial :'accounts/tagships', :locals => {:f => f} %>
   <% end %>
 
-  <% if Config['SHOW_ACCOUNT_CLASSIFIEDS'] and group = Group.find_by(primary: true) and group.memberships.find_by(account: @account) %>
-    <style>
-      #account_classified_request, #account_classified_offer { height: 6em }
-    </style>
-    <script>
-      $(function () {
-        $('#account_classified_request').simplyCountable({
-          counter: '#classified-request-counter',
-          maxCount: <%= Config['MAX_CLASSIFIED_LENGTH'] || 150 %>
-        });
-          $('#account_classified_offer').simplyCountable({
-          counter: '#classified-offer-counter',
-          maxCount: <%= Config['MAX_CLASSIFIED_LENGTH'] || 150 %>
-              });            
-      })
-    </script>
-    <%= f.text_area_block :classified_request, tip: eval(f('tip-classified-request')), hint: %Q{<span id="classified-request-counter"></span>} %>
-    <%= f.text_area_block :classified_offer, tip: eval(f('tip-classified-offer')), hint: %Q{<span id="classified-offer-counter"></span>} %>
-  <% end %>
-
   <script>
     $(function () {
       $('div[data-group-type]').each(function () {
