@@ -18,7 +18,7 @@ Lumen::App.controllers do
         @conversations = @conversations.where(:id.in => conversation_posts.pluck(:conversation_id))
       end
     end    
-    @conversations = @conversations.order_by('pinned desc, updated_at desc').per_page(Config['WALL_STYLE_CONVERSATIONS'] ? 5 : 10).page(params[:page])      
+    @conversations = @conversations.order_by('pinned desc, updated_at desc').per_page(10).page(params[:page])      
     if request.xhr?
       partial :'conversations/conversations'
     else
@@ -68,7 +68,6 @@ Lumen::App.controllers do
   get '/conversations/:slug' do    
     @conversation = Conversation.find_by(slug: params[:slug]) || not_found
     @group = @conversation.group
-    redirect "/groups/#{@group.slug}/conversations?q=slug:#{params[:slug]}" if Config['WALL_STYLE_CONVERSATIONS']
     membership_required!(@group) unless @group.public?
     @membership = @group.memberships.find_by(account: current_account)
     if @conversation.hidden

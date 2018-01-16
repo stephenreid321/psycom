@@ -119,9 +119,9 @@ class ConversationPost
     unless force
       return if conversation.hidden
     end
-    bcc_single
+    conversation_post_bccs.create(accounts: accounts_to_notify)
   end
-        
+             
   def replace_cids!
     self.body = body.gsub(/src="cid:(\S+)"/) { |match|
       begin
@@ -148,8 +148,4 @@ class ConversationPost
     self
   end
   
-  def bcc_single    
-    conversation_post_bccs.create(accounts: accounts_to_notify)
-  end  
-   
 end

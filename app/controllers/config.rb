@@ -48,9 +48,7 @@ Lumen::App.controllers do
       :HIDE_ACCOUNT_PHONE => ['Hides the phone field on account profiles'],
       :HIDE_ACCOUNT_TIME_ZONE => ['Hides the time zone field on account profiles'],
       :HIDE_ACCOUNT_EMAIL => ['Hides email addresses from account profiles'],      
-      :SHOW_ACCOUNT_CLASSIFIEDS => ['Shows request/offer creation forms on edit profile'],      
       :MAX_HEADLINE_LENGTH => 'Maximum character length  for the headline field (defaults to 150)',
-      :MAX_CLASSIFIED_LENGTH => 'Maximum character length  for the headline field (defaults to 150)',
       :ENV_FIELDS_ACCOUNT => 'Extra fields for the Account model e.g. biography:wysiwyg,research_proposal:file',
       
       :MAP_DEFAULTS => 'Comma-separated latitude, longitude and zoom',            
@@ -58,8 +56,6 @@ Lumen::App.controllers do
       :SHOW_EVENTS_BY_DEFAULT => ['Shows events on maps by default'],
       :SHOW_VENUES_BY_DEFAULT => ['Shows venues on maps by default'],
       :SHOW_ORGS_BY_DEFAULT => ['Shows organisations on maps by default'],
-      :ENABLE_CLASSIFIEDS => ['Shows request/offer link in navigation bar'],
-      :WALL_STYLE_CONVERSATIONS => ['Wall-style conversations'],
       :REPLY_TO_GROUP => ['Sets the reply-to header to the group address'],
       :HIGHLIGHTED_EVENT_LABEL_TEXT => 'Custom label text for highlighted events',
       

@@ -1,9 +1,6 @@
 
-
-<% if !Config['WALL_STYLE_CONVERSATIONS'] %>
-  <a class="edit" href="/conversations/<%=conversation_post.conversation.slug%>#conversation-post-<%=conversation_post.id%>" title="<%=conversation_post.created_at%>"><%=timeago(conversation_post.created_at)%></a>
-  &middot;
-<% end %>
+<a class="edit" href="/conversations/<%=conversation_post.conversation.slug%>#conversation-post-<%=conversation_post.id%>" title="<%=conversation_post.created_at%>"><%=timeago(conversation_post.created_at)%></a>
+&middot;
 
 <span class="conversation-post-like">
   <%= partial :'conversations/like', :locals => {:conversation_post => conversation_post} %>

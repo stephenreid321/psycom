@@ -23,34 +23,19 @@
   </div>
 </div>
 
-<% if Config['WALL_STYLE_CONVERSATIONS'] %>
-
-  <% if @membership %>
-    <% if !@q %>
-      <%= partial :'conversations/wall_style_build'  %>
-    <% end %>
-  <% end %>
-
-  <% @conversations.each { |conversation| %>
-    <%= partial :'conversations/wall_style_conversation', :locals => {:conversation => conversation} %>
-  <% } %>
-<% else %>
-  <%= partial :'conversations/conversations_table', :locals => {:conversations => @conversations}  %>
-<% end %>
+<%= partial :'conversations/conversations_table', :locals => {:conversations => @conversations}  %>
 
 <div style="text-align: center">
   <%= will_paginate @conversations, :renderer => WillPaginate::ViewHelpers::BootstrapRenderer %>
 </div>
 
-<% if !Config['WALL_STYLE_CONVERSATIONS'] %>
-  <% if !@group.conversation_creation_by_admins_only or (@group.conversation_creation_by_admins_only and @membership and @membership.admin?) %>
-    <% if @membership %>
-      <div class="conversation-form">
-        <h4 style="margin-top: 0"><%=I18n.t(:new_conversation).capitalize%></h4>
-        <p><%=I18n.t(:fill_out_the_form_below_or_send_a_mail_to)%> <a href="mailto:<%=@group.email%>"><%=@group.email%></a></p>
-        <%= partial :'conversations/build'  %>
-      </div>
-    <% end %>
+<% if !@group.conversation_creation_by_admins_only or (@group.conversation_creation_by_admins_only and @membership and @membership.admin?) %>
+  <% if @membership %>
+    <div class="conversation-form">
+      <h4 style="margin-top: 0"><%=I18n.t(:new_conversation).capitalize%></h4>
+      <p><%=I18n.t(:fill_out_the_form_below_or_send_a_mail_to)%> <a href="mailto:<%=@group.email%>"><%=@group.email%></a></p>
+      <%= partial :'conversations/build'  %>
+    </div>
   <% end %>
 <% end %>
 

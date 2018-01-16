@@ -55,7 +55,6 @@ class Conversation
   before_validation :set_conversation_post
   def set_conversation_post
     if self.body
-      self.body = self.body.gsub("\n","<br />\n") if Config['WALL_STYLE_CONVERSATIONS']
       conversation_post = self.conversation_posts.build body: self.body, account: self.account
       %w{title url description picture player}.each { |x|
         conversation_post.send("link_#{x}=", self.send("link_#{x}"))
