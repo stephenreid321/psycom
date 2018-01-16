@@ -70,12 +70,7 @@ class ConversationPostBcc
         
     if previous_conversation_posts
       begin
-        if Config['BCC_SINGLE']
-          references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bcc.try(:message_id)}>" }
-        else
-          account = self.conversation_post_bcc_recipient.account
-          references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bcc_recipients.find_by(account: account).try(:conversation_post_bcc).try(:message_id)}>" }
-        end
+        references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bcc.try(:message_id)}>" }
         mail.in_reply_to = references.first
         mail.references = references.join(' ')
       rescue => e

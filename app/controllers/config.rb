@@ -78,8 +78,6 @@ Lumen::App.controllers do
       
       :GOOGLE_ANALYTICS_TRACKING_ID => 'Google Analytics tracking ID',
             
-      :BCC_SINGLE => ['Send single BCC to conversation post subscribers'],
-      :BCC_SINGLE_JOB => ['Handle single BCCs in the background'],      
       :INCLUDE_SENDER_PROFILE => ['Include sender profile in conversation post emails'],
       
       :SSL => ['Site served via SSL'],

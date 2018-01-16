@@ -16,13 +16,11 @@ class ConversationPost
   belongs_to :group, index: true
   belongs_to :account, index: true
   
-  has_many :conversation_post_bccs, :dependent => :destroy
+  has_many :conversation_post_bccs, :dependent => :destroy # has_one 
   has_many :conversation_post_bcc_recipients, :dependent => :destroy
   
-  if Config['BCC_SINGLE']
-    def conversation_post_bcc
-      conversation_post_bccs.first
-    end
+  def conversation_post_bcc
+    conversation_post_bccs.first
   end
   
   has_many :attachments, :dependent => :destroy
@@ -121,15 +119,7 @@ class ConversationPost
     unless force
       return if conversation.hidden
     end
-    if Config['BCC_SINGLE']
-      if Config['BCC_SINGLE_JOB']
-        Delayed::Job.enqueue BccSingleJob.new(self.id)
-      else
-        bcc_single
-      end
-    else
-      Delayed::Job.enqueue BccEachJob.new(self.id)
-    end
+    bcc_single
   end
         
   def replace_cids!
