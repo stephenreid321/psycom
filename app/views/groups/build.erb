@@ -51,10 +51,6 @@
     <%= f.select_block :group_type_id, :options => [''] + GroupType.all.map { |group_type| [I18n.t(:"group_type.#{group_type.slug}"),group_type.id] } %>
   <% end %>
   <%= f.text_block :redirect_after_first_profile_save %>
-  <% if @group.persisted? %>
-    <%= f.number_block :hot_conversation_threshold, tip: "Posts required for a conversation to appear in the 'hot conversations' section of a digest" %>
-    <%= f.check_box_block :show_full_conversations_in_digests %>
-  <% end %>
   <% if current_account.admin? %>
     <%= f.check_box_block :conversation_creation_by_admins_only %>
     <%= f.check_box_block :join_on_first_sign_in %>

@@ -128,7 +128,7 @@ class ConversationPost
         Delayed::Job.enqueue BccSingleJob.new(self.id)
       else
         bcc_single
-      end               
+      end
     else
       Delayed::Job.enqueue BccEachJob.new(self.id)
     end

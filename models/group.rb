@@ -14,8 +14,6 @@ class Group
   field :request_questions, :type => String
   field :landing_tab, :type => String
   field :redirect_after_first_profile_save, :type => String
-  field :hot_conversation_threshold, :type => Integer, :default => 3
-  field :show_full_conversations_in_digests, :type => Boolean
   field :picture_uid, :type => String 
   field :conversations_require_approval, :type => Boolean
   field :coordinates, :type => Array
@@ -129,11 +127,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def unapproved_conversations
     conversations.where(:hidden => true).where(:approved => nil)
   end
-  
-  def hot_conversations(from,to)
-    visible_conversations.where(:updated_at.gte => from).where(:updated_at.lt => to+1).order_by(:updated_at.desc).select { |conversation| conversation.visible_conversation_posts.count >= hot_conversation_threshold }
-  end
-  
+    
   def new_events(from,to)
     events.where(:created_at.gte => from).where(:created_at.lt => to+1).where(:start_time.gte => to).order_by(:start_time.asc)
   end
@@ -164,7 +158,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   end
 
   def self.default_notification_levels
-    {'On' => 'each', 'Off' => 'none', 'Daily digest' => 'daily', 'Weekly digest' => 'weekly'}
+    {'On' => 'each', 'Off' => 'none'}
   end
     
   def default_didyouknows
@@ -206,8 +200,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :membership_request_thanks_email => :text_area,
       :membership_request_acceptance_email => :text_area,
       :redirect_after_first_profile_save => :text,      
-      :hot_conversation_threshold => :number,
-      :show_full_conversations_in_digests => :check_box,
       :group_type_id => :lookup,
       :coordinates => :geopicker,      
       :hide_from_dropdown => :check_box,
@@ -260,51 +252,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def secret?
     privacy == 'secret'
   end
-  
-  def send_digests(notification_level)
-    group = self        
-    emails = group.memberships.where(notification_level: notification_level.to_s).map { |membership| membership.account.email }
-    if emails.length > 0                        
-      
-      case notification_level
-      when :daily
-        from = 1.day.ago.to_date
-        to = Date.today
-      when :weekly      
-        from = 1.week.ago.to_date
-        to = Date.today
-      end   
-      
-      h2 = "Digest for #{group.slug}"        
-      # is there a better way of accessing the controller context?
-      html = open("http://#{Config['DOMAIN']}/groups/#{group.slug}/digest?from=#{from.to_s(:db)}&to=#{to.to_s(:db)}&for_email=true&h2=#{URI.escape(h2)}&token=#{Account.find_by(admin: true).secret_token}", :allow_redirections => :safe, :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE).read
         
-      if html.include?('Conversations') or html.include?('Hot conversations') or html.include?('New people') or html.include?('New events') or html.include?('Top stories')
-        Mail.defaults do
-          delivery_method :smtp, group.smtp_settings
-        end    
-      
-        # can't access the compact_daterange helper, so...
-        daterange = if from.strftime("%b %Y") == to.strftime("%b %Y")
-          from.day.ordinalize + " – " + to.strftime("#{to.day.ordinalize} %b %Y")
-        else
-          from.strftime("#{from.day.ordinalize} %b %Y") + " – " + to.strftime("#{to.day.ordinalize} %b %Y")
-        end
-              
-        mail = Mail.new
-        mail.bcc = emails
-        mail.from = "#{group.slug} <#{group.email('-noreply')}>"
-        mail.subject = "#{h2}: #{daterange}"
-        mail.html_part do
-          content_type 'text/html; charset=UTF-8'
-          body html
-        end
-        mail.deliver                      
-      end
-
-    end    
-  end
-      
   after_create :setup_mail_accounts_and_forwarder
   def setup_mail_accounts_and_forwarder
     if Config['MAIL_SERVER_ADDRESS'] and !@setup_complete
@@ -355,248 +303,5 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def send_welcome_emails
     memberships.where(:welcome_email_pending => true).each(&:send_welcome_email)
   end
-  
-  attr_accessor :imap
-  def imap_connect!
-    return unless Config['MAIL_SERVER_ADDRESS']
-    group = self
-    @imap = Net::IMAP.new(Config['MAIL_SERVER_ADDRESS'], :ssl => { :verify_mode => OpenSSL::SSL::VERIFY_NONE })
-    begin
-      @imap.authenticate('PLAIN', group.username('-inbox'), Config['MAIL_SERVER_PASSWORD'])
-    rescue # try former/deprecated account form
-      @imap.authenticate('PLAIN', group.username, Config['MAIL_SERVER_PASSWORD'])
-    end
-    @imap
-  end
-  
-  def imap_disconnect!
-    @imap.disconnect
-  end
-  
-  def delete_messages_sent_by_group
-    group = self
-    sent_by_lumen = imap.search(['HEADER', 'Sender', group.email('-noreply')])
-    if !sent_by_lumen.empty?
-      imap.store(sent_by_lumen, "+FLAGS", [:Deleted])
-      imap.expunge
-    end    
-  end
-    
-  def check!(since: Date.yesterday)
-    return unless Config['MAIL_SERVER_ADDRESS']
-    group = self    
-    imap_connect!
-    imap.select('INBOX')  
-    delete_messages_sent_by_group
-    
-    imap.search(["SINCE", since.strftime("%d-%b-%Y"), 'NOT', 'HEADER', 'Sender', group.email('-noreply')]).each do |sequence_id|
-      
-      # skip messages we've already dealt with
-      imap_uid = imap.fetch(sequence_id,'UID')[0].attr['UID']
-      puts "fetched message with uid #{imap_uid}"
-      if group.conversation_posts.find_by(imap_uid: imap_uid)
-        puts "already created a post with this message id, skipping"
-        next
-      end        
-                                  
-      mail = Mail.read_from_string(imap.fetch(sequence_id,'RFC822')[0].attr['RFC822'])
-      
-      case process_mail(mail, imap_uid: imap_uid)
-      when :delete
-        puts "deleting"
-        imap.store(sequence_id, "+FLAGS", [:Deleted])
-        next
-      when :failed
-        puts "failed, skipping"
-        next
-      end
-                  
-      imap.store(sequence_id, "+FLAGS", [:Seen])
-    end 
-    imap.expunge
-    imap_disconnect!
-  end
-  
-  def process_mail(mail, imap_uid: nil)
-    group = self
-    return :failed unless mail.from
-    from = mail.from.first
-    
-    puts "message from #{from}"
         
-    # check this isn't a message sent by Lumen
-    if mail.sender == group.email('-noreply')
-      raise "a message sent by Lumen made it into #{group.slug}'s inbox"
-    end 
-                                   
-    # skip messages from people that aren't in the group
-    account = Account.find_by(email: /^#{Regexp.escape(from)}$/i)     
-    if !account or !account.memberships.find_by(:group => group, :status => 'confirmed', :muted.ne => true)
-      begin
-        Mail.defaults do
-          delivery_method :smtp, group.smtp_settings
-        end 
-        mail = Mail.new(
-          :to => from,
-          :bcc => Config['HELP_ADDRESS'],
-          :from => "#{group.slug} <#{group.email('-noreply')}>",
-          :subject => "Delivery failed: #{mail.subject}",
-          :body => ERB.new(File.read(Padrino.root('app/views/emails/delivery_failed.erb'))).result(binding)
-        )
-        mail.deliver
-      rescue => e
-        Airbrake.notify(e) unless e.message.include?('User unknown in virtual alias table')
-      end
-        
-      puts "this message was sent by a stranger"
-      return :delete
-    end    
-    
-    if mail.html_part
-      body = mail.html_part.body
-      charset = mail.html_part.charset
-      nl2br = false
-    elsif mail.text_part                
-      body = mail.text_part.body
-      charset = mail.text_part.charset
-      nl2br = true
-    else
-      body = mail.body
-      charset = mail.charset
-      nl2br = true
-    end                            
-              
-    html = begin; body.decoded.force_encoding(charset).encode('UTF-8'); rescue; body.to_s; end
-    html = html.gsub("\n", "<br>\n") if nl2br
-    html = html.gsub(/<o:p>/, '')
-    html = html.gsub(/<\/o:p>/, '')
-    begin
-      html = Premailer.new(html, :with_html_string => true, :adapter => 'nokogiri', :input_encoding => 'UTF-8').to_inline_css
-    rescue => e
-      Airbrake.notify(e)
-    end
-
-    if (
-        (mail.in_reply_to and (conversation = ConversationPostBcc.find_by(message_id: mail.in_reply_to).try(:conversation)) and conversation.group == group) or
-          (
-          html.match(/Respond\s+by\s+replying\s+above\s+this\s+line/) and
-            (conversation_url_match = html.match(/http:\/\/#{Config['DOMAIN']}\/conversations\/(\d+)/)) and
-            conversation = group.conversations.find_by(slug: conversation_url_match[-1])
-        )
-      )
-      new_conversation = false
-      puts "part of conversation id #{conversation.id}"
-      [/Respond\s+by\s+replying\s+above\s+this\s+line/, /On.+, .+ wrote:/, /<span.*>From:<\/span>/, '___________','<hr id="stopSpelling">'].each { |pattern|
-        html = html.split(pattern).first
-      }
-    else      
-      new_conversation = true
-      conversation = group.conversations.create :subject => (mail.subject.blank? ? '(no subject)' : mail.subject), :account => account
-      return :failed if !conversation.persisted? # failed to find/create a valid conversation - probably a dupe
-      puts "created new conversation id #{conversation.id}"
-    end
-      
-    html = Nokogiri::HTML.parse(html)
-    html.search('style').remove
-    # html.search('.gmail_extra').remove
-    html = html.search('body').inner_html
-             
-    conversation_post = conversation.conversation_posts.create :body => html, :account => account, :imap_uid => imap_uid, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{Config['DOMAIN']}")
-    if !conversation_post.persisted? # failed to create the conversation post
-      puts "failed to create conversation post, deleting conversation"
-      conversation.destroy if new_conversation
-      return :failed
-    end
-    puts "created conversation post id #{conversation_post.id}"
-    mail.attachments.each do |attachment|
-      file = Tempfile.new(attachment.filename)
-      begin
-        file.binmode
-        file.write(attachment.body)
-        file.original_filename = attachment.filename
-        conversation_post.attachments.create :file => file, :file_name => attachment.filename, :cid => attachment.cid
-      ensure
-        file.close
-        file.unlink
-      end      
-    end         
-    puts "sending notifications"
-    conversation_post.send_notifications!
-  end
-  
-  def self.test_creating_a_conversation_via_email
-    random_string = Account.generate_password(8)
-    group = Group.create!(name: random_string, slug: random_string, privacy: 'secret')
-    account = Account.create!(name: random_string, email: "#{random_string}@example.com", password: random_string, password_confirmation: random_string)
-    group.memberships.create!(account: account, status: 'confirmed')
-    group.test_creating_a_conversation_via_email
-    group.destroy
-    account.destroy    
-  rescue => e
-    puts e
-    Airbrake.notify(e)
-  end
-  
-  def test_creating_a_conversation_via_email
-    group = self
-    Mail.defaults do
-      delivery_method :smtp, group.smtp_settings # send via the group smtp account...
-    end    
-    mail = Mail.new
-    mail.to = group.email
-    mail.from = group.members.first.email # ...and simply spoof the from address!
-    subject = "test #{Time.now.to_s(:db)}"
-    mail.subject = subject
-    mail.body = '.'
-    puts "sending email with subject #{subject}"
-    mail.deliver          
-    puts "sleeping for 1 minute"
-    sleep 60
-    puts "checking for conversation with subject #{subject}"
-    conversation = group.conversations.order(:created_at.desc).limit(1).first
-    if conversation and conversation.subject == subject
-      puts "conversation created"
-    else
-      begin
-        raise (r = "failed to create conversation: #{subject}")
-      rescue => e
-        puts r
-        Airbrake.notify(e)
-      end
-    end
-    puts "checking for bccs"
-    if conversation.conversation_posts.first.conversation_post_bccs.count > 0
-      puts "bccs created"
-    else
-      begin
-        raise (r = "failed to create bccs: #{subject}")
-      rescue => e
-        puts r
-        Airbrake.notify(e)
-      end
-    end    
-  end
-  
-  def self.create_notification_script
-    Net::SSH.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do  |ssh|
-      ssh.exec!("mkdir /notify")
-      ssh.exec!("chmod 777 /notify")
-      Net::SCP.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do |scp|
-        scp.upload! StringIO.new(%Q{#!/bin/bash
-domain="#{Config['DOMAIN']}"
-maildomain="#{Config['MAIL_DOMAIN']}"
-token="#{Account.find_by(admin: true).secret_token}"
-mailfile=`mktemp`
-cat - > $mailfile
-
-if ! grep -q "Sender: $1-noreply@$maildomain" $mailfile; then 
-  curl -L --insecure http://$domain/groups/$1/check/?token=$token
-fi
-
-rm $mailfile}), "/notify/#{Config['APP_NAME']}.sh"
-      end
-      ssh.exec!("chmod 777 /notify/#{Config['APP_NAME']}.sh")
-    end    
-  end
-      
 end

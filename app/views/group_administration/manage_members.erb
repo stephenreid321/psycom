@@ -158,7 +158,7 @@
       </td>            
       <td>
         <form style="display:inline" method="get" action="/groups/<%=@group.slug%>/set_notification_level/<%=account.id%>">
-          <%= select_tag :level, :options => {'On' => 'each', 'Off' => 'none', 'Daily digest' => 'daily', 'Weekly digest' => 'weekly'}, :selected => membership.notification_level, :onchange => "this.form.submit()", :class => "form-control", :style => "display:inline-block; width: auto;" %>
+          <%= select_tag :level, :options => {'On' => 'each', 'Off' => 'none'}, :selected => membership.notification_level, :onchange => "this.form.submit()", :class => "form-control", :style => "display:inline-block; width: auto;" %>
         </form>                       
       </td>
     </tr>

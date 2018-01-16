@@ -51,7 +51,7 @@
 
           <% if @membership %>
             <form id="notification-level-form" method="get" action="/groups/<%=@group.slug%>/notification_level">
-              <%= select_tag :level, :id => 'notification-level', :options => {'Emails on' => 'each', 'Emails off' => 'none', 'Daily digest' => 'daily', 'Weekly digest' => 'weekly'}, :selected => @membership.notification_level, :class => "form-control input-sm", :onchange => "this.form.submit()" %>  
+              <%= select_tag :level, :id => 'notification-level', :options => {'Emails on' => 'each', 'Emails off' => 'none'}, :selected => @membership.notification_level, :class => "form-control input-sm", :onchange => "this.form.submit()" %>  
             </form>
           <% end %>
 

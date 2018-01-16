@@ -150,20 +150,7 @@ Lumen::App.controllers do
     flash[:notice] = "Your config vars were updated. You may need to restart the server for your changes to take effect."
     redirect '/config'
   end  
-    
-  get '/config/restart' do
-    site_admins_only!
-    Delayed::Job.enqueue SshJob.new("dokku ps:rebuild #{Config['APP_NAME']}")
-    flash[:notice] = "The app is restarting. Changes will take effect in a minute or two."
-    redirect back
-  end
-    
-  get '/config/create_notification_script' do
-    site_admins_only!    
-    Group.create_notification_script
-    redirect '/config'
-  end 
-  
+         
   get '/config/create_fragment/:slug' do
     redirect "/admin/edit/Fragment/#{Fragment.create(slug: params[:slug]).id}"
   end
