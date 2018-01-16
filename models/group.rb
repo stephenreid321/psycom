@@ -84,11 +84,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   end  
                
   def smtp_settings
-    if Config['SMTP_ADDRESS']
-      {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
-    else
-      {:address => Config['MAIL_SERVER_ADDRESS'], :user_name => self.username('-noreply'), :password => Config['MAIL_SERVER_PASSWORD'], :port => 587, :enable_starttls_auto => true, :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE}
-    end
+    {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
   end  
     
   has_many :conversations, :dependent => :destroy
@@ -254,7 +250,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
         
   after_create :setup_mail_accounts_and_forwarder
   def setup_mail_accounts_and_forwarder
-    if Config['MAIL_SERVER_ADDRESS'] and !@setup_complete
+    if Config['SMTP_ADDRESS'] and !@setup_complete
       group = self
       Net::SSH.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do  |ssh|
         ssh.exec!("useradd -d /home/#{group.username('-inbox')} -m #{group.username('-inbox')}; echo #{group.username('-inbox')}:#{Config['MAIL_SERVER_PASSWORD']} | chpasswd")
@@ -271,7 +267,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   
   after_destroy :remove_mail_accounts_and_forwarder
   def remove_mail_accounts_and_forwarder
-    if Config['MAIL_SERVER_ADDRESS']
+    if Config['SMTP_ADDRESS']
       group = self
       Net::SSH.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do  |ssh|
         ssh.exec!("deluser #{group.username('-inbox')} --remove-home")

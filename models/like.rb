@@ -16,7 +16,7 @@ class Like
   
   after_create :notify
   def notify
-    if Config['MAIL_SERVER_ADDRESS']
+    if Config['SMTP_ADDRESS']
       group = conversation_post.group
       Mail.defaults do
         delivery_method :smtp, group.smtp_settings

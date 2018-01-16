@@ -7,10 +7,10 @@ Lumen::App.controllers do
       
       :DOMAIN => 'Domain of Lumen web app',
       :MAIL_DOMAIN => 'Domain from which mails will be sent and received',
-      
-      :MAIL_SERVER_ADDRESS => 'Mail server address (no http://)',
-      :MAIL_SERVER_USERNAME => 'Mail server username',
-      :MAIL_SERVER_PASSWORD => 'Mail server password',
+            
+      :SMTP_ADDRESS => 'Address of SMTP server',
+      :SMTP_USERNAME => 'Username of SMTP server',
+      :SMTP_PASSWORD => 'Password for SMTP server',            
       
       :HELP_ADDRESS => 'Email address for general queries',      
             
@@ -77,11 +77,7 @@ Lumen::App.controllers do
       :INCLUDE_SENDER_PROFILE => ['Include sender profile in conversation post emails'],
       
       :SSL => ['Site served via SSL'],
-      
-      :SMTP_ADDRESS => 'Address of alternative SMTP server',
-      :SMTP_USERNAME => 'Username of alternative SMTP server',
-      :SMTP_PASSWORD => 'Password for alternative SMTP server',      
-      
+            
       :SLACK_WEBHOOK_URL => 'Slack webhook URL',
       :SLACK_CHANNEL => 'Channel to post Slack notifications',
                         

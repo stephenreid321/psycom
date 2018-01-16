@@ -99,11 +99,7 @@ class Account
   end  
     
   def self.smtp_settings
-    if Config['SMTP_ADDRESS']
-      {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
-    else
-      {:address => Config['MAIL_SERVER_ADDRESS'], :user_name => Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD'], :port => 587, :enable_starttls_auto => true, :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE}
-    end
+    {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
   end
   
   attr_accessor :request_membership
@@ -146,7 +142,7 @@ class Account
           sign_in_details << "Sign in at http://#{Config['DOMAIN']}/sign_in."
         end
                   
-        if Config['MAIL_SERVER_ADDRESS']
+        if Config['SMTP_ADDRESS']
           mail = Mail.new
           mail.to = account.email
           mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"

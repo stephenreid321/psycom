@@ -40,7 +40,7 @@ class ConversationPostBcc
             
   after_create :send_email
   def send_email
-    return unless Config['MAIL_SERVER_ADDRESS']
+    return unless Config['SMTP_ADDRESS']
     # set locals for ERB binding
     conversation_post_bcc = self
     conversation_post = conversation_post_bcc.conversation_post
