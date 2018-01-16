@@ -1,0 +1,32 @@
+<ul class="page-options">  
+  <li>
+    <a title="Edit venue" class="edit restore-opacity" href="/groups/<%=@group.slug%>/venues/<%=@venue.id%>/edit"><i class="fa fa-pencil"></i> Edit venue</a>
+  </li>    
+</ul>
+
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li>
+    <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
+  </li>
+  <li>
+    <a href="/groups/<%=@group.slug%>/venues">Venues</a>    
+  </li>  
+  <li class="active">
+    <%= @venue.name %>
+  </li>     
+</ol>
+
+<div class="row">
+  <div class="col-sm-6">
+
+    <h1><%= @venue.name %></h1>
+
+    <%= partial :'venues/summary', :locals => {:venue => @venue} %>
+
+  </div>
+  <div class="col-sm-6">
+    <%= partial :'maps/panel', :locals => {:points => [@venue]} %>
+  </div>
+</div>

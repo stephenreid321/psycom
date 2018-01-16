@@ -1,0 +1,47 @@
+
+<div class="form-group <%= 'has-error' if !f.error_message_on(:sectorships).blank? %>">
+  <label class="control-label col-sm-3"><%=I18n.t(:sectors).capitalize%></label>
+  <div class="col-sm-6">             
+    <div id="sectorships">
+      <% f.fields_for :sectorships do |o| %>
+        <div class="sectorship input-group">
+          <%= o.text_field :sector_name, :class => 'form-control typeahead', :value => o.object.try(:sector).try(:name), :placeholder => I18n.t(:sector).capitalize, :autocomplete => 'off' %>
+          <% unless o.object.new_record? %>
+            <span class="input-group-btn">          
+              <i style="cursor: pointer" onclick="$(this).siblings().last().prop('checked', true).closest('.sectorship').hide()" class="fa fa-times"></i>
+              <%= o.check_box '_destroy', :style => 'display: none' %>                    
+            </span>                
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <style>
+      .sectorship { margin-bottom: 10px }
+      .sectorship .input-group-btn { padding-left: 5px }
+    </style>
+    <script>
+      $(function () {
+        var icon = $('<div><i style="color: #999; cursor: pointer" class="fa fa-plus-square"></i> <a style="color: #999" href="javascript:;"><%= I18n.t(:add_another_sector).capitalize %></a></div>');
+        $(icon).click(function () {
+          var c = $('.sectorship').length
+          var i = $('<input type="text" />');
+          i.attr('name', 'organisation[sectorships_attributes][' + c + '][sector_name]');
+          i.attr('id', 'organisation_sectorships_attributes_' + c + '_sector_name');
+          i.attr('placeholder', '<%=I18n.t(:sector).capitalize%>');
+          i.addClass('form-control');
+          i.addClass('typeahead');
+          i.prop('autocomplete', 'off');
+          i.typeahead({source: sectors});
+          var d = $('<div class="sectorship input-group"/>');
+          i.appendTo(d);
+          $('<span class="input-group-btn"><i style="visibility:hidden" class="fa fa-times"></i></span>').appendTo(d);
+          d.appendTo('#sectorships');
+          i.focus();
+        });
+        icon.insertAfter('#sectorships');
+        var sectors = <%=Sector.all.map(&:name).to_json %>;
+        $('.typeahead').typeahead({source: sectors});
+      });
+    </script>
+  </div>
+</div> 

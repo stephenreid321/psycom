@@ -1,0 +1,70 @@
+
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
+  <li class="active">Request membership</li>
+</ol>
+
+<% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
+  <%= partial :'group_administration/header' %>
+<% end %>  
+
+<% if @membership %>
+  <div style="text-align: center">
+    You're already a member of <%=@group.name%>. Non-members can apply for membership by visiting this page:<br />
+    <span style="display: inline-block; margin-top: 10px; border-bottom: 1px dotted #999"><%= Config['SSL'] ? 'https://' : 'http://' %><%=Config['DOMAIN']%>/groups/<%=@group.slug%>/request_membership</span>
+  </div>
+<% elsif @group.membership_requests.find_by(account: current_account, status: 'pending') %>
+  <div style="text-align: center">
+    You've already requested membership of <%=@group.name%>.
+  </div>
+<% else %>
+
+  <% if @group.request_intro %>
+    <%= @group.request_intro %>
+  <% end %>
+
+  <% form_for @account, "/groups/#{@group.slug}/request_membership", :id => 'request-form', :class => 'form-horizontal' do |f| %>
+
+    <% if !@group.request_intro %>          
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6"> 
+          You must be a member to access <strong><%=@group.slug%></strong>.
+        </div>
+      </div>          
+    <% end %>
+
+    <% if !current_account %>
+      <%= f.text_block :name %>
+      <%= f.text_block :email %>
+      <% if Config['REQUEST_LOCATION'] %>
+        <%= f.text_block :town %>
+        <% if Config['SHOW_ACCOUNT_STATE'] %>
+          <%= f.text_block :state %>
+        <% end %>
+        <%= f.text_block :postcode %>
+        <%= f.select_block :country %>  
+      <% end %>
+      <%= f.hidden_field :request_membership, :value => true %>
+      <%= f.text_block :antispam %>
+    <% end %>
+
+    <% @group.request_questions_a.each { |q| %>
+      <div class="form-group">
+        <label class="control-label col-sm-3"><%=q%></label>
+        <div class="col-sm-6">  
+          <%= text_area_tag "answers[]", :class => 'form-control' %>
+        </div>
+      </div>  
+    <% } %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-6">
+        <button class="btn btn-primary"><i class="fa fa-bell"></i> Request membership</button>
+      </div>
+    </div>            
+
+  <% end %>
+
+<% end %>

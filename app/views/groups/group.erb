@@ -1,0 +1,100 @@
+<ul class="page-options">  
+  <% if @membership %>
+    <li>
+      <a title="<%=I18n.t(:leave_group).capitalize%>" data-confirm="<%=I18n.t(:leave_group_confirm)%>" class="edit restore-opacity" href="/groups/<%=@group.slug%>/leave"><i class="fa fa-sign-out"></i> <%=I18n.t(:leave_group).capitalize%></a>
+    </li>   
+    <% if Config['LIST_EMAIL_ADDRESSES'] %>
+      <li>
+        <a title="List email addresses" class="edit restore-opacity" href="/groups/<%=@group.slug%>/list_emails"><i class="fa fa-list"></i> List email addresses</a>
+      </li>       
+    <% end %>
+  <% elsif current_account %>
+    <li>
+      <a title="<%=I18n.t(:join_group).capitalize%>" class="edit restore-opacity" href="/groups/<%=@group.slug%>/join"><i class="fa fa-sign-in"></i> <%=I18n.t(:join_group).capitalize%></a>
+    </li>
+  <% end %>
+</ul>
+
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="active"><%=@group.name%></li>
+</ol>
+
+<% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
+  <%= partial :'group_administration/header' %>
+<% end %>  
+
+<% if @membership or @group.public? %>
+  <script>
+    $(function () {
+      $('#conversations').load('/groups/<%=@group.slug%>/conversations' + location.search)
+    })
+  </script>
+  <div class="row">
+    <div class="col-sm-8">   
+
+      <div class="row">
+        <div class="col-sm-2">
+          <img style="width: 100%" src="<%=@group.picture ? @group.picture.thumb('500x500#').url : '/images/blank.png'%>">
+        </div>
+        <div class="col-sm-10">
+          <style>
+            @media(min-width: 768px) {
+              #group-title { display: inline; margin-top: 0; margin-right: 10px }
+              #notification-level-form {  display:inline }
+              #notification-level { display:inline-block; width: auto; height: auto; }
+            }
+          </style>          
+
+          <h1 id="group-title"><%= @group.name %></h1>
+
+          <% if @membership %>
+            <form id="notification-level-form" method="get" action="/groups/<%=@group.slug%>/notification_level">
+              <%= select_tag :level, :id => 'notification-level', :options => {'Emails on' => 'each', 'Emails off' => 'none', 'Daily digest' => 'daily', 'Weekly digest' => 'weekly'}, :selected => @membership.notification_level, :class => "form-control input-sm", :onchange => "this.form.submit()" %>  
+            </form>
+          <% end %>
+
+          <p class="lead" style="margin: 10px 0"><%=@group.description%></p>
+
+          <% if @group.closed? %>
+            <p style="font-size: 12px">Non-members can apply for membership by visiting <span style="border-bottom: 1px dotted #999"><%= Config['SSL'] ? 'https://' : 'http://' %><%=Config['DOMAIN']%>/groups/<%=@group.slug%>/request_membership</span></p>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @group.landing_tab %>
+        <%= @group.landing_tab %>
+      <% end %>
+
+      <% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) and @group.conversations_require_approval and @group.unapproved_conversations.count > 0 %>
+        <div class="alert alert-warning" style="margin-top: 10px">
+          <a href="/groups/<%=@group.slug%>/conversations_requiring_approval"><%=pluralize(@group.unapproved_conversations.count,'conversation') %> to approve</a>
+        </div>
+      <% end %>
+
+      <div id="conversations" class="page-container" style="margin-top: 20px; margin-bottom: 20px"> 
+        <h2><i class="fa fa-spin fa-spinner"></i></h2>
+      </div>
+
+    </div>
+    <div class="col-sm-4">
+      <% if current_account %>
+        <h2 style="margin-top: 0">
+          <%=I18n.t(:members, count: @group.members.count)%>
+        </h2>
+        <style>
+          #group-members .pagination { display: none }
+        </style>
+        <div id="group-members">
+          <%= partial :'accounts/list', :locals => {:scope => 'group', :scope_id => @group.id} %>
+        </div>
+        <a style="margin-bottom: 10px" class="btn btn-hg btn-primary btn-block" href="/groups/<%=@group.slug%>/members"><i class="fa fa-search"></i> Browse all members</a>      
+      <% else %>
+        <%= partial 'groups/join', :locals => {:group => @group} %>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <%= partial 'groups/join', :locals => {:group => @group} %>
+<% end %>

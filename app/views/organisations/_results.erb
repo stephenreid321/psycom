@@ -1,0 +1,14 @@
+
+<p><%= page_entries_info @organisations, :model => I18n.t(:organisation).capitalize %></p>
+
+<ul class="list-unstyled clearfix">
+  <% @organisations.each { |organisation| %>
+    <li style="display: block; margin-bottom: 10px; padding: 5px">
+      <%= partial :'organisations/organisation', :object => organisation %>
+    </li>
+  <% } %>
+</ul>
+
+<div style="text-align: center">
+  <%= will_paginate @organisations, :renderer => WillPaginate::ViewHelpers::BootstrapRenderer %>
+</div>

@@ -1,0 +1,59 @@
+
+<% if (slides = Slide.where(:series.in => [nil, 'signed-in'])).count > 0 %>
+  <%= partial :carousel, :locals => {:slides => slides} %>
+<% end %>
+
+<%= eval(f('home-above')) %>
+
+<% Group.where(:coordinates.ne => nil).each { |group| %>
+  <% if current_account and current_account.coordinates and ((d = current_account.distance_from(group.coordinates.reverse)) < 20) and !group.memberships.find_by(account: current_account) and !group.membership_requests.find_by(account: current_account) %>
+    <div class="panel panel-default" style="margin-top: 20px">
+      <div class="panel-body">
+        <i class="fa fa-globe"></i> <% if Fragment.find_by(slug: 'nearby-group') %> <%=eval(f('nearby-group'))%> <% else %> You're based just <%=pluralize(d.ceil,'mile')%> from the group <a href="/groups/<%=group.slug%>"><%=group.name%></a> — <a href="/groups/<%=group.slug%>">why not join?</a> <% end %>
+      </div>
+    </div>
+  <% end %>
+<% } %>
+
+<style>
+  #home-panels .col-sm-4 { margin-top: 20px }
+  #home-panels h3 { margin: 0; line-height: 140%; font-size: 18px }
+  #home-panels h2 { margin-top: 20px }
+  #home-panels .pagination { display: none }
+</style>
+<div id="home-panels" class="row">
+
+  <div class="col-sm-4" id="latest-conversations">        
+    <a class="btn btn-hg btn-primary btn-block modal-trigger" href="/conversations/new"><i class="fa fa-comment"></i> Start a conversation</a>
+    <h2 style="font-size: 28px"><%=I18n.t(:latest_conversations).capitalize%></h2>
+    <% current_account.latest_conversations.limit(5).each { |conversation| %>
+      <hr />
+      <h3><a href="/conversations/<%=conversation.slug%>"><%=conversation.subject%></a> <%= conversation_posts_badge(conversation) %> <small><%=g conversation.group%></small></h3>      
+      <% if conversation.last_conversation_post %>
+        <%=I18n.t(:last_post).capitalize%> <%=timeago(conversation.last_conversation_post.created_at)%>        
+        by <strong><%=conversation.last_conversation_post.account.name%></strong>
+      <% end %>
+    <% } %>
+  </div>
+
+  <div class="col-sm-4" id="upcoming-conversations">   
+    <a class="btn btn-hg btn-primary btn-block modal-trigger" href="/events/new"><i class="fa fa-calendar"></i> <%=I18n.t(:add_an_event).capitalize%></a>
+    <h2 style="font-size: 28px"><%=I18n.t(:upcoming_events).capitalize%></h2>
+    <% current_account.events.future.limit(5).each { |event| %>
+      <hr />
+      <%= partial :'events/minimal', :locals => {:event => event} %>
+    <% } %>
+  </div>  
+
+  <div class="col-sm-4" id="people">
+    <a class="btn btn-hg btn-primary btn-block" href="/people"><i class="fa fa-search"></i> Browse all members</a>    
+    <div class="row" style="margin-top: 20px">
+      <div style="margin: 0 15px">
+        <%= partial :'accounts/list', :locals => {:scope => 'network', :scope_id => nil, :per_page => 4, :o => :updated} %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<%= eval(f('home-below')) %>

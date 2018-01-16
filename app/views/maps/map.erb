@@ -1,0 +1,11 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">Map</li>
+</ol>
+
+<script>
+  $(function () {
+    $('#map').load('/map?<%= {form: true, accounts: !Config['HIDE_PEOPLE_BY_DEFAULT'], events: Config['SHOW_EVENTS_BY_DEFAULT'], venues: Config['SHOW_VENUES_BY_DEFAULT'], organisations: Config['SHOW_ORGS_BY_DEFAULT']}.to_query %>')
+  });
+</script>
+<div id="map"></div>

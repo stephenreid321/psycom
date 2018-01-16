@@ -1,0 +1,28 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li>
+    <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>    
+  </li>      
+  <li class="active">
+    Emails
+  </li>
+</ol>
+
+<%= partial :'group_administration/header' %>
+
+<% form_for @group, "/groups/#{@group.slug}/emails", :class => 'form-horizontal', :multipart => true do |f| %>
+
+  <%= f.text_block :invite_email_subject %>
+  <%= f.wysiwyg_block :invite_email %>
+  <%= f.text_block :reminder_email_subject %>
+  <%= f.wysiwyg_block :reminder_email %>
+  <% if @group.closed? %>
+    <%= f.text_block :membership_request_thanks_email_subject %>
+    <%= f.wysiwyg_block :membership_request_thanks_email %>
+    <%= f.text_block :membership_request_acceptance_email_subject %>
+    <%= f.wysiwyg_block :membership_request_acceptance_email %>
+  <% end %>
+  <%= f.submit_block %>
+
+<% end %> 

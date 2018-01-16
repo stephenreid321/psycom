@@ -1,0 +1,60 @@
+<div class="table-hr-container">
+  <table class="table table-hr" >
+
+    <% if venue.address %>
+      <tr>
+        <td>Address</td>
+        <td>
+          <a href="http://www.google.co.uk/maps?q=<%= URI.encode(venue.address) %>" target="map"><%= venue.address %></a><%= ' (approx)' if venue.approx %>
+        </td>
+      </tr>
+    <% end %>  
+    <% if venue.capacity %>
+      <tr>
+        <td>Capacity</td>
+        <td><%=venue.capacity%></td>
+      </tr>
+    <% end %>
+    <% if venue.accessibility %>
+      <tr>
+        <td>Accessibility</td>
+        <td><%=venue.accessibility%></td>
+      </tr>
+    <% end %>
+    <% if venue.private %>
+      <tr>
+        <td>Privacy</td>
+        <td>Private room available</td>
+      </tr>
+    <% end %>    
+    <% if venue.serves_food %>
+      <tr>
+        <td>Food</td>
+        <td>Serves food</td>
+      </tr>
+    <% end %>    
+    <% if venue.serves_alcohol %>
+      <tr>
+        <td>Alcohol</td>
+        <td>Serves alcohol</td>
+      </tr>
+    <% end %>        
+    <% if venue.hourly_cost %>      
+      <tr>
+        <td>Approximate hourly cost</td>
+        <td><%= I18n.t(:currency_symbol)%><%=venue.hourly_cost%>/hour</td>
+      </tr>
+    <% end %>     
+    <% if venue.website %>
+      <tr>
+        <td>Website</td>
+        <td>
+          <a target="_blank" href="<%=venue.website%>"><%=venue.website%></a>
+        </td>
+      </tr>
+    <% end %>      
+
+  </table>
+</div>
+
+<p style="white-space: normal"><%=venue.description%></p>

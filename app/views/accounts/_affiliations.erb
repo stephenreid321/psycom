@@ -1,0 +1,81 @@
+<div class="form-group <%= 'has-error' if !f.error_message_on(:affiliations).blank? %>">
+  <label class="control-label col-sm-3">
+    <%= I18n.t(:affiliations).capitalize %>
+    <% if Fragment.find_by(slug: 'tip-affiliations') %>
+      <i id="tip-affiliations" class="fa fa-question-circle" title="<%=eval(f('tip-affiliations'))%>"></i>
+      <script>
+        $(function () {
+          $('#tip-affiliations').tooltip({placement: 'right'});
+        });
+      </script>
+    <% end %>
+  </label>
+  <div class="col-sm-6">             
+    <div id="affiliations">
+      <% f.fields_for :affiliations do |o| %>
+        <div class="affiliation">
+          <% if Config['AFFILIATION_POSITIONS'] %>
+            <%= o.select :title, :options => Config['AFFILIATION_POSITIONS'].split(','), :class => 'form-control' %>
+          <% else %>
+            <%= o.text_field :title, :class => 'form-control', :placeholder => I18n.t(:position).capitalize %>
+          <% end %>
+          <span class="at"> <%=I18n.t(:at)%> </span>
+          <%= o.text_field :organisation_name, :class => 'form-control typeahead', :value => o.object.try(:organisation).try(:name), :placeholder => I18n.t(:organisation).capitalize, :autocomplete => 'off' %>
+          <% unless o.object.new_record? %>
+            <span>
+              <i style="cursor: pointer" onclick="$(this).siblings().last().prop('checked', true).closest('.affiliation').hide()" class="fa fa-times"></i>
+              <%= o.check_box '_destroy', :style => 'display: none' %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <style>
+      .affiliation { margin-bottom: 10px }
+      .affiliation input, .affiliation select { width: 40%; display: inline }
+      .affiliation .at { margin: 0 5px }
+    </style>
+    <script>
+      $(function () {
+        var icon = $('<div><i style="color: #999; cursor: pointer" class="fa fa-plus-square"></i> <a style="color: #999" href="javascript:;"><%= I18n.t(:add_another_affiliation).capitalize %></a></div>');
+        $(icon).click(function () {
+          var c = $('.affiliation').length
+<% if Config['AFFILIATION_POSITIONS'] %>
+            var i = $('<select/>');
+            i.attr('name', 'account[affiliations_attributes][' + c + '][title]');
+            i.attr('id', 'account_affiliations_attributes_' + c + '_title');
+  <% Config['AFFILIATION_POSITIONS'].split(',').each { |ap| %>
+              i.append('<option value="<%=ap%>"><%=ap%></option>')
+  <% } %>
+            i.addClass('form-control');
+<% else %>
+            var i = $('<input type="text" />');
+            i.attr('name', 'account[affiliations_attributes][' + c + '][title]');
+            i.attr('id', 'account_affiliations_attributes_' + c + '_title');
+            i.attr('placeholder', '<%=I18n.t(:position).capitalize%>');
+            i.addClass('form-control');
+<% end %>
+          var j = $('<input type="text" />');
+          j.attr('name', 'account[affiliations_attributes][' + c + '][organisation_name]');
+          j.attr('id', 'account_affiliations_attributes_' + c + '_organisation_name');
+          j.attr('placeholder', '<%=I18n.t(:organisation).capitalize%>');
+          j.addClass('form-control');
+          j.addClass('typeahead');
+          j.prop('autocomplete', 'off');
+          j.typeahead({source: organisations});
+          var d = $('<div class="affiliation"/>');
+          i.appendTo(d);
+          $('<span class="at"> <%=I18n.t(:at)%> </span>').appendTo(d);
+          j.appendTo(d);
+          d.appendTo('#affiliations');
+          i.focus();
+        });
+        icon.insertAfter('#affiliations');
+        var organisations = <%=Organisation.all.map(&:name).to_json %>;
+        $('.affiliation .typeahead').typeahead({source: organisations});
+        if ($('.affiliation').length == 0)
+          $(icon).click();
+      });
+    </script>
+  </div>
+</div> 

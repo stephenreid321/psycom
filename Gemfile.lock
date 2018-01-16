@@ -1,0 +1,286 @@
+GIT
+  remote: git://github.com/espen/ri_cal.git
+  revision: 86e3998a0ab65762ae70d949f43bb324182b0f09
+  specs:
+    ri_cal (0.9.4)
+
+GIT
+  remote: git://github.com/mislav/will_paginate.git
+  revision: 18626f5285b284c14fbf1be3e8f49e166b222218
+  specs:
+    will_paginate (3.1.5)
+
+GIT
+  remote: git://github.com/wordsandwriting/activate-admin.git
+  revision: 6f4836d3b37060ede7830fdd84c45e52a7181fd3
+  specs:
+    activate-admin (0.0.1)
+      activate-tools
+      padrino
+      will_paginate
+
+GIT
+  remote: git://github.com/wordsandwriting/activate-tools.git
+  revision: 11473378865624cff7d457a57d245309dc716fa9
+  specs:
+    activate-tools (0.0.1)
+      padrino
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (4.2.8)
+      activesupport (= 4.2.8)
+      builder (~> 3.1)
+    activesupport (4.2.8)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
+    airbrake (5.8.1)
+      airbrake-ruby (~> 1.8)
+    airbrake-ruby (1.8.0)
+    bcrypt (3.1.11)
+    bson (4.2.1)
+    builder (3.2.3)
+    capybara (2.13.0)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    cliver (0.3.2)
+    countries (2.0.8)
+      i18n_data (~> 0.7.0)
+      money (~> 6.7)
+      sixarm_ruby_unaccent (~> 1.1)
+      unicode_utils (~> 1.4)
+    crass (1.0.2)
+    css_parser (1.4.10)
+      addressable
+    delayed_job (4.1.2)
+      activesupport (>= 3.0, < 5.1)
+    delayed_job_mongoid (2.3.0)
+      delayed_job (>= 3.0, < 5)
+      mongoid (>= 3.0, < 7)
+      mongoid-compatibility (>= 0.4.0)
+    domain_name (0.5.20170223)
+      unf (>= 0.0.5, < 1.0.0)
+    dragonfly (1.1.1)
+      addressable (~> 2.3)
+      multi_json (~> 1.0)
+      rack (>= 1.3)
+    enumerable-lazy (0.0.2)
+    erubis (2.7.0)
+    excon (0.55.0)
+    factory_girl (4.8.0)
+      activesupport (>= 3.0.0)
+    faraday (0.11.0)
+      multipart-post (>= 1.2, < 3)
+    geocoder (1.4.3)
+    hashie (3.5.5)
+    heroics (0.0.21)
+      erubis (~> 2.0)
+      excon
+      multi_json (>= 1.9.2)
+    htmlentities (4.3.4)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    i18n (0.8.1)
+    i18n_data (0.7.0)
+    jwt (1.5.6)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
+    mechanize (2.7.5)
+      domain_name (~> 0.5, >= 0.5.1)
+      http-cookie (~> 1.0)
+      mime-types (>= 1.17.2)
+      net-http-digest_auth (~> 1.1, >= 1.1.1)
+      net-http-persistent (~> 2.5, >= 2.5.2)
+      nokogiri (~> 1.6)
+      ntlm-http (~> 0.1, >= 0.1.1)
+      webrobots (>= 0.0.9, < 0.2)
+    mime-types (2.99.3)
+    mini_portile2 (2.1.0)
+    minitest (5.10.1)
+    minitest-rg (5.2.0)
+      minitest (~> 5.0)
+    moneta (0.8.1)
+    money (6.8.2)
+      i18n (>= 0.6.4, < 0.9)
+      sixarm_ruby_unaccent (>= 1.1.1, < 2)
+    mongo (2.4.1)
+      bson (>= 4.2.1, < 5.0.0)
+    mongoid (5.2.0)
+      activemodel (~> 4.0)
+      mongo (>= 2.4.1, < 3.0.0)
+      origin (~> 2.3)
+      tzinfo (>= 0.3.37)
+    mongoid-compatibility (0.4.1)
+      activesupport
+      mongoid (>= 2.0)
+    multi_json (1.12.1)
+    multi_xml (0.6.0)
+    multipart-post (2.0.0)
+    mustermann19 (0.4.4)
+      enumerable-lazy
+    net-http-digest_auth (1.4.1)
+    net-http-persistent (2.9.4)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (4.1.0)
+    nokogiri (1.7.1)
+      mini_portile2 (~> 2.1.0)
+    nokogumbo (1.4.10)
+      nokogiri
+    ntlm-http (0.1.1)
+    oauth2 (1.3.1)
+      faraday (>= 0.8, < 0.12)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (1.6.1)
+      hashie (>= 3.4.6, < 3.6.0)
+      rack (>= 1.6.2, < 3)
+    omniauth-facebook (4.0.0)
+      omniauth-oauth2 (~> 1.2)
+    omniauth-google-oauth2 (0.4.1)
+      jwt (~> 1.5.2)
+      multi_json (~> 1.3)
+      omniauth (>= 1.1.1)
+      omniauth-oauth2 (>= 1.3.1)
+    omniauth-oauth2 (1.4.0)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
+    open_uri_redirections (0.2.1)
+    origin (2.3.0)
+    padrino (0.13.3.2)
+      padrino-admin (= 0.13.3.2)
+      padrino-cache (= 0.13.3.2)
+      padrino-core (= 0.13.3.2)
+      padrino-gen (= 0.13.3.2)
+      padrino-helpers (= 0.13.3.2)
+      padrino-mailer (= 0.13.3.2)
+      padrino-support (= 0.13.3.2)
+    padrino-admin (0.13.3.2)
+      padrino-core (= 0.13.3.2)
+      padrino-helpers (= 0.13.3.2)
+    padrino-cache (0.13.3.2)
+      moneta (~> 0.8.0)
+      padrino-core (= 0.13.3.2)
+      padrino-helpers (= 0.13.3.2)
+    padrino-core (0.13.3.2)
+      activesupport (>= 3.1)
+      mustermann19
+      padrino-support (= 0.13.3.2)
+      rack-protection (>= 1.5.0)
+      sinatra (>= 1.4.6)
+      thor (~> 0.18)
+    padrino-gen (0.13.3.2)
+      bundler (~> 1.0)
+      padrino-core (= 0.13.3.2)
+    padrino-helpers (0.13.3.2)
+      i18n (~> 0.6, >= 0.6.7)
+      padrino-support (= 0.13.3.2)
+      tilt (>= 1.4.1, < 3)
+    padrino-mailer (0.13.3.2)
+      mail (~> 2.5)
+      mime-types (< 3)
+      padrino-core (= 0.13.3.2)
+    padrino-support (0.13.3.2)
+      activesupport (>= 3.1)
+    platform-api (1.0.0)
+      heroics (~> 0.0.20)
+      moneta (~> 0.8.1)
+    poltergeist (1.14.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      websocket-driver (>= 0.2.0)
+    premailer (1.10.2)
+      addressable
+      css_parser (>= 1.4.10)
+      htmlentities (>= 4.0.0)
+    public_suffix (2.0.5)
+    puma (3.8.2)
+    rack (1.6.5)
+    rack-protection (1.5.3)
+      rack
+    rack-test (0.6.3)
+      rack (>= 1.0)
+    rake (12.0.0)
+    rinku (2.0.2)
+    sanitize (4.4.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.4.4)
+      nokogumbo (~> 1.4.1)
+    sass (3.4.23)
+    sinatra (1.4.8)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    sixarm_ruby_unaccent (1.1.1)
+    thor (0.19.4)
+    thread_safe (0.3.6)
+    tilt (2.0.7)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
+    unicode_utils (1.4.0)
+    webrobots (0.1.2)
+    websocket-driver (0.6.5)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activate-admin!
+  activate-tools!
+  activemodel (~> 4.2)
+  airbrake
+  bcrypt
+  capybara
+  countries
+  delayed_job_mongoid
+  dragonfly
+  factory_girl
+  geocoder
+  launchy
+  mail
+  mechanize
+  minitest-rg
+  mongoid
+  net-scp
+  net-ssh
+  omniauth
+  omniauth-facebook
+  omniauth-google-oauth2
+  open_uri_redirections
+  padrino (= 0.13.3.2)
+  platform-api
+  poltergeist
+  premailer
+  puma
+  rake
+  ri_cal!
+  rinku
+  sanitize
+  sass
+  will_paginate!
+
+RUBY VERSION
+   ruby 2.3.3p222
+
+BUNDLED WITH
+   1.14.6

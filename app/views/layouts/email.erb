@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">    
+    <title><%=@title || Config['SITE_NAME']%></title>      
+    <style>
+      body, p, td, input { font-family: Lato, ​Helvetica,​ Arial,​ sans-serif }
+      h1 { font-family: 'Raleway',​ Helvetica,​ Arial,​ sans-serif }
+      h1 small, h2 small, h3 small { color: #bbb }
+      a { text-decoration: none; color: <%=Config['SECONDARY_COLOR'] || DEFAULT_COLORS['secondary']%> !important }
+      a.btn { font-weight: normal; color: <%=Config['PRIMARY_CONTRAST_COLOR'] || DEFAULT_COLORS['primary-contrast']%>;  background: <%=Config['PRIMARY_COLOR'] || DEFAULT_COLORS['primary']%>; padding: 5px 10px; border-radius: 5px; font-size: 14px }
+      table.table { width: 100% }
+      span.badge { background: <%=Config['SECONDARY_COLOR'] || DEFAULT_COLORS['secondary']%>; border-radius: 5px; padding: 3px 5px; color: white }
+      .img-circle { display: inline-block !important }
+      ul.list-unstyled { padding: 0 }
+      ul.list-unstyled li { margin-left: 0 }
+      div.password { font-size: 200%; font-weight: bold; margin-top: 10px }
+    </style>
+  </head>
+  <body>
+
+    <div style="background: <%=Config['GREY_LIGHT_COLOR'] || DEFAULT_COLORS['grey-light']%>; padding: 20px;">
+
+      <div style="max-width: 600px; margin: 0 auto; background: white;">
+        <div style="padding: 20px;">   
+          <h1 style="margin-top: 0"><a href="http://<%=Config['DOMAIN']%>"><%=Config['SITE_NAME']%></a></h1>
+          <%= defined?(content) ? content : yield %>   
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,171 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li>
+    <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
+  </li>
+  <li class="active">
+    Manage members
+  </li>
+</ol>
+
+<%= partial :'group_administration/header' %>
+
+<div class="row" style="margin-bottom: 10px">
+  <div class="col-sm-9">          
+    <%= page_entries_info @accounts, :model => 'Member' %>   
+    <a class="btn btn-default" href="/groups/<%=@group.slug%>/manage_members.csv?<%=request.query_string%>"><i class="fa fa-download"></i> Download as CSV</a>    
+  </div>
+  <div class="col-sm-3" style="text-align: right;">
+    <% form_tag '', :style => "display: inline", :method => 'get' do %>      
+      <div class="input-group" style="text-align: right">
+        <%= search_field_tag :q, :class => 'form-control', :value => @q %>
+        <span class="input-group-btn">
+          <button class="btn btn-default"><i class="fa fa-search"></i></button>
+        </span>            
+      </div>            
+    <% end %> 
+  </div>
+</div>
+
+<% form_tag '', :style => "display: inline", :method => 'get' do %>      
+  <label class="checkbox-inline" style="padding-left: 0">
+    <%= check_box_tag :admins_only, :onchange => 'this.form.submit()', :checked => @admins_only %> Admin
+  </label>
+  <label class="checkbox-inline">
+    <%= check_box_tag :not_yet_receiving_emails, :onchange => 'this.form.submit()', :checked => @not_yet_receiving_emails %> Not yet receiving emails
+  </label>
+<% end %>
+
+<table class="members table">
+  <thead>
+    <tr>
+      <% @cols.each { |k,v| %>
+        <th data-fieldname="<%=v%>">
+          <%=k%>
+
+          <% if @o == v %>
+            <a title="Ordered by <%=k.downcase%>; click to reverse" href="javascript:;" class="od">
+              <% if @d == :asc %>
+                <i class="fa fa-caret-down"></i>
+              <% elsif @d == :desc %>
+                <i class="fa fa-caret-up"></i>
+              <% end %>
+            </a>
+          <% elsif v %>     
+            <a title="Order by <%=k.downcase%>" href="javascript:;" class="od odn">
+              <i class="fa fa-caret-right"></i>
+            </a>
+          <% end %>
+
+        </th>
+      <% } %>
+    </tr>
+  </thead>
+  <% @accounts.each { |account| membership = @group.memberships.find_by(account: account) %>
+    <tr>
+      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %>  >
+        <a href="/accounts/<%=account.id%>"><%= account.name %></a>
+        <% if membership.status == 'pending' %>
+          <span title="<%=account.firstname%> needs to sign in to start receiving emails" class="label label-primary">Not yet receiving emails</span>
+        <% end %>                  
+        <% if membership.admin? %>
+          <span class="label label-primary">Admin</span>
+        <% end %>
+        <% if membership.receive_membership_requests? %>
+          <span class="label label-primary">Receiving membership requests</span>
+        <% end %>
+        <% if membership.muted? %>
+          <span class="label label-primary">Muted</span>
+        <% end %>          
+      </td>      
+      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
+        <%=account.email%>
+      </td>
+      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
+        <%=account.phone%>
+      </td>
+      <td>
+        <% if account.twitter_profile_url %>
+          <a target="_blank" href="<%=account.twitter_profile_url%>"><%=account.twitter_profile_url.split('.com/')[1]%></a>
+        <% end %>
+      </td>       
+      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
+        <% account.affiliations.each { |affiliation|%>
+          <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/organisations/<%=affiliation.organisation_id%>"><%=affiliation.organisation.name%></a> <br />
+        <% } %> 
+      </td>
+      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %>>
+        <%account.account_tagships.each { |account_tagship|%>
+          <a href="/people?account_tag_id=<%=account_tagship.account_tag_id%>" class="label label-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
+        <% } %>
+      </td>       
+      <td>
+        <%=membership.created_at%>
+      </td>     
+      <td>
+        <%= (sign_in = account.sign_ins.order_by(:created_at.desc).limit(1).first) ? sign_in.created_at : "Never signed in" %>
+      </td>
+      <td>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a data-confirm="Are you sure you want to remove this member?" href="/groups/<%=@group.slug%>/remove_member/<%=account.id%>">Remove from group</a>
+            </li>
+            <li>
+              <% if membership.muted? %>
+                <a href="/groups/<%=@group.slug%>/unmute/<%=account.id%>">Unmute</a>
+              <% else %>
+                <a href="/groups/<%=@group.slug%>/mute/<%=account.id%>">Mute</a>
+              <% end %>      
+            </li>
+            <li>
+              <% if membership.admin? %>
+                <a href="/groups/<%=@group.slug%>/unadmin/<%=account.id%>">Unadmin</a>
+              <% else %>
+                <a href="/groups/<%=@group.slug%>/make_admin/<%=account.id%>">Make admin</a>
+              <% end %>            
+            </li>
+            <li>
+              <% if membership.admin? %>
+                <% if membership.receive_membership_requests? %>
+                  <a href="/groups/<%=@group.slug%>/stop_receiving_membership_requests/<%=account.id%>">Stop receiving membership requests</a>
+                <% else %>
+                  <a href="/groups/<%=@group.slug%>/receive_membership_requests/<%=account.id%>">Receive membership requests</a>
+                <% end %>
+              <% end %>      
+            </li>
+            <% if membership.status == 'pending' %>
+              <li>
+                <a href="/groups/<%=@group.slug%>/reminder?account_id=<%=account.id%>&issue=not_completed_signup">Remind to sign in <% if membership.reminder_sent %>(sent <%= timeago(membership.reminder_sent) %>)<% end %></a>
+              </li>
+            <% end %>
+            <% if !account.has_picture? %>
+              <li>
+                <a href="/groups/<%=@group.slug%>/reminder?account_id=<%=account.id%>&issue=no_picture">Remind to upload profile picture <% if membership.reminder_sent %>(sent <%= timeago(membership.reminder_sent) %>)<% end %></a>
+              </li>
+            <% end %>
+            <% if account.affiliations.empty? %>
+              <li>
+                <a href="/groups/<%=@group.slug%>/reminder?account_id=<%=account.id%>&issue=no_affiliations">Remind to provide affiliations <% if membership.reminder_sent %>(sent <%= timeago(membership.reminder_sent) %>)<% end %></a>
+              </li>
+            <% end %>            
+          </ul>
+        </div>        
+      </td>            
+      <td>
+        <form style="display:inline" method="get" action="/groups/<%=@group.slug%>/set_notification_level/<%=account.id%>">
+          <%= select_tag :level, :options => {'On' => 'each', 'Off' => 'none', 'Daily digest' => 'daily', 'Weekly digest' => 'weekly'}, :selected => membership.notification_level, :onchange => "this.form.submit()", :class => "form-control", :style => "display:inline-block; width: auto;" %>
+        </form>                       
+      </td>
+    </tr>
+  <% } %>
+</table>
+
+<div style="text-align: center">
+  <%= will_paginate @accounts, :renderer => WillPaginate::ViewHelpers::BootstrapRenderer %>
+</div>
+

@@ -1,0 +1,19 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active"><%=@fragment.title%></li>
+</ol>
+
+<div class="page">
+  <% if Fragment.find_by(slug: 'right-col') %>
+    <div class="row">
+      <div class="col-sm-8">
+      <% end %>
+      <%= eval(f(@fragment.slug)) %>
+      <% if Fragment.find_by(slug: 'right-col') %>
+      </div>
+      <div class="col-sm-4">
+        <%= eval(f('right-col')) %>    
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,35 @@
+<div style="text-align: center">
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"><%=group.slug%> has <%=pluralize(group.members.count,'member')%></h3>
+    </div>
+    <div class="panel-body">
+
+      <p class="lead">Join them!</p>
+
+      <% form_for Account.new, "/groups/#{group.slug}/join", :method => 'get', :class => 'form-horizontal' do |f| %>
+        <% if !current_account %>
+          <%= f.text_block :name %>
+          <%= f.text_block :email %>
+          <% if Config['REQUEST_LOCATION'] %>
+            <%= f.text_block :town %>
+            <% if Config['SHOW_ACCOUNT_STATE'] %>
+              <%= f.text_block :state %>
+            <% end %>
+            <%= f.text_block :postcode %>
+            <%= f.select_block :country %>  
+          <% end %>    
+        <% end %>
+        <button type="submit" class="btn btn-primary">Join</button>
+      <% end %> 
+
+
+      <% random(group.members.where(:picture_uid.ne => nil), 9).each {  |account| %>
+        <img style="margin: 10px; width: 90px" title="<%=account.name.split(' ').first%>" class="img-circle img-bordered" src="<%=account.picture ? account.picture.thumb('100x100#').url : '/images/silhouette.png' %>">
+      <% } %>
+
+    </div>
+  </div>
+
+</div>

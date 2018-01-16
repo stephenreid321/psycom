@@ -1,0 +1,67 @@
+<style>
+  .fc button { height: auto; line-height: 1.42857; padding: 10px 12px } 
+</style>
+
+<script>
+  $(function() {
+  $('#calendar').fullCalendar({
+  events: '/events/feed',
+          firstDay: 1,
+          header: {
+          left: 'today prev,next title',
+                  right: 'agendaDay,agendaWeek,month'
+          },
+          loading: function(isLoading) {
+          if (isLoading == true)
+                  $('.fc-left h2').append(' <i class="fa fa-spinner fa-spin"></i>');
+          else
+                  $('.fc-left h2 i').remove();
+          },
+          eventColor: '<%=Config['SECONDARY_COLOR'] || DEFAULT_COLORS['secondary']%>',
+          eventClick: function(event, jsEvent, view) {
+          $('.fc-event').popover('destroy');
+          if ($(this).data('popover') == true) {
+          $(this).data('popover', false);
+          } else {
+          el = $(this);
+          $.get('/groups/' + event.group_slug + '/events/' + event.id + '/minimal', function(response) {
+          el.popover({
+          content: response,
+                  trigger: 'manual',
+                  title: false,
+                  placement:'auto top',
+                  container:'body',
+                  html: true
+          }).popover('show');
+          });
+          $('.fc-event').data('popover', false);
+          $(this).data('popover', true);
+          }
+          return false;
+          },
+          viewDestroy: function() {
+          $('.fc-event').popover('destroy');
+          $('.fc-event').data('popover', false);
+          },
+<% if params[:event_id]; event = Event.find(params[:event_id]) %>
+    year: <%=event.start_time.year%>,
+            month: <%=event.start_time.month - 1%>,
+            date: <%=event.start_time.day%>,
+            eventAfterAllRender: function() {
+            $('.event-<%=event.id%>').mouseover().click();
+            }
+<% end %>
+  });
+  $('.fc-right').prepend('<a href="/events" class="btn btn-default"><i class="fa fa-list"></i> List view</a><a href="/events/new" class="btn btn-primary modal-trigger"><i class="fa fa-plus"></i> <%=I18n.t(:add_an_event).capitalize%></a>');
+  $('.fc-button-group').addClass('btn-group');
+  $('.fc-button').attr('class', 'btn btn-default');
+  $('.fc-left > button').attr('disabled', false) //today
+          $('.fc-left > button, .fc-right .fc-button-group .btn').css('text-transform', 'capitalize');
+  });
+</script>
+
+<div id="calendar"></div>
+
+<%= partial :'events/ical_instructions' %>
+
+

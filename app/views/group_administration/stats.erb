@@ -1,0 +1,72 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li>
+    <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>    
+  </li>      
+  <li class="active">
+    Stats
+  </li>
+</ol>
+
+<%= partial :'group_administration/header' %>
+
+<script>
+  $(function () {
+    $(".datepicker").datepicker({format: 'dd-M-yyyy', autoclose: true});
+  });
+</script>
+<form style="display: inline">
+  <input type="text" style="width: 8em; display: inline-block" class="form-control datepicker" name="from" value="<%=@from.strftime('%d-%b-%Y')%>"/>
+  &ndash;
+  <input type="text" style="width: 8em; display: inline-block" class="form-control datepicker" name="to" value="<%=@to.strftime('%d-%b-%Y')%>"/>
+  Show all posters <input onchange="$(this).closest('form').submit()" type="checkbox" name="all" value="1" <% if @all %>checked="checked"<% end %> />
+  <button class="btn btn-primary">Submit</button>  
+</form>
+
+<table class="table" style="margin-top: 20px">
+
+  <%{'Most posts' => @cp, 'Most conversations started' => @c, 'Most events created' => @e}.each { |h,hash| %>
+
+    <tr>
+      <td colspan="2">
+        <h3 style="margin-top: 0"><%=h%></h3>
+      </td>
+    </tr>
+
+    <% max = nil; include = Hash[hash.sort_by { |k,v| v.length }.reverse[0..(@all ? -1 : 9)]]; include[current_account.id] = hash[current_account.id] if current_account and hash[current_account.id]; include.sort_by { |k,v| v.length }.reverse.each_with_index { |(k, v), i| if i == 0; max = v.length.to_f; end; k = Account.find(k) %>
+
+      <% if !@all and i == 10 %>
+        <tr>
+          <td colspan="2">
+            &vellip;
+          </td>
+        </tr>    
+      <% end %>
+
+      <tr>
+        <td style="width: 170px;" <% if current_account and k == current_account %> class="stats-highlight" <% end %>>
+          <div class="media">
+            <span class="pull-left" >      
+              <a href="/accounts/<%=k.id%>">
+                <img class="media-object" style="width: 32px" src="<%=k.picture ? k.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
+              </a>
+            </span>
+            <div class="media-body">    
+              <a href="/accounts/<%=k.id%>"><%=k.name%></a>
+            </div>
+          </div>           
+        </td>
+        <td <% if current_account and k == current_account %> class="stats-highlight" <% end %>  >
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:<%="#{100*(v.length/max)}%"%>">
+              <%=v.length%>
+            </div>
+          </div>        
+        </td>
+      </tr>
+    <% } %>
+
+  <% } %>
+
+</table>

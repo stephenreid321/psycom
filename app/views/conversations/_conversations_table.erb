@@ -1,0 +1,25 @@
+
+<table class="table" style="margin-top: 10px">
+  <% conversations.each { |conversation| %>
+    <tr>
+      <td>
+        <a class="conversation-title" href="/conversations/<%=conversation.slug%>"><%=conversation.subject%></a>
+        <% if !@group %>
+          <%=g conversation.group%>
+        <% end %>        
+      </td>
+      <td>
+        <%= conversation_posts_badge(conversation) %>
+        <% if conversation.pinned? %>
+          <i class="fa fa-map-pin" title="Pinned"></i>
+        <% end %>
+      </td>
+      <td>
+        <% if conversation.last_conversation_post %>
+          <%=I18n.t(:last_post).capitalize%> <%=timeago(conversation.last_conversation_post.created_at)%>        
+          by <a href="/accounts/<%=conversation.last_conversation_post.account.id%>"><%=conversation.last_conversation_post.account.name%></a>
+        <% end %>
+      </td>
+    </tr>
+  <% } %>      
+</table>

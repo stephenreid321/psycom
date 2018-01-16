@@ -1,0 +1,86 @@
+<div class="table-hr-container">
+  <table class="table table-hr" >
+    <tr>
+      <td>Date</td>
+      <td><%= event.when_details %></td>
+    </tr>
+
+    <% if event.location %>
+      <tr>
+        <td>Location</td>
+        <td><a href="http://www.google.co.uk/maps?q=<%= URI.encode(event.location) %>" target="map"><%= event.location %></a></td>
+      </tr>
+    <% end %>  
+
+    <% if event.organisation_id or event.organisation_name %>
+      <tr>
+        <td>Host</td>
+        <td>
+          <% if event.organisation_id %>
+            <a href="http://<%=Config['DOMAIN']%>/organisations/<%=event.organisation_id%>"><%= event.organisation.name %></a>
+          <% else %>
+            <%= event.organisation_name %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %> 
+
+    <% if event.ticketing %>
+      <tr>
+        <td>Tickets</td>
+        <td>
+          <% if event.tickets_link %>
+            <a target="_blank" href="<%= event.tickets_link.include?('@') ? "mailto:#{event.tickets_link}?subject=RSVP for #{event.name}" : event.tickets_link %>"><%=event.ticketing %></a>
+          <% else %>
+            <%=event.ticketing %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+
+    <% if event.more_info %>
+      <tr>
+        <td>Full details</td>
+        <td><a target="_blank" href="<%=event.more_info%>"><%=event.more_info%></td>
+      </tr>
+    <% end %>   
+
+    <% if event.publicity_tweet %>
+      <tr>
+        <td>
+          Tweet this!
+        </td>
+        <td>
+          <a target="_blank" href="http://twitter.com/intent/tweet?text=<%=CGI::escape(event.publicity_tweet)%>"><%=event.publicity_tweet%></a>
+        </td>
+      </tr>
+    <% end %> 
+
+    <tr>
+      <td>Listed by</td>
+      <td><a href="http://<%=Config['DOMAIN']%>/accounts/<%=event.account_id %>"><%=event.account.name%></a></td>
+    </tr>
+  </table>
+</div>
+
+<% if !(defined? no_more) %>
+  <% if defined? read_more %>
+    <a class="read-more" href="/groups/<%=event.group.slug%>/events/<%=event.id%>">Read more&hellip;</a>
+  <% else %>  
+
+    <%= event.details  %>
+
+    <% if event.reason %>
+      <br />
+      <br />
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Members of <%=event.group.slug%> should come because&hellip;</h3>
+        </div>      
+        <div class="panel-body">  
+          <%= event.reason %>
+        </div>
+      </div>
+    <% end %>  
+  <% end %>
+<% end %>

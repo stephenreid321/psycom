@@ -1,0 +1,33 @@
+
+<style>h3 a.btn { float: right }</style>
+
+<% if message %>
+  <%= message %>
+<% end %>
+
+<h2>       
+  <% if h2 %>
+    <%=h2%> <small><%=compact_daterange(from,to)%></small>      
+  <% else %>
+    <%= group ? I18n.t(:digest_for_group, slug: group.slug).capitalize : I18n.t(:digest_for_your_groups).capitalize %>
+
+    <small>
+      <script>
+        $(function () {
+          $(".datepicker").datepicker({format: 'dd-M-yyyy', autoclose: true});
+        });
+      </script>
+      <% form_tag (group ? "/groups/#{group.slug}/digest" : "/digest"), style: 'display: inline', id: 'from-to', method: :get do %>
+        <input type="text" onchange="$(this).closest('form').submit()" style="width: 8em; display: inline-block" class="form-control datepicker" name="from" value="<%=from.strftime('%d-%b-%Y')%>"/>
+        &ndash;
+        <input type="text" onchange="$(this).closest('form').submit()" style="width: 8em; display: inline-block" class="form-control datepicker" name="to" value="<%=to.strftime('%d-%b-%Y')%>"/>
+        <i style="display:none" class="fa fa-spin fa-spinner"></i>
+      <% end %>
+    </small>
+  <% end %>    
+</h2> 
+
+<%= partial :'digest/hot_conversations', locals: {group: group, hot_conversations: hot_conversations} %>    
+<%= partial :'digest/upcoming_events', locals: {group: group, upcoming_events: upcoming_events} %>    
+<%= partial :'digest/new_events', locals: {group: group, new_events: new_events} %>    
+<%= partial :'digest/new_people', locals: {group: group, new_people: new_people} %>    
