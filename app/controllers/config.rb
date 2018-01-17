@@ -77,10 +77,7 @@ Lumen::App.controllers do
       :INCLUDE_SENDER_PROFILE => ['Include sender profile in conversation post emails'],
       
       :SSL => ['Site served via SSL'],
-            
-      :SLACK_WEBHOOK_URL => 'Slack webhook URL',
-      :SLACK_CHANNEL => 'Channel to post Slack notifications',
-                        
+                                    
       :PRIMARY_COLOR => 'Default #228DFF',
       :PRIMARY_CONTRAST_COLOR => 'Default #FFFFFF',
       :SECONDARY_COLOR => 'Default #228DFF',      

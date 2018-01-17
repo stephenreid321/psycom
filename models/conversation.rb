@@ -92,12 +92,6 @@ class Conversation
       )
       mail.deliver        
     end
-    if Config['SLACK_WEBHOOK_URL']
-      unless self.group.slack_ignore
-        agent = Mechanize.new
-        agent.post Config['SLACK_WEBHOOK_URL'], %Q{{"text":"New conversation in #{self.group.name}: <http://#{Config['DOMAIN']}/conversations/#{slug}|#{subject}> #{"(<http://#{Config['DOMAIN']}/groups/#{self.group.slug}/conversations_requiring_approval|requires approval>)" if self.group.conversations_require_approval}", "channel": "#{Config['SLACK_CHANNEL']}", "username": "Lumen", "icon_emoji": ":bulb:"}}, {'Content-Type' => 'application/json'}
-      end
-    end
   end
     
   def self.admin_fields

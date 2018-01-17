@@ -20,7 +20,6 @@ class Group
   field :hide_from_dropdown, :type => Boolean
   field :conversation_creation_by_admins_only, :type => Boolean
   field :join_on_first_sign_in, :type => Boolean
-  field :slack_ignore, :type => Boolean
         
   dragonfly_accessor :picture do
     after_assign { |picture| self.picture = picture.thumb('500x500>') }
@@ -160,14 +159,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       %Q{The most recent profile update was made by <a href="[most_recently_updated_url]">[most_recently_updated_name]</a>.}
     ]
   end
-  
-  after_create do
-    if Config['SLACK_WEBHOOK_URL']
-      agent = Mechanize.new
-      agent.post Config['SLACK_WEBHOOK_URL'], %Q{{"text":"A group was created: <http://#{Config['DOMAIN']}/groups/#{slug}|#{name}>", "channel": "#{Config['SLACK_CHANNEL']}", "username": "Lumen", "icon_emoji": ":bulb:"}}, {'Content-Type' => 'application/json'}
-    end    
-  end
-       
+         
   after_create :create_default_didyouknows
   def create_default_didyouknows
     default_didyouknows.each { |d| didyouknows.create :body => d }
@@ -194,7 +186,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :group_type_id => :lookup,
       :coordinates => :geopicker,      
       :hide_from_dropdown => :check_box,
-      :slack_ignore => :check_box,
       :conversation_creation_by_admins_only => :check_box,
       :join_on_first_sign_in => :check_box,
       :memberships => :collection,
