@@ -247,40 +247,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def secret?
     privacy == 'secret'
   end
-        
-  after_create :setup_mail_accounts_and_forwarder
-  def setup_mail_accounts_and_forwarder
-    if Config['SMTP_ADDRESS'] and !@setup_complete
-      group = self
-      Net::SSH.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do  |ssh|
-        ssh.exec!("useradd -d /home/#{group.username('-inbox')} -m #{group.username('-inbox')}; echo #{group.username('-inbox')}:#{Config['MAIL_SERVER_PASSWORD']} | chpasswd")
-        ssh.exec!("useradd -d /home/#{group.username('-noreply')} -m #{group.username('-noreply')}; echo #{group.username('-noreply')}:#{Config['MAIL_SERVER_PASSWORD']} | chpasswd")                      
-        ssh.exec!(%Q{echo '#{group.slug}@#{Config['MAIL_DOMAIN']} #{group.username}' >> /etc/postfix/virtual})
-        ssh.exec!(%Q{echo '#{group.username}: #{group.username('-inbox')}, "| /notify/#{Config['APP_NAME']}.sh #{group.slug}"' >> /etc/aliases})
-        ssh.exec!("newaliases")        
-        ssh.exec!("postmap /etc/postfix/virtual")
-        ssh.exec!("service postfix restart")
-      end        
-      @setup_complete = true
-    end    
-  end
-  
-  after_destroy :remove_mail_accounts_and_forwarder
-  def remove_mail_accounts_and_forwarder
-    if Config['SMTP_ADDRESS']
-      group = self
-      Net::SSH.start(Config['MAIL_SERVER_ADDRESS'], Config['MAIL_SERVER_USERNAME'], :password => Config['MAIL_SERVER_PASSWORD']) do  |ssh|
-        ssh.exec!("deluser #{group.username('-inbox')} --remove-home")
-        ssh.exec!("deluser #{group.username('-noreply')} --remove-home")
-        ssh.exec!(%Q{sed -i '/#{Regexp.escape(%Q{#{group.slug}@#{Config['MAIL_DOMAIN']} #{group.username}}).gsub('/','\/')}/d' /etc/postfix/virtual})
-        ssh.exec!(%Q{sed -i '/#{Regexp.escape(%Q{#{group.username}: #{group.username('-inbox')}, "| /notify/#{Config['APP_NAME']}.sh #{group.slug}"}).gsub('/','\/')}/d' /etc/aliases})
-        ssh.exec!("newaliases")        
-        ssh.exec!("postmap /etc/postfix/virtual")
-        ssh.exec!("service postfix restart")    
-      end
-    end
-  end  
-          
+                  
   attr_accessor :renamed
   before_validation do
     errors.add(:slug, "is too long: max #{Group.max_slug_length} characters") if self.slug and self.slug.length > Group.max_slug_length
