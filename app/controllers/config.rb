@@ -10,7 +10,9 @@ Lumen::App.controllers do
             
       :SMTP_ADDRESS => 'Address of SMTP server',
       :SMTP_USERNAME => 'Username of SMTP server',
-      :SMTP_PASSWORD => 'Password for SMTP server',            
+      :SMTP_PASSWORD => 'Password for SMTP server',
+      
+      :MAILGUN_API_KEY => 'Mailgun API key',
       
       :HELP_ADDRESS => 'Email address for general queries',      
             
