@@ -15,7 +15,6 @@ class Group
   field :landing_tab, :type => String
   field :redirect_after_first_profile_save, :type => String
   field :picture_uid, :type => String 
-  field :conversations_require_approval, :type => Boolean
   field :coordinates, :type => Array
   field :hide_from_dropdown, :type => Boolean
   field :conversation_creation_by_admins_only, :type => Boolean
@@ -109,14 +108,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def new_people(from,to)
     Account.where(:id.in => memberships.where(:created_at.gte => from).where(:created_at.lt => to+1).pluck(:account_id)).where(:has_picture => true)
   end
-  
-  def approved_conversations
-    conversations.where(:approved => true)
-  end  
-  
-  def unapproved_conversations
-    conversations.where(:hidden => true).where(:approved => nil)
-  end
     
   def new_events(from,to)
     events.where(:created_at.gte => from).where(:created_at.lt => to+1).where(:start_time.gte => to).order_by(:start_time.asc)
@@ -174,7 +165,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :description => :text_area,
       :picture => :image,
       :privacy => :radio,
-      :conversations_require_approval => :check_box,
       :default_notification_level => :text,
       :request_intro => :text_area,      
       :request_questions => :text_area,

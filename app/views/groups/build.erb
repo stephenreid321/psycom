@@ -45,7 +45,6 @@
     <%= f.text_area_block :request_questions %>
   </div>
   <%= f.wysiwyg_block :landing_tab %>      
-  <%= f.check_box_block :conversations_require_approval %>      
   <%= f.select_block :default_notification_level %>
   <% if GroupType.count > 0 %>
     <%= f.select_block :group_type_id, :options => [''] + GroupType.all.map { |group_type| [I18n.t(:"group_type.#{group_type.slug}"),group_type.id] } %>

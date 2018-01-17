@@ -27,7 +27,6 @@ class Conversation
   field :subject, :type => String
   field :slug, :type => Integer
   field :hidden, :type => Boolean, :default => false
-  field :approved, :type => Boolean
   field :pinned, :type => Boolean
   
   index({slug: 1 }, {unique: true})
@@ -70,35 +69,12 @@ class Conversation
       errors.add(:subject, 'is a duplicate') if self.group == most_recent.group and self.subject == most_recent.subject
     end
   end
-  
-  before_validation do
-    if self.new_record? and group.conversations_require_approval
-      self.hidden = true
-    end
-  end
-  
-  after_create do
-    if Config['SMTP_ADDRESS'] and group.conversations_require_approval
-      group = self.group
-      Mail.defaults do
-        delivery_method :smtp, group.smtp_settings
-      end 
-      mail = Mail.new(
-        :to => group.admins.map(&:email),
-        :from => "#{group.slug} <#{group.email('-noreply')}>",
-        :subject => "Conversation requires approval in #{group.slug} on #{Config['SITE_NAME_SHORT']}",
-        :body => ERB.new(File.read(Padrino.root('app/views/emails/approval_required.erb'))).result(binding)
-      )
-      mail.deliver        
-    end
-  end
-    
+        
   def self.admin_fields
     {
       :subject => :text,
       :slug => :text,
       :hidden => :check_box,
-      :approved => :check_box,
       :pinned => :check_box,
       :group_id => :lookup,      
       :account_id => :lookup,      
