@@ -2,8 +2,6 @@ Lumen::App.controllers do
   
   before do
     @environment_variables = {
-      :APP_NAME => 'App name (lowercase, no spaces)',
-      :GROUP_USERNAME_SUFFIX => 'Custom username suffix for groups (defaults to APP_NAME)',      
       
       :DOMAIN => 'Domain of Lumen web app',
       :MAIL_DOMAIN => 'Domain from which mails will be sent and received',

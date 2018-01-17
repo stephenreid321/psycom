@@ -74,13 +74,9 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def email(suffix = '')
     "#{self.slug}#{suffix}@#{Config['MAIL_DOMAIN']}"
   end
-      
-  def username(add = '')
-    "#{slug}#{add}.#{Config['GROUP_USERNAME_SUFFIX'] || Config['APP_NAME']}"
-  end
   
   def self.max_slug_length
-    32 - "-noreply.#{Config['GROUP_USERNAME_SUFFIX'] || Config['APP_NAME']}".length
+    32
   end  
                
   def smtp_settings
