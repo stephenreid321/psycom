@@ -8,11 +8,15 @@ Lumen::App.controllers do
             
       :SMTP_ADDRESS => 'Address of SMTP server',
       :SMTP_USERNAME => 'Username of SMTP server',
-      :SMTP_PASSWORD => 'Password for SMTP server',
-      
+      :SMTP_PASSWORD => 'Password for SMTP server',      
       :MAILGUN_API_KEY => 'Mailgun API key',
       
       :HELP_ADDRESS => 'Email address for general queries',      
+      
+      :S3_BUCKET_NAME => 'S3 bucket name',
+      :S3_ACCESS_KEY => 'S3 access key',
+      :S3_SECRET => 'S3 secret',
+      :S3_REGION => 'S3 region',
             
       :AIRBRAKE_HOST => 'Airbrake host (no http://)',
       :AIRBRAKE_API_KEY => 'Airbrake API key',  

@@ -1,12 +1,11 @@
 Dragonfly.app.configure do    
   plugin :imagemagick
   url_format '/media/:job/:name'    
-  secret Config['DRAGONFLY_SECRET']
+  datastore :s3, {:bucket_name => ENV['S3_BUCKET_NAME'], :access_key_id => ENV['S3_ACCESS_KEY'], :secret_access_key => ENV['S3_SECRET'], :region => ENV['S3_REGION'], :url_scheme => 'https'}
+  secret ENV['DRAGONFLY_SECRET']
   
-  `ln -s /storage #{Padrino.root('app', 'assets', 'dragonfly')}` if Padrino.env == :production
-  datastore :file, {:root_path => Padrino.root('app', 'assets', 'dragonfly'), :server_root => 'assets'}
-     
   define_url do |app, job, opts|    
     app.datastore.url_for((DragonflyJob.find_by(signature: job.signature) || DragonflyJob.create(uid: job.store, signature: job.signature)).uid)
   end
+  
 end
