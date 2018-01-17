@@ -247,6 +247,14 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def secret?
     privacy == 'secret'
   end
+  
+  after_create :setup_mail_accounts_and_forwarder
+  def setup_mail_accounts_and_forwarder    
+  end
+  
+  after_destroy :remove_mail_accounts_and_forwarder
+  def remove_mail_accounts_and_forwarder
+  end   
                   
   attr_accessor :renamed
   before_validation do
