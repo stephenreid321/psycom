@@ -1,5 +1,5 @@
 Lumen::App.controllers do
-    
+         
   get '/groups/new' do
     Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? site_admins_only! : sign_in_required!
     @group = Group.new
@@ -34,12 +34,7 @@ Lumen::App.controllers do
     @title = @group.name
     erb :'groups/group'
   end
-  
-  post '/groups/:slug/inbound' do    
-		mail, html, plain_text = EmailReceiver.receive(request)
-		raise plain_text
-  end    
-      
+       
   get '/groups/:slug/members' do
     @group = Group.find_by(slug: params[:slug]) || not_found
     @membership = @group.memberships.find_by(account: current_account)
