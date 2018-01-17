@@ -1,10 +1,5 @@
 <% if @membership %>
   <ul class="page-options">  
-    <% if @membership and !@conversation.proposal %>
-      <li>
-        <a title="Make a proposal" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/propose"><i class="fa fa-pie-chart"></i> Make a proposal</a>
-      </li>     
-    <% end %>
     <% if @conversation.conversation_mutes.find_by(account: current_account) %>
       <li>
         <a title="Unmute conversation" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/unmute"><i class="fa fa-volume-up"></i> Unmute conversation</a>
@@ -84,10 +79,6 @@
 
   </div>
   <div class="col-sm-4">
-
-    <% if @conversation.proposal %>
-      <%= partial :'conversations/proposal', :locals => {:proposal => @conversation.proposal} %>
-    <% end %>
 
     <% if current_account %>
       <h2 style="margin-top: 0"><%=pluralize(@conversation.participants.count,'participant')%> in this conversation</h2>

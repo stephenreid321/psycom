@@ -63,7 +63,6 @@ class Account
   has_many :venues_as_creator, :class_name => 'Venue', :inverse_of => :account, :dependent => :destroy
   has_many :docs_as_creator, :class_name => 'Doc', :inverse_of => :account, :dependent => :destroy
   has_many :likes, :dependent => :destroy
-  has_many :proposals, :dependent => :destroy
   has_many :positions, :dependent => :destroy
   
   belongs_to :language, index: true

@@ -101,60 +101,6 @@ Lumen::App.controllers do
     end
   end
   
-  get '/conversations/:slug/propose' do
-    @conversation = Conversation.find_by(slug: params[:slug]) || not_found
-    @group = @conversation.group
-    membership_required!(@group)
-    @membership = @group.memberships.find_by(account: current_account)
-    @proposal = Proposal.new(conversation: @conversation, closes_at: Time.now + 7.days)
-    erb :'conversations/proposal'
-  end  
-    
-  post '/conversations/:slug/propose' do
-    @conversation = Conversation.find_by(slug: params[:slug]) || not_found
-    @group = @conversation.group
-    membership_required!(@group)
-    @membership = @group.memberships.find_by(account: current_account)
-    @proposal = Proposal.new(params[:proposal])
-    @proposal.account = current_account
-    @proposal.conversation = @conversation
-    if @proposal.save
-      redirect "/conversations/#{@conversation.slug}"
-    else
-      flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the proposal from being created."
-      erb :'conversations/proposal'      
-    end
-  end  
-  
-  get '/proposals/:id/destroy' do
-    @proposal = Proposal.find(params[:id]) || not_found
-    @conversation = @proposal.conversation
-    @group = @conversation.group
-    membership_required!(@group)
-    @membership = @group.memberships.find_by(account: current_account)
-    if (@proposal.account == current_account) or @membership.admin?
-      @proposal.destroy      
-    end
-    redirect back
-  end  
-  
-  get '/proposals/:id/position/:status' do
-    @proposal = Proposal.find(params[:id]) || not_found
-    @conversation = @proposal.conversation
-    @group = @conversation.group
-    membership_required!(@group)
-    @membership = @group.memberships.find_by(account: current_account)
-    position = @proposal.positions.find_by(account: current_account) || @proposal.positions.build(account: current_account)
-    if params[:status] == 'destroy'
-      position.destroy
-    else
-      position.status = params[:status]
-      position.reason = params[:reason]
-      position.save!
-    end
-    redirect back
-  end
-  
   get '/conversations/:slug/approve' do
     @conversation = Conversation.find_by(slug: params[:slug]) || not_found
     group_admins_only!(@conversation.group)
