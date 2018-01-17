@@ -25,6 +25,7 @@ gem 'omniauth-google-oauth2'
 # Email
 gem 'mail'
 gem 'premailer'
+gem 'incoming'
 
 # Interacting with other websites
 gem 'airbrake', '~> 5.0'
