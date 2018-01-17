@@ -37,14 +37,9 @@ Lumen::App.controllers do
   
   post '/groups/:slug/inbound' do    
 		mail, html, plain_text = EmailReceiver.receive(request)
-		### create post here
+		raise plain_text
   end    
-  
-  post '/groups/:slug/inbound/:id' do    
-		mail, html, plain_text = EmailReceiver.receive(request)
-		### create post here
-  end  
-    
+      
   get '/groups/:slug/members' do
     @group = Group.find_by(slug: params[:slug]) || not_found
     @membership = @group.memberships.find_by(account: current_account)
