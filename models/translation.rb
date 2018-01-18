@@ -35,6 +35,8 @@ class Translation
       :organisations => 'organisations',
       :sector => 'sector',
       :sectors => 'sectors',
+      :position => 'position',
+      :positions => 'positions',      
       :account_tagship => 'area of expertise',
       :account_tagships => 'areas of expertise',
       :add_another_account_tagship => 'add another area of expertise',      

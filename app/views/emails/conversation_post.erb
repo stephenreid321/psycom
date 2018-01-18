@@ -30,11 +30,11 @@
       <fieldset style="margin-top: 1em">
         <legend>Attachments</legend>        
         <% if conversation_post.attachments.count == 1 and (attachment = conversation_post.attachments.first; %w{png jpg gif jpeg}.any? { |x| attachment.file_name.downcase.ends_with? ".#{x}" }) and !attachment.cid %>
-          <img style="display: block; width: 100%;" src="http://<%=Config['DOMAIN']%><%=attachment.file.url%>">
+          <img style="display: block; width: 100%;" src="<%=attachment.file.url%>">
         <% elsif conversation_post.attachments.count > 0 %>
           <ul>
             <% conversation_post.attachments.each { |attachment| %>
-              <li><a href="http://<%=Config['DOMAIN']%><%=attachment.file.url%>"><%=attachment.file_name%></a></li>
+              <li><a href="<%=attachment.file.url%>"><%=attachment.file_name%></a></li>
             <% } %>
           </ul>
         <% end %>
@@ -74,11 +74,11 @@
           <fieldset style="margin-top: 1em">
             <legend>Attachments</legend>        
             <% if conversation_post.attachments.count == 1 and (attachment = conversation_post.attachments.first; %w{png jpg gif jpeg}.any? { |x| attachment.file_name.downcase.ends_with? ".#{x}" }) and !attachment.cid %>
-              <img style="display: block; width: 100%;" src="http://<%=Config['DOMAIN']%><%=attachment.file.url%>">
+              <img style="display: block; width: 100%;" src="<%=attachment.file.url%>">
             <% elsif conversation_post.attachments.count > 0 %>
               <ul>
                 <% conversation_post.attachments.each { |attachment| %>
-                  <li><a href="http://<%=Config['DOMAIN']%><%=attachment.file.url%>"><%=attachment.file_name%></a></li>
+                  <li><a href="<%=attachment.file.url%>"><%=attachment.file_name%></a></li>
                 <% } %>
               </ul>
             <% end %>
