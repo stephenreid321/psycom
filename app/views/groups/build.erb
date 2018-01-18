@@ -49,7 +49,6 @@
   <% if GroupType.count > 0 %>
     <%= f.select_block :group_type_id, :options => [''] + GroupType.all.map { |group_type| [I18n.t(:"group_type.#{group_type.slug}"),group_type.id] } %>
   <% end %>
-  <%= f.text_block :redirect_after_first_profile_save %>
   <% if current_account.admin? %>
     <%= f.check_box_block :conversation_creation_by_admins_only %>
     <%= f.check_box_block :join_on_first_sign_in %>

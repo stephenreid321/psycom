@@ -33,11 +33,7 @@ ActivateApp::App.controllers do
         redirect back
       else
         flash[:notice] = "<strong>Great!</strong> Your account was updated successfully."
-        if @account.sign_ins.count == 1 and @account.memberships.count > 0
-          redirect (@account.memberships.first.group.try(:redirect_after_first_profile_save) || '/')
-        else
-          redirect '/me/edit'
-        end
+        redirect '/me/edit'
       end
     else
       flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the account from being saved."

@@ -13,7 +13,6 @@ class Group
   field :request_intro, :type => String  
   field :request_questions, :type => String
   field :landing_tab, :type => String
-  field :redirect_after_first_profile_save, :type => String
   field :picture_uid, :type => String 
   field :coordinates, :type => Array
   field :hide_from_dropdown, :type => Boolean
@@ -168,7 +167,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :invite_email => :text_area,
       :membership_request_thanks_email => :text_area,
       :membership_request_acceptance_email => :text_area,
-      :redirect_after_first_profile_save => :text,      
       :group_type_id => :lookup,
       :coordinates => :geopicker,      
       :hide_from_dropdown => :check_box,
