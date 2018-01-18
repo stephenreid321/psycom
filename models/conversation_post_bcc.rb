@@ -70,7 +70,7 @@ class ConversationPostBcc
         
     if previous_conversation_posts
       begin
-        references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bcc.try(:message_id)}>" }
+        references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bccs.order('created_at desc').first.try(:message_id)}>" }
         mail.in_reply_to = references.first
         mail.references = references.join(' ')
       rescue => e

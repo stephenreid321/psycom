@@ -15,12 +15,8 @@ class ConversationPost
   belongs_to :group, index: true
   belongs_to :account, index: true
   
-  has_many :conversation_post_bccs, :dependent => :destroy # has_one 
+  has_many :conversation_post_bccs, :dependent => :destroy
   has_many :conversation_post_bcc_recipients, :dependent => :destroy
-  
-  def conversation_post_bcc
-    conversation_post_bccs.first
-  end
   
   has_many :attachments, :dependent => :destroy
   accepts_nested_attributes_for :attachments
@@ -117,6 +113,7 @@ class ConversationPost
     end
     conversation_post_bccs.create(accounts: accounts_to_notify)
   end
+  handle_asynchronously :send_notifications!
              
   def replace_cids!
     self.body = body.gsub(/src="cid:(\S+)"/) { |match|
