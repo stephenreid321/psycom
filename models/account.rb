@@ -252,7 +252,7 @@ class Account
   has_many :provider_links, :dependent => :destroy
   accepts_nested_attributes_for :provider_links
                         
-  attr_accessor :password, :password_confirmation 
+  attr_accessor :password
   
   attr_accessor :require_account_affiliations
   before_validation do
@@ -261,7 +261,6 @@ class Account
     
   validates_presence_of :name, :email
   validates_presence_of :password, :if => :password_required
-  validates_presence_of :password_confirmation, :if => :password_required  
   
   def require_account_postcode
     Config['REQUIRE_ACCOUNT_POSTCODE']
@@ -272,7 +271,6 @@ class Account
   validates_uniqueness_of :email, :case_sensitive => false
   validates_format_of :email, :with => /\A[^@\s]+@[^@\s]+\.[^@\s]+\Z/i
   validates_length_of :password, :within => 4..40, :if => :password_required
-  validates_confirmation_of :password, :if => :password_required 
   
   validates_length_of :headline, maximum: (Config['MAX_HEADLINE_LENGTH'] ? Config['MAX_HEADLINE_LENGTH'].to_i : 150)
   
@@ -362,7 +360,6 @@ class Account
       :time_zone => :select,
       :language_id => :lookup,
       :password => :password,
-      :password_confirmation => :password,
       :password_set_by_user => :check_box,
       :prevent_new_memberships => :check_box,      
       :affiliations => :collection,

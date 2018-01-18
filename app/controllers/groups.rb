@@ -74,7 +74,6 @@ ActivateApp::App.controllers do
       if !(@account = Account.find_by(email: /^#{Regexp.escape(params[:account][:email])}$/i))
         @account = Account.new(mass_assigning(params[:account], Account))
         @account.password = Account.generate_password(8) # this password is never actually used; it's reset by process_membership_request
-        @account.password_confirmation = @account.password 
         if !@account.save
           flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the account from being saved."
           halt 400, (erb :'groups/request_membership')
@@ -140,7 +139,6 @@ ActivateApp::App.controllers do
         @new_account = true
         @account = Account.new(mass_assigning(params[:account], Account))
         @account.password = Account.generate_password(8)
-        @account.password_confirmation = @account.password
         if !@account.save
           flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the account from being saved."
           halt 400, (erb :'groups/group')

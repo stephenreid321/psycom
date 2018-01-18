@@ -17,7 +17,6 @@ You were added to the groups [group_list] on #{Config['SITE_NAME_DEFINITE']}.
     @account = Account.new(mass_assigning(params[:account], Account))
     password = Account.generate_password(8)
     @account.password = password
-    @account.password_confirmation = password
     if @account.save
       flash[:notice] = 'The account was created successfully'              
       redirect back

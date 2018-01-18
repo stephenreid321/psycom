@@ -71,7 +71,6 @@ class Translation
       :'mongoid.attributes.account.linkedin_profile_url' => 'LinkedIn profile URL',
       :'mongoid.attributes.account.picture' => 'Picture',
       :'mongoid.attributes.account.password' => 'Password',
-      :'mongoid.attributes.account.password_confirmation' => 'Password again',      
       :'mongoid.attributes.account.location' => 'Location',
       :'mongoid.attributes.account.town' => 'Town/city',
       :'mongoid.attributes.account.state' => 'State/province',

@@ -188,7 +188,6 @@ ActivateApp::App.controllers do
             :password => Account.generate_password(8),
             :email => email
           })
-        @account.password_confirmation = @account.password
         if !@account.save
           notices << "Failed to create an account for #{email} - is this a valid email address?"
           next

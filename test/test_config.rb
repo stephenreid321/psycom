@@ -23,7 +23,6 @@ FactoryGirl.define do
     sequence(:email) { |n| "account#{n}@example.com" }
     time_zone 'London'
     sequence(:password) { |n| "password#{n}" } 
-    password_confirmation { password }
   end
   
   factory :group do

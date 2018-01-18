@@ -123,7 +123,6 @@
 
   <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>
   <%= f.password_block :password %>
-  <%= f.password_block :password_confirmation %>
   <%= f.submit_block button_text: I18n.t(:update_account).capitalize %>
 
 <% end %>

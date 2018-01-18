@@ -55,7 +55,7 @@ module ActivateApp
     
     get '/' do
       if Account.count == 0       
-        account = Account.create!(:name => 'admin', :password => 'admin', :password_confirmation => 'admin', :email => 'admin@example.com', :admin => true)
+        account = Account.create!(:name => 'admin', :password => 'admin', :email => 'admin@example.com', :admin => true)
         SignIn.create(account: account)
         session[:account_id] = account.id.to_s
         flash[:notice] = %Q{An admin account has been created. You'll want to change the name, email address and password.}        
