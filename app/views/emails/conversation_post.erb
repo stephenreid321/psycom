@@ -33,7 +33,7 @@
           <img style="display: block; width: 100%;" src="<%=attachment.file.url%>">
         <% elsif conversation_post.attachments.count > 0 %>
           <ul>
-            <% conversation_post.attachments.each { |attachment| %>
+            <% conversation_post.attachments(true).each { |attachment| %>
               <li><a href="<%=attachment.file.url%>"><%=attachment.file_name%></a></li>
             <% } %>
           </ul>
@@ -77,7 +77,7 @@
               <img style="display: block; width: 100%;" src="<%=attachment.file.url%>">
             <% elsif conversation_post.attachments.count > 0 %>
               <ul>
-                <% conversation_post.attachments.each { |attachment| %>
+                <% conversation_post.attachments(true).each { |attachment| %>
                   <li><a href="<%=attachment.file.url%>"><%=attachment.file_name%></a></li>
                 <% } %>
               </ul>

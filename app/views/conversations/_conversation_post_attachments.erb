@@ -2,7 +2,7 @@
   <img style="width: 100%;" src="<%=attachment.file.url%>">
 <% elsif conversation_post.attachments.count > 0 %>
   <ul class="fa-ul" style="margin-top: 0; margin-bottom: 0">
-    <% conversation_post.attachments.each { |attachment| %>
+    <% conversation_post.attachments(true).each { |attachment| %>
       <li><i class="fa fa-li fa-paperclip"></i><a href="<%=attachment.file.url%>"><%=attachment.file_name%></a></li>
         <% } %>
   </ul>
