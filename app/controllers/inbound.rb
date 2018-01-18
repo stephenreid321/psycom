@@ -1,14 +1,14 @@
 ActivateApp::App.controllers do
     
   post '/groups/:slug/inbound' do    
-    group = Group.find_by(slug: params[:slug]) || not_found
+    group = Group.find_by(slug: params[:slug]) || (halt 406)
 		mail = EmailReceiver.receive(request)
 
-    halt unless mail.from
+    (halt 406) unless mail.from
     from = mail.from.first
     
     puts "message from #{from}"            
-    halt if mail.sender == group.email('-noreply') # check this isn't a message sent by the app
+    (halt 406) if mail.sender == group.email('-noreply') # check this isn't a message sent by the app
                                    
     # skip messages from people that aren't in the group
     account = Account.find_by(email: /^#{Regexp.escape(from)}$/i)     
@@ -30,7 +30,7 @@ ActivateApp::App.controllers do
       end
         
       puts "this message was sent by a stranger"
-      halt
+      (halt 406)
     end    
     
     if mail.html_part
@@ -73,7 +73,7 @@ ActivateApp::App.controllers do
     else      
       new_conversation = true
       conversation = group.conversations.create :subject => (mail.subject.blank? ? '(no subject)' : mail.subject), :account => account
-      halt if !conversation.persisted? # failed to find/create a valid conversation - probably a dupe
+      (halt 406) if !conversation.persisted? # failed to find/create a valid conversation - probably a dupe
       puts "created new conversation id #{conversation.id}"
     end
       
@@ -86,7 +86,7 @@ ActivateApp::App.controllers do
     if !conversation_post.persisted? # failed to create the conversation post
       puts "failed to create conversation post, deleting conversation"
       conversation.destroy if new_conversation
-      halt
+      (halt 406)
     end
     puts "created conversation post id #{conversation_post.id}"
     mail.attachments.each do |attachment|
