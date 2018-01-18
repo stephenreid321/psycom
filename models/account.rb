@@ -28,6 +28,7 @@ class Account
   field :linkedin_profile_url, :type => String
   field :google_profile_url, :type => String
   field :prevent_new_memberships, :type => Boolean
+  field :username, :type => String
   
   def self.protected_attributes
     %w{admin}
@@ -261,6 +262,8 @@ class Account
     
   validates_presence_of :name, :email
   validates_presence_of :password, :if => :password_required
+  validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
+  validates_uniqueness_of :username, :allow_nil => true
   
   def require_account_postcode
     Config['REQUIRE_ACCOUNT_POSTCODE']
@@ -296,7 +299,12 @@ class Account
     errors.add(:password, 'should be changed') if self.require_password_change and !self.password_set_by_user and !self.password
   end    
   
+  def username_or_id
+    username or id
+  end  
+  
   before_validation do    
+    self.username = self.username.downcase if self.username
     self.email = self.email.gsub(' ','') if self.email # strip unicode \u00a0
     self.secret_token = SecureRandom.uuid if !self.secret_token
     self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
@@ -327,6 +335,7 @@ class Account
     
   def self.new_tips
     {
+      :username => 'Letters, numbers, underscores and periods',
       :postcode => I18n.t(:account_postcode_tip)
     }
   end
@@ -338,6 +347,7 @@ class Account
   def self.admin_fields
     {
       :name => :text,
+      :username => :text,
       :firstname => {:type => :text, :edit => false},
       :lastname => {:type => :text, :edit => false},
       :email => :text,
