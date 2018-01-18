@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   before do
     @from = params[:from] ? Date.parse(params[:from]) : 1.week.ago.to_date

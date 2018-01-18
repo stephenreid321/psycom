@@ -1,4 +1,4 @@
-module Lumen
+module ActivateApp
   class App < Padrino::Application
     
     set :sessions, :expire_after => 1.year    
@@ -55,12 +55,12 @@ module Lumen
     
     get '/' do
       if Account.count == 0       
-        account = Account.create!(:name => 'Lumen Admin', :password => 'lumen', :password_confirmation => 'lumen', :email => 'admin@example.com', :admin => true)
+        account = Account.create!(:name => 'admin', :password => 'admin', :password_confirmation => 'admin', :email => 'admin@example.com', :admin => true)
         SignIn.create(account: account)
         session[:account_id] = account.id.to_s
-        flash[:notice] = %Q{<strong>Welcome to Lumen!</strong> An admin account has been created. You'll want to change the name, email address and password.}        
+        flash[:notice] = %Q{An admin account has been created. You'll want to change the name, email address and password.}        
         redirect '/me/edit'
-      end      
+      end
       sign_in_required! unless Fragment.find_by(slug: 'public-homepage')
       if current_account
         @o = :updated       

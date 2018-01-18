@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
          
   get '/groups/new' do
     Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? site_admins_only! : sign_in_required!

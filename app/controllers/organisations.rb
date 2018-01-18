@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   get '/organisations' do
     sign_in_required!

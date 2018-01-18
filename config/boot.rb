@@ -22,3 +22,7 @@ Delayed::Worker.max_attempts = 1
 Delayed::Worker.destroy_failed_jobs = false
 
 I18n.enforce_available_locales = false
+
+if Language.count == 0 
+  Language.create :name => 'English', :code => 'en', :default => true
+end

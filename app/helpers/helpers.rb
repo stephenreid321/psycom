@@ -1,4 +1,4 @@
-Lumen::App.helpers do
+ActivateApp::App.helpers do
   
   def mass_assigning(params, model)
     params ||= {}

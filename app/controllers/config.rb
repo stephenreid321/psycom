@@ -1,17 +1,18 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   before do
     @environment_variables = {
       
-      :DOMAIN => 'Domain of Lumen web app',
+      :DOMAIN => 'Domain of web app',
       :MAIL_DOMAIN => 'Domain from which mails will be sent and received',
             
       :SMTP_ADDRESS => 'Address of SMTP server',
       :SMTP_USERNAME => 'Username of SMTP server',
       :SMTP_PASSWORD => 'Password for SMTP server',      
       :MAILGUN_API_KEY => 'Mailgun API key',
-      
-      :HELP_ADDRESS => 'Email address for general queries',      
+            
+      :DRAGONFLY_SECRET => 'Dragonfly secret',
+      :SESSION_SECRET => 'Session secret',      
       
       :S3_BUCKET_NAME => 'S3 bucket name',
       :S3_ACCESS_KEY => 'S3 access key',
@@ -21,11 +22,13 @@ Lumen::App.controllers do
       :AIRBRAKE_HOST => 'Airbrake host (no http://)',
       :AIRBRAKE_API_KEY => 'Airbrake API key',  
       
+      :HELP_ADDRESS => 'Email address for general queries',            
+      
       :GOOGLE_MAPS_API_KEY => 'Google Maps API key',
       
-      :SITE_NAME => 'Name of site e.g. Lumen Users Network',
-      :SITE_NAME_DEFINITE => "Name of site with 'the' if appropriate e.g. The Lumen Users Network",
-      :SITE_NAME_SHORT => 'Short site name e.g. LUN',
+      :SITE_NAME => 'Name of site',
+      :SITE_NAME_DEFINITE => "Name of site with 'the' if appropriate",
+      :SITE_NAME_SHORT => 'Short site name',
       :NAVBAR_BRAND => 'Content to appear in a.navbar-brand in the header',
       
       :DEFAULT_TIME_ZONE => 'Default time zone (see dropdown in profile for options, defaults to London)',

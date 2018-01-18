@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   get '/groups/:slug/conversations' do
     @group = Group.find_by(slug: params[:slug]) || not_found

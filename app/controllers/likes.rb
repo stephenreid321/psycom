@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
     
   get '/conversation_posts/:id/like' do
     sign_in_required!

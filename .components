@@ -5,4 +5,4 @@
 :script: jquery
 :renderer: erb
 :stylesheet: sass
-:namespace: Lumen
+:namespace: ActivateApp

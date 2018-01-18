@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
     
   get '/groups/:slug/edit' do
     @group = Group.find_by(slug: params[:slug]) || not_found
@@ -209,7 +209,7 @@ Lumen::App.controllers do
       notices << "#{email} was added to the group."
     }
     
-    Delayed::Job.enqueue SendWelcomeEmailsJob.new(@group.id)
+    @group.send_welcome_emails
         
     flash[:notice] = notices.join('<br />') if !notices.empty?
     redirect back

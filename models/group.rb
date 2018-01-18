@@ -250,5 +250,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def send_welcome_emails
     memberships.where(:welcome_email_pending => true).each(&:send_welcome_email)
   end
+  handle_asynchronously :send_welcome_emails
         
 end

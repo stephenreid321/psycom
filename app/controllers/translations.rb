@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   before do
     unless current_account and (current_account.admin? or current_account.translator)

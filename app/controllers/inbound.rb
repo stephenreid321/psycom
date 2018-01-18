@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
     
   post '/groups/:slug/inbound' do    
     group = Group.find_by(slug: params[:slug]) || not_found
@@ -8,7 +8,7 @@ Lumen::App.controllers do
     from = mail.from.first
     
     puts "message from #{from}"            
-    halt if mail.sender == group.email('-noreply') # check this isn't a message sent by Lumen
+    halt if mail.sender == group.email('-noreply') # check this isn't a message sent by the app
                                    
     # skip messages from people that aren't in the group
     account = Account.find_by(email: /^#{Regexp.escape(from)}$/i)     

@@ -1,4 +1,4 @@
-Lumen::App.controllers do
+ActivateApp::App.controllers do
   
   get '/groups/:slug/venues' do
     redirect '/map'
