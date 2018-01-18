@@ -72,11 +72,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def email(suffix = '')
     "#{self.slug}#{suffix}@#{Config['MAIL_DOMAIN']}"
   end
-  
-  def self.max_slug_length
-    32
-  end  
-               
+                 
   def smtp_settings
     {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
   end  
@@ -224,29 +220,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def secret?
     privacy == 'secret'
   end
-  
-  after_create :setup_mail_accounts_and_forwarder
-  def setup_mail_accounts_and_forwarder    
-  end
-  
-  after_destroy :remove_mail_accounts_and_forwarder
-  def remove_mail_accounts_and_forwarder
-  end   
-                  
-  attr_accessor :renamed
-  before_validation do
-    errors.add(:slug, "is too long: max #{Group.max_slug_length} characters") if self.slug and self.slug.length > Group.max_slug_length
-    @renamed = slug_changed?
-    true
-  end
-  after_save :rename
-  def rename
-    if persisted? and @renamed
-      setup_mail_accounts_and_forwarder
-      conversation_posts.update_all(imap_uid: nil)
-    end
-  end
-  
+                     
   def send_welcome_emails
     memberships.where(:welcome_email_pending => true).each(&:send_welcome_email)
   end
