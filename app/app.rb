@@ -31,7 +31,7 @@ module ActivateApp
     set :default_builder, 'ActivateFormBuilder'    
                       
     before do
-      redirect "http://#{Config['DOMAIN']}#{request.path}" if Config['DOMAIN'] and request.env['HTTP_HOST'] != Config['DOMAIN']
+      redirect "#{ENV['BASE_URI']}#{request.path}" if ENV['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != ENV['BASE_URI']
       Time.zone = (current_account and current_account.time_zone) ? current_account.time_zone : (Config['DEFAULT_TIME_ZONE'] || 'London')
       I18n.locale = (current_account and current_account.language) ? current_account.language.code : Language.default.code      
       fix_params!
@@ -61,17 +61,11 @@ module ActivateApp
         flash[:notice] = %Q{An admin account has been created. You'll want to change the name, email address and password.}        
         redirect '/me/edit'
       end
-      sign_in_required! unless Fragment.find_by(slug: 'public-homepage')
-      if current_account
-        @o = :updated       
-        erb :home
-      else
-        erb :'public/homepage'
-      end
+      @o = :updated       
+      erb :home
     end
             
-    get '/people' do
-      sign_in_required!
+    get '/people' do      
       erb :people
     end    
                    

@@ -42,16 +42,7 @@
                 </td>          
               </tr>
             <% end %>           
-
-            <% if !@organisation.sectorships.empty?%>
-              <tr>
-                <td>Sectors</td>
-                <td>
-                  <%@organisation.sectorships.each { |sectorship|%><a href="/sectors/<%=sectorship.sector_id%>"><span class="label label-primary" style="text-indent: 0"><%=sectorship.sector.name%></span></a> <% } %>
-                </td>
-              </tr>
-            <% end %>             
-
+           
           </table>
         </div>
 

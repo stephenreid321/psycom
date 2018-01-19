@@ -29,7 +29,7 @@ class Slide
   end
   
   def self.series
-    ['signed-in','not-signed-in']
+    ['signed-in']
   end
     
 end

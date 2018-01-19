@@ -17,7 +17,7 @@
         <td>Host</td>
         <td>
           <% if event.organisation_id %>
-            <a href="http://<%=Config['DOMAIN']%>/organisations/<%=event.organisation_id%>"><%= event.organisation.name %></a>
+            <a href="<%=Config['BASE_URI']%>/organisations/<%=event.organisation_id%>"><%= event.organisation.name %></a>
           <% else %>
             <%= event.organisation_name %>
           <% end %>
@@ -58,14 +58,14 @@
 
     <tr>
       <td>Listed by</td>
-      <td><a href="http://<%=Config['DOMAIN']%>/accounts/<%=event.account_id %>"><%=event.account.name%></a></td>
+      <td><a href="<%=Config['BASE_URI']%>/accounts/<%=event.account_id %>"><%=event.account.name%></a></td>
     </tr>
   </table>
 </div>
 
 <% if !(defined? no_more) %>
   <% if defined? read_more %>
-    <a class="read-more" href="/groups/<%=event.group.slug%>/events/<%=event.id%>">Read more&hellip;</a>
+    <a class="read-more" href="/events/<%=event.id%>">Read more&hellip;</a>
   <% else %>  
 
     <%= event.details  %>
@@ -75,7 +75,7 @@
       <br />
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Members of <%=event.group.slug%> should come because&hellip;</h3>
+          <h3 class="panel-title">Come because&hellip;</h3>
         </div>      
         <div class="panel-body">  
           <%= event.reason %>

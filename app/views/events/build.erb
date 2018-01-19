@@ -1,25 +1,8 @@
-<ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li>
-    <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
-  </li>
-  <li>
-    <a href="/groups/<%=@group.slug%>/events"><%=I18n.t(:events).capitalize%></a>    
-  </li>  
-  <% if @event.persisted? %>
-    <li>
-      <a href="/groups/<%=@group.slug%>/events/<%=@event.id%>"><%= @event.name %></a>    
-    </li>      
-    <li class="active">
-      Edit
-    </li>
-  <% else %>
-    <li class="active">
-      <%=I18n.t(:new_event).capitalize%>
-    </li>    
-  <% end %>
-</ol>
+<% if @event.persisted? %>
+  <h1>Edit event</h1>
+<% else %>
+  <h1>New event</h1>
+<% end %>
 
 <style>
   .time { display: none }
@@ -62,7 +45,7 @@
   });
 </script>        
 
-<% form_for @event, @event.new_record? ? "/groups/#{@group.slug}/events/new" : "/groups/#{@group.slug}/events/#{@event.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
+<% form_for @event, @event.new_record? ? "/events/new" : "/events/#{@event.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :name %>
   <%= f.datetime_block :start_time, fives: true %>
@@ -84,15 +67,10 @@
   </div>
   <%= f.text_block :reason %>        
   <%= f.text_area_block :publicity_tweet %>   
-  <% if @event.new_record? %>
-    <% if !@group.conversation_creation_by_admins_only or @membership.admin? %>
-      <%= f.check_box_block :start_conversation %>    
-    <% end %>
-  <% end %>
   <% if current_account.admin? %>
     <%= f.check_box_block :highlighted %>    
   <% end %>      
 
-  <%= f.submit_block destroy_url: "/groups/#{@group.slug}/events/#{@event.id}/destroy" %>
+  <%= f.submit_block destroy_url: "/events/#{@event.id}/destroy" %>
 
 <% end %>

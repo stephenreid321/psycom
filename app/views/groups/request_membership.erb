@@ -13,7 +13,7 @@
 <% if @membership %>
   <div style="text-align: center">
     You're already a member of <%=@group.name%>. Non-members can apply for membership by visiting this page:<br />
-    <span style="display: inline-block; margin-top: 10px; border-bottom: 1px dotted #999"><%= Config['SSL'] ? 'https://' : 'http://' %><%=Config['DOMAIN']%>/groups/<%=@group.slug%>/request_membership</span>
+    <span style="display: inline-block; margin-top: 10px; border-bottom: 1px dotted #999"><%=Config['BASE_URI']%>/groups/<%=@group.slug%>/request_membership</span>
   </div>
 <% elsif @group.membership_requests.find_by(account: current_account, status: 'pending') %>
   <div style="text-align: center">
@@ -38,14 +38,6 @@
     <% if !current_account %>
       <%= f.text_block :name %>
       <%= f.text_block :email %>
-      <% if Config['REQUEST_LOCATION'] %>
-        <%= f.text_block :town %>
-        <% if Config['SHOW_ACCOUNT_STATE'] %>
-          <%= f.text_block :state %>
-        <% end %>
-        <%= f.text_block :postcode %>
-        <%= f.select_block :country %>  
-      <% end %>
       <%= f.hidden_field :request_membership, :value => true %>
       <%= f.text_block :antispam %>
     <% end %>

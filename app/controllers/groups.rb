@@ -20,7 +20,6 @@ ActivateApp::App.controllers do
   end
   
   get '/groups' do      
-    sign_in_required!
     erb :'groups/groups'
   end
                                 
@@ -28,7 +27,6 @@ ActivateApp::App.controllers do
     @group = Group.find_by(slug: params[:slug]) || not_found
     @membership = @group.memberships.find_by(account: current_account)
     redirect "/groups/#{@group.slug}/request_membership" if !@membership and @group.closed?    
-    sign_in_required! if ((@group.open? or @group.public?) and Config['PRIVATE_NETWORK'])
     membership_required! if @group.secret?
     @account = Account.new
     @title = @group.name
@@ -59,7 +57,6 @@ ActivateApp::App.controllers do
     @membership = @group.memberships.find_by(account: current_account)    
     redirect "/groups/#{@group.slug}" if @group.public? or @group.open?
     (flash[:notice] = 'It is not possible to request membersip of that group' and redirect '/' if @group.secret?)
-    (flash[:notice] = "You must sign in to request membership" and redirect '/sign_in') if Config['PRIVATE_NETWORK'] and !current_account and !@group.allow_external_membership_requests
     @account = Account.new
     erb :'groups/request_membership'
   end
@@ -130,7 +127,6 @@ ActivateApp::App.controllers do
   get '/groups/:slug/join' do
     @group = Group.find_by(slug: params[:slug]) || not_found
     redirect back if @group.closed? or @group.secret?
-    redirect back if !current_account and Config['PRIVATE_NETWORK']
     if current_account
       @account = current_account
     else

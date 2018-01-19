@@ -1,0 +1,17 @@
+<% content_for :cover_bottom_left_wrap do %>
+  <%= partial :'accounts/square', :locals => {:account => @account, :hide_trust_count => true, :style => 'background: white; border: 3px solid white; width: 200px;'} %>
+  <h1><a style="color: white" href="/<%=@account.username_or_id%>"><%=@account.name%></a></h1>
+<% end %>
+
+<% if current_account and @account.id == current_account.id %>
+  <% content_for :cover_top_right do %>
+    <a class="btn btn-primary" href="/accounts/edit"><i class="fa fa-pencil"></i> Edit profile</a>
+  <% end %>
+<% end %>
+
+<% if !current_account or (current_account and @account.id != current_account.id) %>
+  <% content_for :cover_bottom_left do %>
+
+  <% end %>
+<% end %>
+<%= partial :cover %>

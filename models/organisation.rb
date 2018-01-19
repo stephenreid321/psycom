@@ -4,6 +4,7 @@ class Organisation
   extend Dragonfly::Model
 
   field :name, :type => String
+  field :username, :type => String
   field :address, :type => String
   field :website, :type => String
   field :picture_uid, :type => String  
@@ -17,9 +18,14 @@ class Organisation
     self.geocode || (self.coordinates = nil)
   end
   
+  def username_or_id
+    username or id
+  end  
+  
+  validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
+  validates_uniqueness_of :username, :allow_nil => true  
+  
   has_many :events, :dependent => :destroy
-  has_many :sectorships, :dependent => :destroy
-  accepts_nested_attributes_for :sectorships, allow_destroy: true, reject_if: :all_blank
   
   has_many :affiliations, :dependent => :restrict
   
@@ -39,6 +45,7 @@ class Organisation
   validates_uniqueness_of :name, :case_sensitive => false 
   
   before_validation do
+    self.username = self.username.downcase if self.username
     self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
   end
   
@@ -49,13 +56,19 @@ class Organisation
   def self.admin_fields
     {
       :name => :text,
+      :username => :text,
       :address => :text,
       :website => :text,
       :picture => :image,
-      :sectorships => :collection,
       :affiliations => :collection
     }
   end
+  
+  def self.new_tips
+    {
+      :username => 'Letters, numbers, underscores and periods'
+    }
+  end     
     
   # Picture
   dragonfly_accessor :picture do

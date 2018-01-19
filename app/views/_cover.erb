@@ -1,0 +1,54 @@
+<style>
+  @media(max-width: 767px) {
+    .cover { padding-left: 10px; padding-top: 10px; padding-bottom: 10px }
+    .cover-top-right { margin-bottom: 15px } 
+    .cover-bottom-left-wrap {
+      margin-bottom: 10px
+    }
+    .cover-bottom-left-wrap img {
+      margin-bottom: 10px
+    }
+    .cover-bottom-left-wrap h1 {
+      margin: 0; margin-bottom: 10px
+    }
+  }
+  @media(min-width: 768px) {
+    .cover-sidebar { margin-top: 25px }
+    .cover {
+      position: relative; height: 250px;
+    }
+    .cover-top-right {
+      position: absolute; right: 10px; top: 10px
+    }
+    .cover-bottom-right {
+      position: absolute; right: 10px; bottom: 10px
+    }
+    .cover-bottom-left-wrap {
+      position: absolute; left: 10px; bottom: 10px
+    }
+    .cover-bottom-left-wrap img {
+      position: relative; bottom: -35px; vertical-align: bottom
+    }
+    .cover-bottom-left-wrap h1 {
+      display: inline-block; margin: 0; margin-left: 10px
+    }
+    .cover-bottom-left { 
+      height: 1px; display: inline-block; position: relative; top: -10px; margin-left: 10px
+    }
+  }
+</style>
+
+<div class="cover" style="background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('/images/soap-film.jpg'); background-size: cover; background-position: center;">
+  <div class="cover-top-right">
+    <%= yield_content :cover_top_right %>         
+  </div>
+  <div class="cover-bottom-right">
+    <%= yield_content :cover_bottom_right %>
+  </div>  
+  <div class="cover-bottom-left-wrap">
+    <%= yield_content :cover_bottom_left_wrap %>
+    <div class="cover-bottom-left">
+      <%= yield_content :cover_bottom_left %>
+    </div>
+  </div>
+</div>

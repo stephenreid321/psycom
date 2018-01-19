@@ -61,7 +61,7 @@ ActivateApp::App.controllers do
         (mail.in_reply_to and (conversation = ConversationPostBcc.find_by(message_id: mail.in_reply_to).try(:conversation)) and conversation.group == group) or
           (
           html.match(/Respond\s+by\s+replying\s+above\s+this\s+line/) and
-            (conversation_url_match = html.match(/http:\/\/#{Config['DOMAIN']}\/conversations\/(\d+)/)) and
+            (conversation_url_match = html.match(/#{Config['BASE_URI']}\/conversations\/(\d+)/)) and
             conversation = group.conversations.find_by(slug: conversation_url_match[-1])
         )
       )

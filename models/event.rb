@@ -2,7 +2,6 @@ class Event
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  belongs_to :group, index: true
   belongs_to :account, index: true
   belongs_to :organisation, index: true
 
@@ -35,7 +34,7 @@ class Event
     
   attr_accessor :start_conversation
   
-  validates_presence_of :name, :start_time, :end_time, :group, :account, :ticketing
+  validates_presence_of :name, :start_time, :end_time, :account, :ticketing
   
   before_validation :ensure_end_after_start
   def ensure_end_after_start
@@ -62,7 +61,6 @@ class Event
       :ticketing => :select,
       :tickets_link => :text,
       :highlighted => :check_box,
-      :group_id => :lookup,
       :account_id => :lookup,
       :organisation_name => :text,
       :organisation_id => :lookup
@@ -91,14 +89,14 @@ class Event
   
   def self.ical(eventable)
     cal = RiCal.Calendar do |rcal|
-      rcal.add_x_property('X-WR-CALNAME', eventable.is_a?(Group) ? eventable.email : Config['DOMAIN'])
+      rcal.add_x_property('X-WR-CALNAME', Config['DOMAIN'])
       eventable.events.each { |event|
         rcal.event do |revent|
           revent.summary = event.name
           revent.dtstart =  event.consider_time ? event.start_time : event.start_time.to_date
           revent.dtend = event.consider_time ? event.end_time : (event.end_time.to_date + 1.day)
           (revent.location = event.location) if event.location
-          revent.description = "http://#{Config['DOMAIN']}/groups/#{event.group.slug}/events/#{event.id}"
+          revent.description = "#{Config['BASE_URI']}/events/#{event.id}"
         end
       }
     end
@@ -131,7 +129,6 @@ class Event
         :organisation_name => event.organisation_name,
         :id => event.id.to_s,
         :className => "event-#{event.id}",
-        :group_slug => event.group.slug,
         :eventable => eventable.class.to_s
       }
     }    

@@ -82,9 +82,6 @@
       <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
         <%=account.email%>
       </td>
-      <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
-        <%=account.phone%>
-      </td>
       <td>
         <% if account.twitter_profile_url %>
           <a target="_blank" href="<%=account.twitter_profile_url%>"><%=account.twitter_profile_url.split('.com/')[1]%></a>

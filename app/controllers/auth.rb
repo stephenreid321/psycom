@@ -1,5 +1,5 @@
 ActivateApp::App.controllers do
-        
+  
   get '/sign_in' do
     erb :'accounts/sign_in'
   end  
@@ -7,7 +7,7 @@ ActivateApp::App.controllers do
   get '/sign_out' do
     session.clear
     redirect '/sign_in'
-  end  
+  end
   
   post '/accounts/forgot_password' do
     if params[:email] and @account = Account.find_by(email: /^#{Regexp.escape(params[:email])}$/i)
@@ -52,8 +52,8 @@ ActivateApp::App.controllers do
       flash[:error] = 'That link has expired'
       redirect '/sign_in'      
     end
-  end
-  
+  end   
+            
   get '/auth/failure' do
     if current_account
       flash[:error] = "There was a problem connecting your account. This can happen sometimes. Give it another whirl."

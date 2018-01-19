@@ -1,7 +1,6 @@
 <h3 style="margin-top: 0">
-  <a href="/groups/<%=event.group.slug%>/events/<%=event.id%>"><%= event.name %></a>
+  <a href="/events/<%=event.id%>"><%= event.name %></a>
   <% if event.highlighted %><span class="label label-primary" style="font-weight: normal; font-size: 12px; position: relative; top: -2px"><%=Config['HIGHLIGHTED_EVENT_LABEL_TEXT'] || '<i class="fa fa-star"></i>'%></span><% end %> 
-  <small><%=g event.group%></small>
 </h3>
 
 <ul class="fa-ul">
@@ -12,5 +11,5 @@
 </ul>
 
 <% if defined? read_more %>
-  <a class="read-more" href="/groups/<%=event.group.slug%>/events/<%=event.id%>">Read more&hellip;</a>
+  <a class="read-more" href="/events/<%=event.id%>">Read more&hellip;</a>
 <% end %>

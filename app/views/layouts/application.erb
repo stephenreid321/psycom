@@ -19,7 +19,7 @@
       'fullcalendar/2.4.0' => 'fullcalendar.min.js fullcalendar.min.css',
       'jquery-timeago/1.4.3' => 'jquery.timeago.min.js',
       'datatables/1.10.12' => 'js/jquery.dataTables.min.js css/dataTables.bootstrap.min.css',
-      'Chart.js/2.3.0' => 'Chart.min.js'
+      'Chart.js/2.3.0' => 'Chart.min.jns'
       }.each { |k,v| %>
       <% v.split(' ').each { |f| u = "//cdnjs.cloudflare.com/ajax/libs/#{k}/#{f}" %>
         <% case f.split('.').last.to_sym; when :js %>
@@ -30,8 +30,9 @@
       <% } %>
     <% } %>
 
-    <% [
-      "/stylesheets/app.css?#{Time.now.to_i}"
+    <% [      
+      "/stylesheets/app.css?#{Time.now.to_i}",
+      "/stylesheets/share.css?#{Time.now.to_i}",
       ].each { |f| %>
       <link rel="stylesheet" href="<%=f%>" />
     <% } %>
@@ -81,83 +82,8 @@
   </head>
   <body>
 
-    <div class="container-fluid">
-      <nav class="navbar navbar-inverse" style="margin-bottom: 10px">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-top" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/"><%= Fragment.find_by(slug: 'navbar-brand').try(:body) || Config['NAVBAR_BRAND'] || '<i class="fa fa-home"></i>'%></a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-top">
-          <% if current_account %>
-            <ul class="nav navbar-nav">
-              <% if current_account %>
-                <li><a href="/people"><%=I18n.t(:people).capitalize%></a></li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <%=I18n.t(:groups).capitalize%>
-                    <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/groups"><%=I18n.t(:all_groups).capitalize%></a></li>
-                    <li role="separator" class="divider"></li>
-                    <% current_account.memberships.map(&:group).reject { |group| group.hide_from_dropdown }.sort_by(&:name).each { |group| %>
-                      <li><a href="/groups/<%=group.slug%>"><%= group.name %></a></li>
-                    <% } %>
-                  </ul>
-                </li>
-              <%  end %>
-              <li><a href="/events"><%=I18n.t(:events).capitalize%></a></li>
-              <li><a href="/map"><%=I18n.t(:map).capitalize%></a></li>
-              <li><a href="/docs"><%=I18n.t(:docs).capitalize%></a></li>
-            </ul>
-          <% end %>
-          <div class="navbar-right">
-            <ul class="nav navbar-nav">
-              <% if current_account %>
-                <%= eval(f('navbar')) %>
-                <li class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    Hello <%=current_account.firstname%>
-                    <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/me">My profile</a></li>
-                    <li><a href="/me/edit"><%=I18n.t(:edit_profile).capitalize%></a></li>
-                    <li><a href="/sign_out"><%=I18n.t(:sign_out).capitalize%></a></li>
-                  </ul>
-                </li>
-              <% else %>
-                <li><a href="/sign_in"><%=I18n.t(:sign_in).capitalize%></a></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
-
-    <div style="z-index: 1040; width: 40%; margin-left: -20%; left: 50%; position: absolute; margin-top: -40px">
-      <% {:error => 'alert-danger', :warning => 'alert-warning', :notice => 'alert-info'}.each { |k,v| %>
-        <% if flash[k] %>
-          <div id="top-alert" class="fade in alert <%=v%> alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <%= flash[k] %>
-          </div>
-        <% end %>
-      <% } %>
-    </div>
-    <script>
-      $(function () {
-        $(".alert").alert();
-        window.setTimeout(function () {
-          $("#top-alert").alert('close');
-        }, 5000);
-      });
-    </script>
+    <%= partial :nav %>
+    <%= partial :alert %>
 
     <div class="container-fluid">
       <%= yield %>

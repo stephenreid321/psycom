@@ -3,11 +3,6 @@
   <li class="active"><%=I18n.t(:groups).capitalize%></li>
 </ol>
 
-<% if Fragment.find_by(slug: 'right-col') %>
-  <div class="row">
-    <div class="col-sm-8">
-    <% end %>
-
     <div>
       <% if !Config['GROUP_CREATION_BY_ADMINS_ONLY'] or (current_account and current_account.admin?) %>
         <a style="float: right" title="<%=I18n.t(:create_a_group).capitalize%>" class="btn btn-primary" href="/groups/new"><i class="fa fa-plus"></i> <%=I18n.t(:create_a_group).capitalize%></a>
@@ -31,11 +26,3 @@
         <%= partial :'groups/group', :object => group %>
       <% } %>
     <% end %>
-
-    <% if Fragment.find_by(slug: 'right-col') %>
-    </div>
-    <div class="col-sm-4">
-      <%= eval(f('right-col')) %>    
-    </div>
-  </div>
-<% end %>

@@ -23,7 +23,7 @@
 
       <div style="max-width: 600px; margin: 0 auto; background: white;">
         <div style="padding: 20px;">   
-          <h1 style="margin-top: 0"><a href="http://<%=Config['DOMAIN']%>"><%=Config['SITE_NAME']%></a></h1>
+          <h1 style="margin-top: 0"><a href="<%=Config['BASE_URI']%>"><%=Config['SITE_NAME']%></a></h1>
           <%= defined?(content) ? content : yield %>   
         </div>
       </div>

@@ -1,0 +1,16 @@
+<div style="position: relative; display: inline-block">
+  <% unless defined?(hide_trust_count) %>
+    <span data-toggle="tooltip" title="Trusted by <%=pluralize(account.trust_count,'person')%>" class="badge" style="background-color: white; color: #555555; position: absolute; bottom: 0; right: 0"><%=account.trust_count %></span>
+  <% end %>
+  <% if !defined?(content) %><a href="/<%=account.username_or_id%>"><% end %>
+    <img <% if defined?(klass) %> class="<%=klass%>" <% end %> <% if !defined?(content) %>data-toggle="tooltip" title="<%=account.name%>"<% else %>data-toggle="popover"<% end %> <% if defined?(style) %> style="<%= style%>" <% else %> style="width: <%=width%>;" <% end %> src="<%=account.picture ? account.picture.thumb('400x400#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>" />
+    <% if defined?(content) %>
+      <span style="display: none">
+        <a href="/<%=account.username_or_id%>"><%=account.name%></a>
+      </span>
+      <span style="display: none">
+        <%=content%>
+      </span>
+    <% end %>
+    <% if !defined?(content) %></a><% end %>
+</div>

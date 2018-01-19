@@ -1,129 +1,27 @@
-<ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/people">People</a></li>
-  <li class="active"><%=@account.name%></li>
-</ol>
+
+<%= partial :'accounts/cover' %>
 
 <div class="row">
+
+  <div class="col-sm-4 cover-sidebar">
+
+    <%= partial :'accounts/sidebar' %>
+
+  </div>
   <div class="col-sm-8">
 
-    <div class="row">
-      <div class="col-sm-4">
-        <img style="display: block; margin: 0 auto; width: 100%" class="img-circle img-bordered-lg" src="<%=@account.picture ? @account.picture.thumb('500x500#').url : '/images/silhouette.png' %>">
-      </div>
-      <div class="col-sm-8">
-        <h1 style="margin-top: 0;"><%=@account.name%></h1>  
-        <% if @account.headline %>
-          <p class="lead"><%=@account.headline%></p>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="table-hr-container">
-      <table class="table table-hr" >
-
-        <% if !Config['HIDE_ACCOUNT_AFFILIATIONS'] %>
-          <tr>
-            <td>Affiliations</td>
-            <td>  
-              <% @account.affiliations.each { |affiliation|%>
-                <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/organisations/<%=affiliation.organisation_id%>"><%=affiliation.organisation.name%></a> <br />
-              <% } %>        
-            </td>
-          </tr>
-        <% end %>
-
-        <% if @account.account_tagships.count > 0 %>
-          <tr>
-            <td><%=I18n.t(:account_tagships).capitalize%></td>
-            <td>
-              <%@account.account_tagships.each { |account_tagship|%>
-                <a href="/people?account_tag_id=<%=account_tagship.account_tag_id%>" class="label label-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
-              <% } %>
-            </td>
-          </tr>
-        <% end %>
-
-
-        <% if @account.public_memberships.count > 0 %>
-          <tr>
-            <td><%=I18n.t(:member_of).capitalize%> </td>
-            <td><%= @account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %></td>
-          </tr>
-        <% end %>          
-
-        <% if [@account.town, @account.state, @account.country].compact.length > 0 %>
-          <tr>
-            <td>Location</td>
-            <td><%=[@account.town, @account.state, @account.country].compact.join(', ')%></td>
-          </tr>
-        <% end %>          
-
-        <% if !Config['HIDE_ACCOUNT_EMAIL'] %>
-          <tr>
-            <td>Email</td>
-            <td><a target="_blank" href="mailto:<%=@account.email%>"><%=@account.email%></a></td>
-          </tr>
-        <% end %>        
-
-        <% if !Config['HIDE_ACCOUNT_PHONE'] %>
-          <% if @account.phone %>
-            <tr>
-              <td>Phone</td>
-              <td><%=@account.phone%></td>
-            </tr>
-          <% end %>
-        <% end %>
-
-        <% if !Config['HIDE_ACCOUNT_WEBSITE'] %>
-          <% if @account.website %>
-            <tr>
-              <td>Website</td>
-              <td><a href="<%=@account.website%>"><%=@account.website%></a></td>
-            </tr>        
-          <% end %>
-        <% end %>          
-
-        <% ['Twitter', 'Facebook', 'Google', 'LinkedIn'].each { |display_name| %>
-          <% if provider = Provider.all.find { |provider| provider.display_name == display_name } and provider.registered? and provider_link = @account.provider_links.find_by(provider: provider.display_name) %>          
-            <tr>
-              <td><%=display_name%></td>
-              <td>
-                <a target="_blank" href="<%=provider.profile_url.call(provider_link.omniauth_hash)%>"><%=provider.nickname.call(provider_link.omniauth_hash)%></a>
-              </td>            
-            </tr>
-          <% elsif @account.send("#{display_name.downcase}_profile_url") %>
-            <tr>
-              <td><%=display_name%></td>
-              <td>
-                <a target="_blank" href="<%=@account.send("#{display_name.downcase}_profile_url")%>"><%=@account.send("#{display_name.downcase}_profile_url").split('/')[3..-1].join('/')%></a>
-              </td>  
-            </tr>
-          <% end %>
-        <% } %>
-
-      </table>
-    </div>
-
-    <dl class="dl-horizontal">
-      <% EnvFields.fields(Account).each { |fieldname, fieldtype|; if result = @account.send(fieldname) %>
-          <h3><%=Account.human_attribute_name(fieldname)%></h3>
-          <%=EnvFields.display(fieldtype, result) %>
-        <% end } %>
-    </dl>
+    <% if @account.story %>
+      <h2><%=@account.firstname%>'s story</h2>
+      <p>
+        <%= Rinku.auto_link(@account.story.gsub("\n",'<br />')) %>
+      </p>   
+    <% end %>  
 
     <% if @shared_conversations and !@shared_conversations.empty? %>
       <h3>Recent conversations</h3>
       <%= partial :'conversations/conversations_table', :locals => {:conversations => @shared_conversations}%>
-    <% end %>
-
-  </div>
-  <div class="col-sm-4">
-    <% if @account.coordinates or @account.affiliations.any? { |affiliation| affiliation.organisation.coordinates } %>
-      <%= partial :'maps/panel', :locals => {:points => ([@account])} %>
-    <% end %>
+    <% end %>    
+    
   </div>
 </div>
-
-
-
+    

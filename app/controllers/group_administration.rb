@@ -48,7 +48,7 @@ ActivateApp::App.controllers do
     @accounts = @accounts.where(:id.nin => @group.memberships.where(:status => 'confirmed').pluck(:account_id)) if @not_yet_receiving_emails
     @accounts = @accounts.or([{:name => /#{Regexp.escape(@q)}/i}, {:email => /#{Regexp.escape(@q)}/i}]) if @q
     @accounts = @accounts.order("#{@o} #{@d}")    
-    @cols = {'Name' => :name, 'Email' => :email, 'Phone' => nil, 'Twitter' => nil, 'Affiliations' => nil, I18n.t(:account_tagships).capitalize => nil, 'Joined' => nil, 'Last signed in' => nil, 'Actions' => nil, 'Notifications' => nil}
+    @cols = {'Name' => :name, 'Email' => :email, 'Twitter' => nil, 'Affiliations' => nil, I18n.t(:account_tagships).capitalize => nil, 'Joined' => nil, 'Last signed in' => nil, 'Actions' => nil, 'Notifications' => nil}
     case content_type
     when :html    
       @accounts = @accounts.page(params[:page])      
@@ -61,7 +61,6 @@ ActivateApp::App.controllers do
           csv << [
             account.name,
             account.email,
-            account.phone,
             account.twitter_profile_url ? account.twitter_profile_url.split('.com/')[1] : '',
             account.affiliations.map { |affiliation| "#{affiliation.title} at #{affiliation.organisation.name}" }.join("\n"),
             account.account_tagships.map { |account_tagship| account_tagship.account_tag.name }.join("\n"),
@@ -293,9 +292,9 @@ ActivateApp::App.controllers do
       if account.sign_ins.count == 0
         password = Account.generate_password(8)
         account.update_attribute(:password, password) 
-        sign_in_details << %Q{Sign in at http://#{Config['DOMAIN']}/sign_in with the email address #{account.email} and the password <div class="password">#{password}</div>}
+        sign_in_details << %Q{Sign in at #{Config['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{password}</div>}
       else
-        sign_in_details << "Sign in at http://#{Config['DOMAIN']}/sign_in."
+        sign_in_details << "Sign in at #{Config['BASE_URI']}/sign_in."
       end 
             
       group = @group # instance var not available in defaults block

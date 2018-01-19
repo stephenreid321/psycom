@@ -1,18 +1,14 @@
 ActivateApp::App.controllers do
   
   get '/organisations' do
-    sign_in_required!
     erb :'organisations/index'
   end
     
   get '/organisations/results' do
-    sign_in_required!
     @o = (params[:o] ? params[:o] : 'date').to_sym
     @name = params[:name]
-    @sector_name = params[:sector_name]
-    @organisations = current_account.network_organisations    
+    @organisations = Organisation.all
     @q = []
-    @q << {:id.in => Sectorship.where(:sector_id.in => Sector.where(:name => /#{Regexp.escape(@sector_name)}/i).pluck(:id)).pluck(:organisation_id)} if @sector_name
     @organisations = @organisations.and(@q)
     @organisations = @organisations.where(:name => /#{Regexp.escape(@name)}/i) if @name    
     @organisations = case @o

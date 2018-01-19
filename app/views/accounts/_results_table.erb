@@ -6,7 +6,6 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      <th>Phone</th>
       <th>Twitter</th>
       <th>Affiliations</th>
       <th><%=I18n.t(:account_tagships).capitalize%></th>
@@ -19,9 +18,6 @@
       </td>      
       <td>
         <%=account.email%>
-      </td>
-      <td>
-        <%=account.phone%>
       </td>
       <td>
         <% if account.twitter_profile_url %>

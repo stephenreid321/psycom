@@ -1,0 +1,77 @@
+
+<% if @account.headline %>
+  <p class="lead" style="margin: 10px 0"><%= @account.headline %></p>
+<% end %>
+
+<div class="table-hr-container">
+  <table class="table table-hr" >
+
+    <% if @account.public_memberships.count > 0 %>
+      <tr>
+        <td><%=I18n.t(:member_of).capitalize%> </td>
+        <td><%= @account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %></td>
+      </tr>
+    <% end %>     
+
+    <% if !@account.affiliations.empty? %>
+      <tr>
+        <td>Affiliations</td>
+        <td>  
+          <% @account.affiliations.each { |affiliation|%>
+            <%=affiliation.title%> at <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a> <br />
+          <% } %>        
+        </td>
+      </tr>
+    <% end %>    
+
+    <% if @account.account_tagships.count > 0 %>
+      <tr>
+        <td><%=I18n.t(:account_tagships).capitalize%></td>
+        <td>
+          <%@account.account_tagships.each { |account_tagship|%>
+            <a href="/people?account_tag_id=<%=account_tagship.account_tag_id%>" class="label label-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
+          <% } %>
+        </td>
+      </tr>
+    <% end %>      
+
+    <% if @account.facebook_profile_url %>
+      <tr>
+        <td>Facebook</td>
+        <td>
+          <a target="_blank" href="<%=@account.facebook_profile_url%>"><%=@account.facebook_profile_url.split('/')[3..-1].join('/')%></a>
+        </td>  
+      </tr>
+    <% end %>     
+
+    <% if @account.twitter_profile_url %>
+      <tr>
+        <td>Twitter</td>
+        <td>
+          <a target="_blank" href="<%=@account.twitter_profile_url%>"><%=@account.twitter_profile_url.split('/')[3..-1].join('/').split('?').first%></a>
+        </td>  
+      </tr>
+    <% end %> 
+
+    <% if @account.website %>
+      <tr>
+        <td>Website</td>
+        <td>
+          <a style="font-size: 12px" target="_blank" href="<%=@account.website%>"><%=@account.website%></a>
+        </td>  
+      </tr>
+    <% end %>   
+
+  </table>     
+
+  <%= partial :share %>
+
+  <% if @account.coordinates and (accounts = Account.geo_near(@account.coordinates).spherical.max_distance(25 / 3963.167)).count > 0 %>
+    <div style="margin-top: 20px">
+      <style>#map-canvas { height: 200px !important }</style>     
+      <%= partial :'maps/map', :locals => {:points => accounts} %>      
+      <p style="color: #959595; margin-top: 5px">Map shows the 100 closest people within 25 miles of <%=@account.firstname%></p>
+    </div>
+  <% end %>
+
+</div>

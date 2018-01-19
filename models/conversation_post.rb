@@ -76,14 +76,14 @@ class ConversationPost
   def didyouknow_replacements(string)
     group = conversation.group
     members = group.members
-    string.gsub!('[site_url]', "#{Config['SSL'] ? 'https://' : 'http://'}#{Config['DOMAIN']}")
+    string.gsub!('[site_url]', Config['BASE_URI'])
     string.gsub!('[name]', group.name)
     string.gsub!('[slug]', group.slug)        
-    string.gsub!('[conversation_url]', "#{Config['SSL'] ? 'https://' : 'http://'}#{Config['DOMAIN']}/conversations/#{conversation.slug}")
+    string.gsub!('[conversation_url]', "#{Config['BASE_URI']}/conversations/#{conversation.slug}")
     string.gsub!('[members]', "#{m = members.count} #{m == 1 ? 'member' : 'members'}")
     string.gsub!('[upcoming_events]', "#{e = group.events.where(:start_time.gt => Time.now).count} #{e == 1 ? 'upcoming event' : 'upcoming events'}")
     most_recently_updated_account = members.order_by([:has_picture.desc, :updated_at.desc]).first
-    string.gsub!('[most_recently_updated_url]', "#{Config['SSL'] ? 'https://' : 'http://'}#{Config['DOMAIN']}/accounts/#{most_recently_updated_account.id}")
+    string.gsub!('[most_recently_updated_url]', "#{Config['BASE_URI']}/accounts/#{most_recently_updated_account.id}")
     string.gsub!('[most_recently_updated_name]', most_recently_updated_account.name)
     string
   end  
@@ -118,14 +118,14 @@ class ConversationPost
   def replace_cids!
     self.body = body.gsub(/src="cid:(\S+)"/) { |match|
       begin
-        %Q{src="#{Config['SSL'] ? 'https://' : 'http://'}#{Config['DOMAIN']}#{attachments.find_by(cid: $1).file.url}"}
+        %Q{src="#{Config['BASE_URI']}#{attachments.find_by(cid: $1).file.url}"}
       rescue
         nil
       end
     }    
     self.body = body.gsub(/\[cid:(\S+)\]/) { |match|
       begin
-        %Q{<img src="#{Config['SSL'] ? 'https://' : 'http://'}#{Config['DOMAIN']}#{attachments.find_by(cid: $1).file.url}">}
+        %Q{<img src="#{Config['BASE_URI']}#{attachments.find_by(cid: $1).file.url}">}
       rescue
         nil
       end

@@ -31,7 +31,7 @@ class Group
 <br /><br />
 Well-maintained profiles help build a stronger community. Will you spare a minute to provide the missing details?
 <br /><br />
-You can sign in at http://#{Config['DOMAIN']}/sign_in.}
+You can sign in at #{Config['BASE_URI']}/sign_in.}
   }
     
   field :invite_email_subject, :type => String, :default => -> { "You were added to the group #{self.name} (#{self.email}) on #{Config['SITE_NAME_SHORT']}" }
@@ -81,10 +81,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   has_many :conversation_post_bccs, :dependent => :destroy
   has_many :memberships, :dependent => :destroy
   has_many :membership_requests, :dependent => :destroy
-  has_many :events, :dependent => :destroy
   has_many :didyouknows, :dependent => :destroy
-  has_many :venues, :dependent => :destroy
-  has_many :docs, :dependent => :destroy
   
   def tags
     conversations.where(subject: /(?:\s|^)(?:#(?!(?:\d+|\w+?_|_\w+?)(?:\s|$)))(\w+)(?=\s|$)/i).map(&:tags).flatten.uniq.sort
@@ -103,15 +100,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def new_people(from,to)
     Account.where(:id.in => memberships.where(:created_at.gte => from).where(:created_at.lt => to+1).pluck(:account_id)).where(:has_picture => true)
   end
-    
-  def new_events(from,to)
-    events.where(:created_at.gte => from).where(:created_at.lt => to+1).where(:start_time.gte => to).order_by(:start_time.asc)
-  end
-  
-  def upcoming_events
-    events.where(:start_time.gte => Date.today).where(:start_time.lt => Date.today+7).order_by(:start_time.asc)
-  end  
-  
+      
   def members
     Account.where(:id.in => memberships.where(:status => 'confirmed').pluck(:account_id))
   end
@@ -196,7 +185,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       
   def self.privacies
     p = {}
-    (p['Public: group content is public and anyone can choose to join'] = 'public') unless Config['PRIVATE_NETWORK']
+    p['Public: group content is public and anyone can choose to join'] = 'public'
     p['Open: anyone can choose to join'] = 'open'
     p['Closed: people must request membership'] = 'closed'
     p['Secret: group is hidden and people can only join via invitation'] = 'secret'      

@@ -13,37 +13,27 @@ class Account
   field :time_zone, :type => String
   field :has_picture, :type => Boolean
   field :picture_uid, :type => String  
-  field :phone, :type => String 
   field :website, :type => String 
   field :headline, :type => String 
-  field :town, :type => String
-  field :state, :type => String
-  field :postcode, :type => String
-  field :country, :type => String
+  field :location, :type => String
   field :coordinates, :type => Array 
   field :translator, :type => Boolean
   field :password_reset_token, :type => String
   field :twitter_profile_url, :type => String
   field :facebook_profile_url, :type => String
-  field :linkedin_profile_url, :type => String
-  field :google_profile_url, :type => String
   field :prevent_new_memberships, :type => Boolean
   field :username, :type => String
+  field :story, :type => String
   
   def self.protected_attributes
     %w{admin}
   end  
-    
-  EnvFields.set(self)
-    
+        
   def self.e(email)
     find_by(email: email)
   end
   
   include Geocoder::Model::Mongoid
-  def location
-    [town, state, postcode, country].compact.join(', ')
-  end
   geocoded_by :location
   def lat; coordinates[1] if coordinates; end  
   def lng; coordinates[0] if coordinates; end  
@@ -61,8 +51,6 @@ class Account
   has_many :conversations_as_creator, :class_name => 'Conversation', :dependent => :destroy
   has_many :conversation_posts_as_creator, :class_name => 'ConversationPost', :dependent => :destroy
   has_many :events_as_creator, :class_name => 'Event', :inverse_of => :account, :dependent => :destroy
-  has_many :venues_as_creator, :class_name => 'Venue', :inverse_of => :account, :dependent => :destroy
-  has_many :docs_as_creator, :class_name => 'Doc', :inverse_of => :account, :dependent => :destroy
   has_many :likes, :dependent => :destroy
   
   belongs_to :language, index: true
@@ -136,9 +124,9 @@ class Account
         end    
         
         if account.sign_ins.count == 0 and account.password    
-          sign_in_details << %Q{Sign in at http://#{Config['DOMAIN']}/sign_in with the email address #{account.email} and the password <div class="password">#{account.password}</div>}
+          sign_in_details << %Q{Sign in at #{Config['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{account.password}</div>}
         else
-          sign_in_details << "Sign in at http://#{Config['DOMAIN']}/sign_in."
+          sign_in_details << "Sign in at #{Config['BASE_URI']}/sign_in."
         end
                   
         if Config['SMTP_ADDRESS']
@@ -190,19 +178,7 @@ class Account
   def network_organisations
     Organisation.where(:id.in => Affiliation.where(:account_id.in => network.pluck(:id)).pluck(:organisation_id))
   end
-  
-  def network_sectors
-    Sector.where(:id.in => Sectorship.where(:organisation_id.in => network_organisations.pluck(:id)).pluck(:sector_id))
-  end
-    
-  def events
-    Event.where(:group_id.in => memberships.pluck(:group_id))
-  end  
-  
-  def upcoming_events
-    events.where(:start_time.gte => Date.today).where(:start_time.lt => Date.today+7).order_by(:start_time.asc)
-  end
-  
+          
   def conversations
     Conversation.where(:group_id.in => memberships.pluck(:group_id))
   end
@@ -222,15 +198,7 @@ class Account
   def visible_conversation_posts
     conversation_posts.where(:hidden.ne => true).where(:conversation_id.in => visible_conversations.pluck(:id))
   end  
-  
-  def venues
-    Venue.where(:group_id.in => memberships.pluck(:group_id))
-  end  
-          
-  def docs
-    Doc.where(:group_id.in => memberships.pluck(:group_id))
-  end 
-    
+                
   def groups
     Group.where(:id.in => memberships.pluck(:group_id))
   end
@@ -263,12 +231,7 @@ class Account
   validates_presence_of :password, :if => :password_required
   validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
   validates_uniqueness_of :username, :allow_nil => true
-  
-  def require_account_postcode
-    Config['REQUIRE_ACCOUNT_POSTCODE']
-  end      
-  validates_presence_of :postcode, :if => :require_account_postcode
-  
+    
   validates_length_of :email, :within => 3..100
   validates_uniqueness_of :email, :case_sensitive => false
   validates_format_of :email, :with => /\A[^@\s]+@[^@\s]+\.[^@\s]+\Z/i
@@ -311,15 +274,11 @@ class Account
     
     self.twitter_profile_url = "twitter.com/#{self.twitter_profile_url}" if self.twitter_profile_url and !self.twitter_profile_url.include?('twitter.com')      
     errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')
-    errors.add(:linkedin_profile_url, 'must contain linkedin.com') if self.linkedin_profile_url and !self.linkedin_profile_url.include?('linkedin.com')
-    errors.add(:google_profile_url, 'must contain google.com') if self.google_profile_url and !self.google_profile_url.include?('google.com')
     
     self.twitter_profile_url = self.twitter_profile_url.gsub('twitter.com/', 'twitter.com/@') if self.twitter_profile_url and !self.twitter_profile_url.include?('@')
                 
     self.twitter_profile_url = "http://#{self.twitter_profile_url}" if self.twitter_profile_url and !(self.twitter_profile_url =~ /\Ahttps?:\/\//)
     self.facebook_profile_url = "http://#{self.facebook_profile_url}" if self.facebook_profile_url and !(self.facebook_profile_url =~ /\Ahttps?:\/\//)   
-    self.google_profile_url = "http://#{self.google_profile_url}" if self.google_profile_url and !(self.google_profile_url =~ /\Ahttps?:\/\//)
-    self.linkedin_profile_url = "http://#{self.linkedin_profile_url}" if self.linkedin_profile_url and !(self.linkedin_profile_url =~ /\Ahttps?:\/\//)    
   end  
   
   after_save do
@@ -334,8 +293,7 @@ class Account
     
   def self.new_tips
     {
-      :username => 'Letters, numbers, underscores and periods',
-      :postcode => I18n.t(:account_postcode_tip)
+      :username => 'Letters, numbers, underscores and periods'
     }
   end
   
@@ -352,18 +310,13 @@ class Account
       :email => :text,
       :secret_token => :text,
       :headline => :text,
-      :phone => :text, 
+      :story => :text_area,
       :website => :text,
-      :town => :text,
-      :state => :text,
-      :postcode => :text,
-      :country => :select,
+      :location => :text,
       :coordinates => :geopicker,      
       :picture => :image,
       :twitter_profile_url => :text,
       :facebook_profile_url => :text,
-      :linkedin_profile_url => :text,
-      :google_profile_url => :text,      
       :admin => :check_box,
       :translator => :check_box,
       :time_zone => :select,
@@ -378,7 +331,7 @@ class Account
       :memberships => :collection,
       :memberships_summary => {:type => :text, :edit => false},
       :membership_requests => :collection
-    }.merge(EnvFields.fields(self))
+    }
   end
   
   def affiliations_summary
