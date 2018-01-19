@@ -59,46 +59,13 @@ $(function () {
     });
   }
 
-  function opengraph() {
-    $('.opengraph textarea, .opengraph input[type=text]').typing({
-      stop: function (event, $elem) {
-        var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-        var m = $($elem).val().match(urlPattern);
-        var resource = $($elem).attr('name').split('[')[0]
-        var displayContainer = $($elem).closest('.form-group').next()
-        var fieldContainer = displayContainer.next()
-        if (m) {
-          $(displayContainer).html('<i style="position: absolute; top: 0; right: 5px;" class="fa fa-spinner fa-spin"></i>')
-          $(displayContainer).load('/opengraph?url=' + encodeURIComponent(m[0]), function () {
-            var r = $('<a style="position: absolute; top: 0; right: 5px;" class="edit" title="Remove link" href="javascript:;"><i class="fa fa-times"></i></a>');
-            r.click(function () {
-              $(displayContainer).html('')
-              $(fieldContainer).html('')
-            });
-            r.prependTo(displayContainer);
-          });
-          $(fieldContainer).html('')
-          $.getJSON('/opengraph.json?url=' + encodeURIComponent(m[0]), function (data) {
-            $.each(['title', 'url', 'description', 'player', 'picture'], function (i, x) {
-              if (data[x])
-                $(fieldContainer).append('<input type="hidden" name="' + resource + '[link_' + x + ']" value="' + data[x] + '">')
-            });
-          })
-        }
-      },
-      delay: 400
-    });
-  }
-
   $(document).ajaxComplete(function () {
     wysify();
     placeholdersOnly();
-    opengraph();
     timeago();
   });
   wysify();
   placeholdersOnly();
-  opengraph();
   timeago();
 
 

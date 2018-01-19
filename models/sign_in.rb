@@ -12,10 +12,7 @@ class SignIn
   
   after_create do
     if account.sign_ins.count == 1
-      account.memberships.where(:status => 'pending').each { |membership| membership.update_attribute(:status, 'confirmed') }      
-      Group.where(:join_on_first_sign_in => true).each { |group|
-        group.memberships.create :account => account
-      }
+      account.memberships.where(:status => 'pending').each { |membership| membership.update_attribute(:status, 'confirmed') }
     end
   end
   

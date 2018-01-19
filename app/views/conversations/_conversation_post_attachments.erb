@@ -7,7 +7,3 @@
         <% } %>
   </ul>
 <% end %>
-
-<% if conversation_post.link_url %>
-  <%= partial :'opengraph', :locals => {:title => conversation_post.link_title, :url => conversation_post.link_url, :description => conversation_post.link_description, :player => conversation_post.link_player, :picture => conversation_post.link_picture} %>
-<% end %>

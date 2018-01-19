@@ -6,7 +6,6 @@ class Group
   field :name, :type => String  
   field :slug, :type => String
   field :primary, :type => Boolean
-  field :allow_external_membership_requests, :type => Boolean
   field :description, :type => String
   field :privacy, :type => String
   field :default_notification_level, :type => String, :default => 'each'
@@ -17,7 +16,6 @@ class Group
   field :coordinates, :type => Array
   field :hide_from_dropdown, :type => Boolean
   field :conversation_creation_by_admins_only, :type => Boolean
-  field :join_on_first_sign_in, :type => Boolean
         
   dragonfly_accessor :picture do
     after_assign { |picture| self.picture = picture.thumb('500x500>') }
@@ -145,7 +143,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :name => :text,
       :slug => :text,
       :primary => :check_box,
-      :allow_external_membership_requests => :check_box,
       :description => :text_area,
       :picture => :image,
       :privacy => :radio,
@@ -160,7 +157,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
       :coordinates => :geopicker,      
       :hide_from_dropdown => :check_box,
       :conversation_creation_by_admins_only => :check_box,
-      :join_on_first_sign_in => :check_box,
       :memberships => :collection,
       :membership_requests => :collection,
       :conversations => :collection
