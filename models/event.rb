@@ -31,9 +31,7 @@ class Event
   def self.marker_color
     '9C3DE4'
   end  
-    
-  attr_accessor :start_conversation
-  
+      
   validates_presence_of :name, :start_time, :end_time, :account, :ticketing
   
   before_validation :ensure_end_after_start

@@ -79,7 +79,6 @@ class Translation
       :'mongoid.attributes.event.more_info' => 'Link to full event details',
       :'mongoid.attributes.event.reason' => 'Members of this group should come because… (optional)',
       :'mongoid.attributes.event.publicity_tweet' => 'What should people tweet to publicise this event?',
-      :'mongoid.attributes.event.start_conversation' => 'Send an email notification to all group members about the addition of this event (use with care)',      
       :'mongoid.attributes.group.landing_tab' => 'Group homepage content',
       :'mongoid.attributes.group.default_notification_level' => 'Email notification default',      
       # mongoid.errors.models.account.attributes.name[.blank, .not_found]
