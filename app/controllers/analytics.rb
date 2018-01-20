@@ -6,7 +6,7 @@ ActivateApp::App.controllers do
   end
   
   get '/analytics' do
-    redirect '/analytics/unique_visitors'
+    redirect '/analytics/cumulative_totals'
   end
 
   get '/analytics/cumulative_totals' do
@@ -14,17 +14,7 @@ ActivateApp::App.controllers do
     @collections = [ConversationPost, Account, Event]
     erb :'analytics/cumulative_totals'
   end
-  
-  get '/analytics/unique_visitors' do
-    site_admins_only!  
-    erb :'analytics/unique_visitors'    
-  end  
-  
-  get '/analytics/page_views' do
-    site_admins_only!
-    erb :'analytics/page_views'    
-  end
-  
+    
   get '/analytics/groups', :provides => [:html, :csv] do
     site_admins_only!
     @header = [

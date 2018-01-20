@@ -39,7 +39,6 @@ module ActivateApp
       if params[:token] and account = Account.find_by(secret_token: params[:token])
         session[:account_id] = account.id.to_s
       end
-      PageView.create(:account => current_account, :path => request.path) if current_account and !request.xhr? and !params[:token]
     end     
      
     error do
