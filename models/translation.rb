@@ -7,7 +7,7 @@ class Translation
     
   belongs_to :language, index: true
   
-  validates_presence_of :key, :value, :language
+  validates_presence_of :key, :value
   validates_uniqueness_of :key, :scope => :language
     
   def self.admin_fields

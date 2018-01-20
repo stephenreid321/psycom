@@ -15,7 +15,6 @@ class ConversationPostBcc
   accepts_nested_attributes_for :conversation_post_bcc_recipients
   
   validates_uniqueness_of :message_id, :allow_nil => true
-  validates_presence_of :conversation, :conversation_post, :group
     
   def self.admin_fields
     {

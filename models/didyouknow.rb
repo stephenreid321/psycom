@@ -6,7 +6,7 @@ class Didyouknow
   
   field :body, :type => String  
   
-  validates_presence_of :group, :body
+  validates_presence_of :body
       
   def self.admin_fields
     {

@@ -31,7 +31,7 @@ class Conversation
   
   index({slug: 1 }, {unique: true})
   
-  validates_presence_of :subject, :slug, :group, :account
+  validates_presence_of :subject, :slug
   validates_uniqueness_of :slug
   
   def tags

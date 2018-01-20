@@ -9,7 +9,7 @@ class Attachment
   
   belongs_to :conversation_post, index: true
         
-  validates_presence_of :file, :conversation_post
+  validates_presence_of :file
  
   dragonfly_accessor :file
         

@@ -18,7 +18,7 @@ class Affiliation
     end
   end
        
-  validates_presence_of :title, :organisation, :account
+  validates_presence_of :title
       
   def self.admin_fields
     {

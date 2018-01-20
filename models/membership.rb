@@ -10,11 +10,11 @@ class Membership
   field :welcome_email_pending, :type => Boolean
   field :muted, :type => Boolean
   
-  belongs_to :added_by, index: true, class_name: "Account", inverse_of: :memberships_added
+  belongs_to :added_by, index: true, optional: true, class_name: "Account", inverse_of: :memberships_added
   belongs_to :account, index: true, class_name: "Account", inverse_of: :memberships
   belongs_to :group, index: true
           
-  validates_presence_of :account, :group, :status, :notification_level
+  validates_presence_of :status, :notification_level
   validates_uniqueness_of :account, :scope => :group
       
   def self.admin_fields

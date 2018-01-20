@@ -53,7 +53,7 @@ class Account
   has_many :events_as_creator, :class_name => 'Event', :inverse_of => :account, :dependent => :destroy
   has_many :likes, :dependent => :destroy
   
-  belongs_to :language, index: true
+  belongs_to :language, index: true, optional: true
   
   has_many :affiliations, :dependent => :destroy
   accepts_nested_attributes_for :affiliations, allow_destroy: true, reject_if: :all_blank

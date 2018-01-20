@@ -3,7 +3,7 @@ class Event
   include Mongoid::Timestamps
   
   belongs_to :account, index: true
-  belongs_to :organisation, index: true
+  belongs_to :organisation, index: true, optional: true
 
   field :name, :type => String
   field :start_time, :type => Time
@@ -32,7 +32,7 @@ class Event
     '9C3DE4'
   end  
       
-  validates_presence_of :name, :start_time, :end_time, :account, :ticketing
+  validates_presence_of :name, :start_time, :end_time, :ticketing
   
   before_validation :ensure_end_after_start
   def ensure_end_after_start

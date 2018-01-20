@@ -1,9 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.3.3'
-gem 'padrino', '0.13.3.2'
+ruby '2.4.2'
+gem 'sinatra'
+gem 'padrino'
 gem 'puma'
 gem 'rake'
+gem 'sass'
 
 # Admin
 gem 'will_paginate', github: 'mislav/will_paginate'
@@ -11,11 +13,11 @@ gem 'activate-tools', github: 'wordsandwriting/activate-tools'
 gem 'activate-admin', github: 'wordsandwriting/activate-admin'
 
 # Data storage
+gem 'activemodel'
 gem 'mongoid'
 gem 'delayed_job_mongoid'
 gem 'dragonfly'
 gem 'dragonfly-s3_data_store'
-gem 'activemodel', '~>4.2'
 
 # Authentication
 gem 'bcrypt'
@@ -33,13 +35,10 @@ gem 'airbrake', '~> 5.0'
 gem 'mechanize'
 gem 'platform-api'
 gem 'geocoder'
-gem 'net-ssh'
-gem 'net-scp'
 
 # Text processing
 gem 'rinku'
 gem 'sanitize'
-gem 'sass'
 
 # Others
 gem 'ri_cal', github: 'espen/ri_cal'

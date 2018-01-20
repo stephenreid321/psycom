@@ -16,7 +16,6 @@ class AccountTagship
     end
   end
     
-  validates_presence_of :account, :account_tag
   validates_uniqueness_of :account, :scope => :account_tag
     
   def self.admin_fields

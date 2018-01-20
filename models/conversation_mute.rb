@@ -5,7 +5,6 @@ class ConversationMute
   belongs_to :conversation, index: true
   belongs_to :account, index: true
   
-  validates_presence_of :account, :conversation
   validates_uniqueness_of :account, :scope => :conversation
       
   def self.admin_fields

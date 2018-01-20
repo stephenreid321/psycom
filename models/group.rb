@@ -93,7 +93,7 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
     conversation_posts.where(:hidden.ne => true).where(:conversation_id.in => visible_conversations.pluck(:id))
   end
   
-  belongs_to :group_type, index: true
+  belongs_to :group_type, index: true, optional: true
         
   def new_people(from,to)
     Account.where(:id.in => memberships.where(:created_at.gte => from).where(:created_at.lt => to+1).pluck(:account_id)).where(:has_picture => true)

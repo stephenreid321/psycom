@@ -5,7 +5,7 @@ class MembershipRequest
   belongs_to :account, index: true
   belongs_to :group, index: true
         
-  validates_presence_of :account, :group, :status
+  validates_presence_of :status
   
   field :status, :type => String
   field :answers, :type => Array
