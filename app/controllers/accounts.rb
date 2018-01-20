@@ -16,6 +16,10 @@ ActivateApp::App.controllers do
       erb :'accounts/build'
     end
   end  
+  
+  get '/people' do      
+    erb :people
+  end      
                
   get '/accounts/results' do
     sign_in_required!

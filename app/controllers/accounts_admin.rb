@@ -50,4 +50,22 @@ You were added to the groups [group_list] on #{Config['SITE_NAME_DEFINITE']}.
     end    
   end
   
+  get '/merge_tags' do
+    site_admins_only!
+    erb :merge_tags
+  end
+    
+  post '/merge_tags' do
+    site_admins_only!
+    at1 = AccountTag.find(params[:at1])
+    if params[:at2]
+      at2 = AccountTag.find(params[:at2])
+      at1.account_tagships.each { |account_tagship|
+        AccountTagship.create account: account_tagship.account, account_tag: at2
+      }
+    end
+    at1.destroy
+    redirect '/merge_tags'
+  end  
+  
 end

@@ -53,22 +53,10 @@ module ActivateApp
         
     ############
     
-    get '/' do
-      if Account.count == 0       
-        account = Account.create!(:name => 'admin', :password => 'admin', :email => 'admin@example.com', :admin => true)
-        SignIn.create(account: account)
-        session[:account_id] = account.id.to_s
-        flash[:notice] = %Q{An admin account has been created. You'll want to change the name, email address and password.}        
-        redirect '/me/edit'
-      end
-      @o = :updated       
+    get '/' do    
       erb :home
     end
-            
-    get '/people' do      
-      erb :people
-    end    
-                   
+                               
     get '/:slug' do      
       if @fragment = Fragment.find_by(slug: params[:slug], page: true)
         sign_in_required! unless @fragment.public?
@@ -77,24 +65,6 @@ module ActivateApp
         pass
       end
     end   
-        
-    get '/merge_tags' do
-      site_admins_only!
-      erb :merge_tags
-    end
-    
-    post '/merge_tags' do
-      site_admins_only!
-      at1 = AccountTag.find(params[:at1])
-      if params[:at2]
-        at2 = AccountTag.find(params[:at2])
-        at1.account_tagships.each { |account_tagship|
-          AccountTagship.create account: account_tagship.account, account_tag: at2
-        }
-      end
-      at1.destroy
-      redirect '/merge_tags'
-    end
-                      
+                             
   end
 end
