@@ -6,11 +6,7 @@
     <div id="affiliations">
       <% f.fields_for :affiliations do |o| %>
         <div class="affiliation">
-          <% if Config['AFFILIATION_POSITIONS'] %>
-            <%= o.select :title, :options => Config['AFFILIATION_POSITIONS'].split(','), :class => 'form-control' %>
-          <% else %>
-            <%= o.text_field :title, :class => 'form-control', :placeholder => I18n.t(:position).capitalize %>
-          <% end %>
+          <%= o.text_field :title, :class => 'form-control', :placeholder => I18n.t(:position).capitalize %>
           <span class="at"> <%=I18n.t(:at)%> </span>
           <%= o.text_field :organisation_name, :class => 'form-control typeahead', :value => o.object.try(:organisation).try(:name), :placeholder => I18n.t(:organisation).capitalize, :autocomplete => 'off' %>
           <% unless o.object.new_record? %>
@@ -32,21 +28,11 @@
         var icon = $('<div><i style="color: #999; cursor: pointer" class="fa fa-plus-square"></i> <a style="color: #999" href="javascript:;"><%= I18n.t(:add_another_affiliation).capitalize %></a></div>');
         $(icon).click(function () {
           var c = $('.affiliation').length
-<% if Config['AFFILIATION_POSITIONS'] %>
-            var i = $('<select/>');
-            i.attr('name', 'account[affiliations_attributes][' + c + '][title]');
-            i.attr('id', 'account_affiliations_attributes_' + c + '_title');
-  <% Config['AFFILIATION_POSITIONS'].split(',').each { |ap| %>
-              i.append('<option value="<%=ap%>"><%=ap%></option>')
-  <% } %>
-            i.addClass('form-control');
-<% else %>
-            var i = $('<input type="text" />');
-            i.attr('name', 'account[affiliations_attributes][' + c + '][title]');
-            i.attr('id', 'account_affiliations_attributes_' + c + '_title');
-            i.attr('placeholder', '<%=I18n.t(:position).capitalize%>');
-            i.addClass('form-control');
-<% end %>
+          var i = $('<input type="text" />');
+          i.attr('name', 'account[affiliations_attributes][' + c + '][title]');
+          i.attr('id', 'account_affiliations_attributes_' + c + '_title');
+          i.attr('placeholder', '<%=I18n.t(:position).capitalize%>');
+          i.addClass('form-control');
           var j = $('<input type="text" />');
           j.attr('name', 'account[affiliations_attributes][' + c + '][organisation_name]');
           j.attr('id', 'account_affiliations_attributes_' + c + '_organisation_name');

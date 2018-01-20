@@ -2,17 +2,12 @@
   <h1>Sign up</h1>
 <% else %>
   <%= partial :'accounts/nav' %>
-
-  <% if @account.sign_ins.count == 1 %>
-    <%= eval(f('first-time')) %>
-  <% end %>
-
 <% end %>
 
 <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :name %>
-  <%= f.email_block :email, disabled: Config['PREVENT_EMAIL_CHANGES'] %>
+  <%= f.email_block :email %>
   <%= f.text_block :username %>
   <%= f.text_block :location %>       
   <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>
@@ -27,7 +22,7 @@
       $(function () {
         $('#account_headline').simplyCountable({
           counter: '#headline-counter',
-          maxCount: <%= Config['MAX_HEADLINE_LENGTH'] || 150 %>
+          maxCount: <%= 150 %>
         });
       })
     </script>

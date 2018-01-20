@@ -153,12 +153,7 @@ class Account
       end
     end
   end
-  
-  attr_accessor :prevent_email_changes
-  before_validation do    
-    errors.add(:email, "cannot be changed") if prevent_email_changes and persisted? and email_changed?
-  end  
-  
+    
   def self.marker_color
     '3DA2E4'
   end
@@ -221,12 +216,7 @@ class Account
   accepts_nested_attributes_for :provider_links
                         
   attr_accessor :password
-  
-  attr_accessor :require_account_affiliations
-  before_validation do
-    errors.add(:affiliations, 'must be present') if self.require_account_affiliations and self.affiliations.empty?
-  end  
-    
+      
   validates_presence_of :name, :email
   validates_presence_of :password, :if => :password_required
   validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
@@ -237,7 +227,7 @@ class Account
   validates_format_of :email, :with => /\A[^@\s]+@[^@\s]+\.[^@\s]+\Z/i
   validates_length_of :password, :within => 4..40, :if => :password_required
   
-  validates_length_of :headline, maximum: (Config['MAX_HEADLINE_LENGTH'] ? Config['MAX_HEADLINE_LENGTH'].to_i : 150)
+  validates_length_of :headline, maximum: 150
   
   index({email: 1 }, {unique: true})
   

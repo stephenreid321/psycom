@@ -5,7 +5,7 @@
 
 <script>
   $(function () {
-    $('#map').load('/map?<%= {form: true, accounts: !Config['HIDE_PEOPLE_BY_DEFAULT'], events: Config['SHOW_EVENTS_BY_DEFAULT'], organisations: Config['SHOW_ORGS_BY_DEFAULT']}.to_query %>')
+    $('#map').load('/map?<%= {form: true, accounts: true, events: true, organisations: true}.to_query %>')
   });
 </script>
 <div id="map"></div>

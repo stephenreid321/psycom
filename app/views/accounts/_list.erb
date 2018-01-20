@@ -13,26 +13,24 @@
       <i id="filter-spin" style="display: none; position: absolute; right: -5px; top: 9px" class="fa fa-spin fa-spinner"></i>
     </div>
 
-    <%  if defined?(full_width) or Config['SHOW_COMPACT_ORG_FILTER'] %>
+    <%  if defined?(full_width) %>
       <div class="<%=col_class%>">   
         <%= text_field_tag :organisation_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_organisation).capitalize %>
       </div>
     <% end %>
 
-    <%  if defined?(full_width) or Config['SHOW_COMPACT_TAG_FILTER'] %>
+    <%  if defined?(full_width) %>
       <div class="<%=col_class%>">   
         <%= text_field_tag :account_tag_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_account_tagship).capitalize %>
       </div>
     <% end %>
 
-    <% unless Config['HIDE_COMPACT_SORT'] %>
-      <div class="<%=col_class%>">
-        <div style="text-align: right" >      
-          <i style="margin-right: 4px" title="Sort by" class="fa fa-sort"></i>
-          <%= select_tag :o, :class => 'form-control input-sm', :style => 'display: inline; width: auto', :options => {I18n.t(:date_joined).capitalize => :date, I18n.t(:name).capitalize => :name, I18n.t(:last_updated).capitalize => :updated}, :selected => (defined?(o) ? o : :date) %>                      
-        </div>
+    <div class="<%=col_class%>">
+      <div style="text-align: right" >      
+        <i style="margin-right: 4px" title="Sort by" class="fa fa-sort"></i>
+        <%= select_tag :o, :class => 'form-control input-sm', :style => 'display: inline; width: auto', :options => {I18n.t(:date_joined).capitalize => :date, I18n.t(:name).capitalize => :name, I18n.t(:last_updated).capitalize => :updated}, :selected => (defined?(o) ? o : :date) %>                      
       </div>
-    <% end %>
+    </div>
 
   </div>
 

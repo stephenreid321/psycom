@@ -3,26 +3,23 @@
   <li class="active"><%=I18n.t(:groups).capitalize%></li>
 </ol>
 
-    <div>
-      <% if !Config['GROUP_CREATION_BY_ADMINS_ONLY'] or (current_account and current_account.admin?) %>
-        <a style="float: right" title="<%=I18n.t(:create_a_group).capitalize%>" class="btn btn-primary" href="/groups/new"><i class="fa fa-plus"></i> <%=I18n.t(:create_a_group).capitalize%></a>
-      <% end %>
-      <h1 style="margin-top: 0"><%=I18n.t(:groups).capitalize%></h1>
-    </div>
+<div>
+  <% if !Config['GROUP_CREATION_BY_ADMINS_ONLY'] or (current_account and current_account.admin?) %>
+    <a style="float: right" title="<%=I18n.t(:create_a_group).capitalize%>" class="btn btn-primary" href="/groups/new"><i class="fa fa-plus"></i> <%=I18n.t(:create_a_group).capitalize%></a>
+  <% end %>
+  <h1 style="margin-top: 0"><%=I18n.t(:groups).capitalize%></h1>
+</div>
 
-    <%= eval(f('groups')) %>
+<h2><%=I18n.t(:your_groups).capitalize%></h2>
+<% current_account.groups.order_by(:primary.desc, :slug.asc).each { |group| %>
+  <hr />
+  <%= partial :'groups/group', :object => group %>  
+<% } %>
 
-    <h2><%=I18n.t(:your_groups).capitalize%></h2>
-    <% current_account.groups.order_by(:primary.desc, :slug.asc).each { |group| %>
-      <hr />
-      <%= partial :'groups/group', :object => group %>  
-    <% } %>
-
-
-    <% unless current_account.prevent_new_memberships %>
-      <h2><%=I18n.t(:other_groups).capitalize%></h2>
-      <% Group.where(:id.nin => current_account.groups.pluck(:id)).where(:privacy.ne => 'secret').order_by(:primary.desc, :slug.asc).each { |group| %>
-        <hr />
-        <%= partial :'groups/group', :object => group %>
-      <% } %>
-    <% end %>
+<% unless current_account.prevent_new_memberships %>
+  <h2><%=I18n.t(:other_groups).capitalize%></h2>
+  <% Group.where(:id.nin => current_account.groups.pluck(:id)).where(:privacy.ne => 'secret').order_by(:primary.desc, :slug.asc).each { |group| %>
+    <hr />
+    <%= partial :'groups/group', :object => group %>
+  <% } %>
+<% end %>
