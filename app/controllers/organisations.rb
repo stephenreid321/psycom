@@ -10,7 +10,7 @@ ActivateApp::App.controllers do
     @organisations = Organisation.all
     @q = []
     @organisations = @organisations.and(@q)
-    @organisations = @organisations.where(:name => /#{Regexp.escape(@name)}/i) if @name    
+    @organisations = @organisations.where(:name => /#{::Regexp.escape(@name)}/i) if @name    
     @organisations = case @o
     when :name
       @organisations.order_by(:name.asc)

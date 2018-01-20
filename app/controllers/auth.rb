@@ -10,7 +10,7 @@ ActivateApp::App.controllers do
   end
   
   post '/accounts/forgot_password' do
-    if params[:email] and @account = Account.find_by(email: /^#{Regexp.escape(params[:email])}$/i)
+    if params[:email] and @account = Account.find_by(email: /^#{::Regexp.escape(params[:email])}$/i)
       @account.update_attribute(:password_reset_token, SecureRandom.uuid)
          
       Mail.defaults do

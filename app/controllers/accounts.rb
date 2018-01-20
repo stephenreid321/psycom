@@ -45,10 +45,10 @@ ActivateApp::App.controllers do
       Account.all
     end 
     @q = []    
-    @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{Regexp.escape(@organisation_name)}/i).pluck(:id)).pluck(:account_id)} if @organisation_name
-    @q << {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{Regexp.escape(@account_tag_name)}/i).pluck(:id)).pluck(:account_id)} if @account_tag_name    
+    @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(@organisation_name)}/i).pluck(:id)).pluck(:account_id)} if @organisation_name
+    @q << {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{::Regexp.escape(@account_tag_name)}/i).pluck(:id)).pluck(:account_id)} if @account_tag_name    
     @accounts = @accounts.and(@q)    
-    @accounts = @accounts.or({:name => /#{Regexp.escape(@name)}/i}, {:name_transliterated => /#{Regexp.escape(@name)}/i}) if @name            
+    @accounts = @accounts.or({:name => /#{::Regexp.escape(@name)}/i}, {:name_transliterated => /#{::Regexp.escape(@name)}/i}) if @name            
     @accounts = case @o
     when :name
       @accounts.order_by(:name.asc)

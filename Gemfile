@@ -33,7 +33,6 @@ gem 'incoming'
 # Interacting with other websites
 gem 'airbrake', '~> 5.0'
 gem 'mechanize'
-gem 'platform-api'
 gem 'geocoder'
 
 # Text processing

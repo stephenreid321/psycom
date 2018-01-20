@@ -46,7 +46,7 @@ ActivateApp::App.controllers do
     @not_yet_receiving_emails = params[:not_yet_receiving_emails]
     @accounts = Account.where(:id.in => (@admins_only ? @group.admins.pluck(:id) : @group.memberships.pluck(:account_id)))
     @accounts = @accounts.where(:id.nin => @group.memberships.where(:status => 'confirmed').pluck(:account_id)) if @not_yet_receiving_emails
-    @accounts = @accounts.or([{:name => /#{Regexp.escape(@q)}/i}, {:email => /#{Regexp.escape(@q)}/i}]) if @q
+    @accounts = @accounts.or([{:name => /#{::Regexp.escape(@q)}/i}, {:email => /#{::Regexp.escape(@q)}/i}]) if @q
     @accounts = @accounts.order("#{@o} #{@d}")    
     @cols = {'Name' => :name, 'Email' => :email, 'Twitter' => nil, 'Affiliations' => nil, I18n.t(:account_tagships).capitalize => nil, 'Joined' => nil, 'Last signed in' => nil, 'Actions' => nil, 'Notifications' => nil}
     case content_type
@@ -85,7 +85,7 @@ ActivateApp::App.controllers do
     @o = params[:o] ? params[:o].to_sym : :created_at
     @d = params[:d] ? params[:d].to_sym : :desc
     @membership_requests = @group.membership_requests.where(:status => 'pending')
-    @membership_requests = @membership_requests.where(:account_id.in => Account.or([{:name => /#{Regexp.escape(@q)}/i}, {:email => /#{Regexp.escape(@q)}/i}]).pluck(:id)) if @q
+    @membership_requests = @membership_requests.where(:account_id.in => Account.or([{:name => /#{::Regexp.escape(@q)}/i}, {:email => /#{::Regexp.escape(@q)}/i}]).pluck(:id)) if @q
     @membership_requests = @membership_requests.order("#{@o} #{@d}")
     @cols = {'Name' => nil, 'Email' => nil}
     (@cols['Answers'] = nil) if @group.request_questions
@@ -181,7 +181,7 @@ ActivateApp::App.controllers do
       name.strip!
       email.strip!
       
-      if !(@account = Account.find_by(email: /^#{Regexp.escape(email)}$/i))   
+      if !(@account = Account.find_by(email: /^#{::Regexp.escape(email)}$/i))   
         @account = Account.new({
             :name => name,
             :password => Account.generate_password(8),

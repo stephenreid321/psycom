@@ -11,7 +11,7 @@ ActivateApp::App.controllers do
     (halt 406) if mail.sender == group.email('-noreply') # check this isn't a message sent by the app
                                    
     # skip messages from people that aren't in the group
-    account = Account.find_by(email: /^#{Regexp.escape(from)}$/i)     
+    account = Account.find_by(email: /^#{::Regexp.escape(from)}$/i)     
     if !account or !account.memberships.find_by(:group => group, :status => 'confirmed', :muted.ne => true)
       begin
         Mail.defaults do
