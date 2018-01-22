@@ -1,8 +1,8 @@
-<ul class="page-options">
-  <li>  
-    <a title="Edit organisation" class="edit restore-opacity" href="/organisations/<%=@organisation.id%>/edit"><i class="fa fa-pencil"></i> Edit <%=I18n.t(:organisation)%></a>
-  </li>   
-</ul>
+
+<% @pills = [
+  [%Q{<i class="fa fa-pencil"></i> Edit #{I18n.t(:organisation)}}, "/organisations/#{@organisation.id}/edit"]
+  ] %>
+<%= partial :pills %>
 
 <div class="row">
   <div class="col-sm-8">

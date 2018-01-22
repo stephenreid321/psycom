@@ -7,29 +7,25 @@
 </ol>
 
 <% if @membership %>
-  <ul class="page-options">  
-    <% if @conversation.conversation_mutes.find_by(account: current_account) %>
-      <li>
-        <a title="Unmute conversation" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/unmute"><i class="fa fa-volume-up"></i> Unmute conversation</a>
-      </li> 
-    <% else %>
-      <li>
-        <a title="Mute conversation" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/mute"><i class="fa fa-volume-off"></i> Mute conversation</a>
-      </li>         
-    <% end %>
-    <% if @membership.admin? %>    
-      <li>
-        <a title="Hide conversation" data-confirm="Are you sure you want to hide this conversation?" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/hide"><i class="fa fa-times"></i> Hide conversation</a>
-      </li> 
-      <li>
-        <% if !@conversation.pinned? %>
-          <a title="Pin conversation" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/pin"><i class="fa fa-map-pin"></i> Pin conversation</a>
-        <% else %>
-          <a title="Unpin conversation" class="edit restore-opacity" href="/conversations/<%=@conversation.slug%>/unpin"><i class="fa fa-map-pin"></i> Unpin conversation</a>
-        <% end %>
-      </li>       
-    <% end %>
-  </ul>
+
+  <% @pills = [
+    (if @conversation.conversation_mutes.find_by(account: current_account)
+        [%Q{<i class="fa fa-volume-up"></i> Unmute conversation}, "/conversations/#{@conversation.slug}/unmute"]
+        else
+        [%Q{<i class="fa fa-volume-off"></i> Mute conversation}, "/conversations/#{@conversation.slug}/mute"]
+      end),
+    (if @membership.admin?
+        [%Q{<i class="fa fa-times"></i> Hide conversation}, "/conversations/#{@conversation.slug}/hide"]
+        if !@conversation.pinned?
+          [%Q{<i class="fa fa-map-pin"></i> Pin conversation}, "/conversations/#{@conversation.slug}/pin"]
+          else
+          [%Q{<i class="fa fa-map-pin"></i> Unpin conversation}, "/conversations/#{@conversation.slug}/unpin"]
+        end
+      end
+    )
+    ].compact %>
+  <%= partial :pills %>
+
 <% end %>
 
 <div class="row">
@@ -63,8 +59,8 @@
           <% form_for (@conversation_post ||= @conversation.conversation_posts.build), "/conversations/#{@conversation.slug}", :class => 'form-horizontal', :multipart => true do |f| %>
             <%= f.wysiwyg_block :body, label_class: 'd-none' %>
             <a class="btn btn-secondary" href="javascript:;" onclick="$(this).hide();
-                    $(this).next().show();
-                    $(this).next().find('input').click();"><%=I18n.t(:attach_a_file).capitalize%></a>
+                $(this).next().show();
+                $(this).next().find('input').click();"><%=I18n.t(:attach_a_file).capitalize%></a>
             <div style="display:none;">
               <%= f.file_block :file, label_class: 'd-none' %>
             </div>

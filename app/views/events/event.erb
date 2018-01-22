@@ -1,8 +1,8 @@
-<ul class="page-options">  
-  <li>
-    <a title="Edit event" class="edit restore-opacity" href="/events/<%=@event.id%>/edit"><i class="fa fa-pencil"></i> <%=I18n.t(:edit_event).capitalize%></a>
-  </li>    
-</ul>
+
+<% @pills = [
+  [%Q{<i class="fa fa-pencil"></i> #{I18n.t(:edit_event).capitalize}}, "/events/#{@event.id}/edit"]
+  ] %>
+<%= partial :pills %>
 
 <div class="row">
   <div class="col-sm-8">

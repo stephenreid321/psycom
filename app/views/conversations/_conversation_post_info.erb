@@ -1,5 +1,5 @@
 
-<a class="edit" href="/conversations/<%=conversation_post.conversation.slug%>#conversation-post-<%=conversation_post.id%>" title="<%=conversation_post.created_at%>"><%=timeago(conversation_post.created_at)%></a>
+<a  href="/conversations/<%=conversation_post.conversation.slug%>#conversation-post-<%=conversation_post.id%>" title="<%=conversation_post.created_at%>"><%=timeago(conversation_post.created_at)%></a>
 &middot;
 
 <span class="conversation-post-like">
@@ -8,7 +8,7 @@
 
 <% if @membership and @membership.admin? %>
   &middot;
-  <a class="edit" data-confirm="Are you sure you want to resend emails for this post?" href="/conversation_posts/<%=conversation_post.id%>/resend">Resend</a>
+  <a  data-confirm="Are you sure you want to resend emails for this post?" href="/conversation_posts/<%=conversation_post.id%>/resend">Resend</a>
 <% end %>
 
 
