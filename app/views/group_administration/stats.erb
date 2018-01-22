@@ -1,15 +1,16 @@
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item">
     <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>    
   </li>      
-  <li class="active">
+  <li class="breadcrumb-item active">
     Stats
   </li>
 </ol>
 
 <%= partial :'group_administration/header' %>
+<%= partial :pills %>
 
 <script>
   $(function () {
@@ -26,7 +27,7 @@
 
 <table class="table" style="margin-top: 20px">
 
-  <%{'Most posts' => @cp, 'Most conversations started' => @c, 'Most events created' => @e}.each { |h,hash| %>
+  <%{'Most posts' => @cp, 'Most conversations started' => @c}.each { |h,hash| %>
 
     <tr>
       <td colspan="2">
@@ -47,9 +48,9 @@
       <tr>
         <td style="width: 170px;" <% if current_account and k == current_account %> class="stats-highlight" <% end %>>
           <div class="media">
-            <span class="pull-left" >      
+            <span class="mr-3" >      
               <a href="/accounts/<%=k.id%>">
-                <img class="media-object" style="width: 32px" src="<%=k.picture ? k.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
+                <img style="width: 32px" src="<%=k.picture ? k.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
               </a>
             </span>
             <div class="media-body">    

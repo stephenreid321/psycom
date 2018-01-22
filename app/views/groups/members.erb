@@ -1,8 +1,8 @@
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
-  <li class="active">Members</li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item"><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
+  <li class="breadcrumb-item active">Members</li>
 </ol>
 
 <h1>Members of <%=@group.name%></h1>

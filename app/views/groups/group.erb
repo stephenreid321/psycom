@@ -1,29 +1,19 @@
-<ul class="page-options">  
-  <% if @membership %>
-    <li>
-      <a title="<%=I18n.t(:leave_group).capitalize%>" data-confirm="<%=I18n.t(:leave_group_confirm)%>" class="edit restore-opacity" href="/groups/<%=@group.slug%>/leave"><i class="fa fa-sign-out"></i> <%=I18n.t(:leave_group).capitalize%></a>
-    </li>   
-    <% if Config['LIST_EMAIL_ADDRESSES'] %>
-      <li>
-        <a title="List email addresses" class="edit restore-opacity" href="/groups/<%=@group.slug%>/list_emails"><i class="fa fa-list"></i> List email addresses</a>
-      </li>       
-    <% end %>
-  <% elsif current_account %>
-    <li>
-      <a title="<%=I18n.t(:join_group).capitalize%>" class="edit restore-opacity" href="/groups/<%=@group.slug%>/join"><i class="fa fa-sign-in"></i> <%=I18n.t(:join_group).capitalize%></a>
-    </li>
-  <% end %>
-</ul>
-
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li class="active"><%=@group.name%></li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item active"><%=@group.name%></li>
 </ol>
 
+<% @pills = [
+  ([%Q{<i class="fa fa-sign-out"></i> #{I18n.t(:leave_group).capitalize}}, "/groups/#{@group.slug}/leave"] if @membership),
+  ([%Q{<i class="fa fa-list"></i> List email addresses}, "/groups/#{@group.slug}/list_emails"] if @membership and Config['LIST_EMAIL_ADDRESSES']),
+  ([%Q{<i class="fa fa-sign-in"></i> #{I18n.t(:join_group).capitalize}}, "/groups/#{@group.slug}/join"] if current_account and !@membership )
+  ].compact %>
+
 <% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
-  <%= partial :'group_administration/header' %>
+  <%= partial :'group_administration/header' %>  
 <% end %>  
+<%= partial :pills %>
 
 <% if @membership or @group.public? %>
   <script>

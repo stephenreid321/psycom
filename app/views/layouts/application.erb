@@ -19,7 +19,8 @@
       'fullcalendar/2.4.0' => 'fullcalendar.min.js fullcalendar.min.css',
       'jquery-timeago/1.4.3' => 'jquery.timeago.min.js',
       'datatables/1.10.12' => 'js/jquery.dataTables.min.js css/dataTables.bootstrap.min.css',
-      'Chart.js/2.3.0' => 'Chart.min.jns'
+      'Chart.js/2.3.0' => 'Chart.min.js',
+      'flatpickr/3.0.7' => 'flatpickr.min.js flatpickr.min.css'
       }.each { |k,v| %>
       <% v.split(' ').each { |f| u = "//cdnjs.cloudflare.com/ajax/libs/#{k}/#{f}" %>
         <% case f.split('.').last.to_sym; when :js %>
@@ -45,7 +46,6 @@
       '//cdn.rawgit.com/bassjobsen/Bootstrap-3-Typeahead/d5d71f28b00a16766d2661aef6a75f80f1f604da/bootstrap3-typeahead.min.js',
       '//cdn.rawgit.com/m1ket/jquery-typing/7bfdbca1014b418fac5de12c86a91850bc8edd25/plugin/jquery.typing-0.3.0.min.js',
       '//cdn.rawgit.com/aaronrussell/jquery-simply-countable/9c7c8fb200cf2c8f0bc0bdb20e37ca7ee6c00be7/jquery.simplyCountable.js',
-      '//cdn.rawgit.com/richhollis/vticker/1c624bd347ef0bcb6e686795303a056e506472cc/js/jquery.vticker.js',
       ("//cdn.rawgit.com/rmm5t/jquery-timeago/5293dacee881e78b25bd4f699161fca81dff5205/locales/jquery.timeago.#{I18n.locale}.js" if I18n.locale != :en),
       "/javascripts/app.js?#{Time.now.to_i}"
       ].compact.each { |f| %>
@@ -89,17 +89,17 @@
       <%= yield %>
     </div>
 
-    <div id="footer">
+    <div id="footer" class="bg-dark p-3 mt-3">
       <div class="container-fluid">
         <%= eval(f('footer')) %>
         <ul class="list-inline" style="margin-bottom: 0">
           <% if current_account %>
             <% if current_account.admin? %>
-              <li><a href="/config">Configuration</a></li>
-              <li><a href="/analytics">Analytics</a></li>
+              <li class="list-inline-item"><a href="/config">Configuration</a></li>
+              <li class="list-inline-item"><a href="/analytics">Analytics</a></li>
             <% end %>
             <% if current_account.admin? or current_account.translator %>
-              <li><a href="/translations">Translations</a></li>
+              <li class="list-inline-item"><a href="/translations">Translations</a></li>
             <% end %>
           <% end %>
         </ul>

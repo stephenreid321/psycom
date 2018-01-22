@@ -1,14 +1,15 @@
 
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
-  <li class="active">Request membership</li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item"><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
+  <li class="breadcrumb-item active">Request membership</li>
 </ol>
 
 <% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
-  <%= partial :'group_administration/header' %>
+  <%= partial :'group_administration/header' %>  
 <% end %>  
+<%= partial :pills %>
 
 <% if @membership %>
   <div style="text-align: center">

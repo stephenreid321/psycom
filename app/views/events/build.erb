@@ -48,8 +48,8 @@
 <% form_for @event, @event.new_record? ? "/events/new" : "/events/#{@event.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :name %>
-  <%= f.datetime_block :start_time, fives: true %>
-  <%= f.datetime_block :end_time, fives: true %>
+  <%= f.datetime_block :start_time %>
+  <%= f.datetime_block :end_time %>
   <%= f.check_box :consider_time, :style => 'display: none'%>
   <%= f.text_block :location %>      
   <%= f.text_block :organisation_name%>

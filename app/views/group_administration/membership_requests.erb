@@ -1,15 +1,16 @@
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item">
     <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
   </li>
-  <li class="active">
+  <li class="breadcrumb-item active">
     Membership requests
   </li>
 </ol>
 
 <%= partial :'group_administration/header' %>
+<%= partial :pills %>
 
 <div class="row" style="margin-bottom: 10px">
   <div class="col-sm-6">          
@@ -20,7 +21,7 @@
       <div class="input-group" style="text-align: right">
         <%= search_field_tag :q, :class => 'form-control', :value => @q %>
         <span class="input-group-btn">
-          <button class="btn btn-default"><i class="fa fa-search"></i></button>
+          <button class="btn btn-secondary"><i class="fa fa-search"></i></button>
         </span>            
       </div>            
     <% end %> 
@@ -75,17 +76,17 @@
       </td>     
       <td>
         <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li>
+            <li class="dropdown-item">
               <a title="Accept request but wait until first sign in before receiving emails" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>?accept=true">Accept</a>
             </li>          
-            <li>
+            <li class="dropdown-item">
               <a title="Accept request and confirm the membership so this person starts receiving emails immediately" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>?accept=true&status=confirmed">Accept and confirm</a>
             </li>          
-            <li>
+            <li class="dropdown-item">
               <a title="Silently reject request" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>">Silently reject request</a>
             </li>          
           </ul>

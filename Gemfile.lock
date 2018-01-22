@@ -77,7 +77,6 @@ GEM
       dragonfly (~> 1.0)
       fog-aws
     enumerable-lazy (0.0.2)
-    erubis (2.7.0)
     excon (0.60.0)
     factory_girl (4.9.0)
       activesupport (>= 3.0.0)
@@ -102,11 +101,6 @@ GEM
     formatador (0.2.5)
     geocoder (1.4.5)
     hashie (3.5.7)
-    heroics (0.0.24)
-      erubis (~> 2.0)
-      excon
-      moneta
-      multi_json (>= 1.9.2)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -214,8 +208,6 @@ GEM
       mime-types (< 3)
       padrino-core (= 0.14.2)
     padrino-support (0.14.2)
-    platform-api (0.8.0)
-      heroics (~> 0.0.17)
     poltergeist (1.17.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -294,7 +286,6 @@ DEPENDENCIES
   omniauth-google-oauth2
   open_uri_redirections
   padrino
-  platform-api
   poltergeist
   premailer
   puma

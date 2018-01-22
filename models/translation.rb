@@ -149,7 +149,6 @@ class Translation
       :new_group => 'New group',
       :posted_in_the_group => 'Posted in the group %{name}',
       :latest_conversations => 'Latest conversations',
-      :pick_a_group => 'Pick a group',
       :listed => 'listed',
       :filter_by_group => 'filter by group',
       :agree => 'agree',

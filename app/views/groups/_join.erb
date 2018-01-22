@@ -1,10 +1,8 @@
 <div style="text-align: center">
 
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <h3 class="panel-title"><%=group.slug%> has <%=pluralize(group.members.count,'member')%></h3>
-    </div>
-    <div class="panel-body">
+  <div class="card">
+    <h3 class="card-header"><%=group.slug%> has <%=pluralize(group.members.count,'member')%></h3>
+    <div class="card-body">
 
       <p class="lead">Join them!</p>
 

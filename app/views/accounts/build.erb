@@ -47,15 +47,13 @@
 
 
 <% if @account.persisted? %>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title"><%= I18n.t(:delete_account).capitalize %></h3>
-    </div>
-    <div class="panel-body">
+  <div class="card mt-3">
+    <h3 class="card-header bg-danger text-white"><%= I18n.t(:delete_account).capitalize %></h3>
+    <div class="card-body">
       <p><%= I18n.t(:delete_account_instructions) %></p>
 
       <% form_tag '/me/destroy', :class => 'form-inline' do %>
-        <%= text_field_tag :name, :class => 'form-control' %>
+        <%= text_field_tag :name, :class => 'form-control mr-2' %>
         <button class="btn btn-danger"><%= I18n.t(:delete_account).capitalize %></button>
       <% end %>   
     </div>

@@ -71,7 +71,6 @@ class ConversationPost
     string.gsub!('[slug]', group.slug)        
     string.gsub!('[conversation_url]', "#{Config['BASE_URI']}/conversations/#{conversation.slug}")
     string.gsub!('[members]', "#{m = members.count} #{m == 1 ? 'member' : 'members'}")
-    string.gsub!('[upcoming_events]', "#{e = group.events.where(:start_time.gt => Time.now).count} #{e == 1 ? 'upcoming event' : 'upcoming events'}")
     most_recently_updated_account = members.order_by([:has_picture.desc, :updated_at.desc]).first
     string.gsub!('[most_recently_updated_url]', "#{Config['BASE_URI']}/accounts/#{most_recently_updated_account.id}")
     string.gsub!('[most_recently_updated_name]', most_recently_updated_account.name)

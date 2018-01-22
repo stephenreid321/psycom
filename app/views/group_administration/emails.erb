@@ -1,15 +1,16 @@
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
-  <li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item">
     <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>    
   </li>      
-  <li class="active">
+  <li class="breadcrumb-item active">
     Emails
   </li>
 </ol>
 
 <%= partial :'group_administration/header' %>
+<%= partial :pills %>
 
 <% form_for @group, "/groups/#{@group.slug}/emails", :class => 'form-horizontal', :multipart => true do |f| %>
 

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,700,700i,900,900i');
+
 $primary: colors('primary');
 $primary-dark: darken($primary, 15%);
 $primary-contrast: colors('primary-contrast');
@@ -8,7 +10,25 @@ $grey-mid: colors('grey-mid');
 $dark: colors('dark');
 $dark-light: lighten($dark, 40%);
 $dark-contrast: colors('dark-contrast');
-$headerFont: 'Raleway';
-$bodyFont: 'Raleway';
+
+$theme-colors: (
+);
+$font-size-base: 0.9rem;
+$font-family-sans-serif: 'Raleway', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 
 @import "bootstrap/bootstrap";
+
+@media print {
+  a[href]:after {
+    content: none;
+  }
+}
+
+h1, h2, h3, h4, h5, h6, .h { text-transform: uppercase; font-weight: 900 }
+
+body { padding-top: 4rem }
+
+.navbar-brand { font-weight: bold; text-transform: uppercase }
+
+.table-hr td:first-child { width: 1px; white-space: nowrap; font-weight: bold; padding-right: 1rem; }
+.table-hr td { border: 0 !important; border-bottom: 0.1rem solid #eee !important; }

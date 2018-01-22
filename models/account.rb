@@ -42,7 +42,6 @@ class Account
   end
 
   has_many :sign_ins, :dependent => :destroy  
-  has_many :page_views, :dependent => :destroy  
   has_many :memberships, :class_name => "Membership", :inverse_of => :account, :dependent => :destroy
   has_many :memberships_added, :class_name => "Membership", :inverse_of => :added_by, :dependent => :nullify
   has_many :membership_requests, :dependent => :destroy  

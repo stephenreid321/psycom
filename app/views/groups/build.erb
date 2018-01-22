@@ -1,15 +1,15 @@
 <ol class="breadcrumb">
-  <li><a href="/">Home</a></li>
-  <li><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
   <% if @group.persisted? %>
-    <li>
+    <li class="breadcrumb-item">
       <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>
     </li>      
-    <li class="active">
+    <li class="breadcrumb-item active">
       <%=I18n.t(:edit).capitalize%>
     </li>
   <% else %>
-    <li class="active">
+    <li class="breadcrumb-item active">
       <%=I18n.t(:new_group).capitalize%>
     </li>    
   <% end %>
@@ -17,6 +17,7 @@
 
 <% if @group.persisted? %>
   <%= partial :'group_administration/header' %>
+  <%= partial :pills %>
 <% end %>  
 
 <% form_for @group, @group.new_record? ? '/groups/new' : "/groups/#{@group.slug}/edit", :class => 'form-horizontal', :multipart => true do |f| %>

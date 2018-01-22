@@ -50,23 +50,19 @@ $(function () {
     });
   }
 
-  function placeholdersOnly() {
-    $('form.placeholders-only label[for]').each(function () {
-      var input = $(this).next().children().first()
-      if (!$(input).attr('placeholder'))
-        $(input).attr('placeholder', $.trim($(this).text()))
-      $(this).hide()
-    });
+  function datepickers() {
+    $(".datepicker").flatpickr({altInput: true, altFormat: 'J F Y'});
+    $(".datetimepicker").flatpickr({altInput: true, altFormat: 'J F Y, H:i', enableTime: true, time_24hr: true});
   }
 
   $(document).ajaxComplete(function () {
-    wysify();
-    placeholdersOnly();
-    timeago();
+    wysify()
+    timeago()
+    datepickers()
   });
-  wysify();
-  placeholdersOnly();
-  timeago();
+  wysify()
+  timeago()
+  datepickers()
 
 
 

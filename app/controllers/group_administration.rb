@@ -348,15 +348,7 @@ ActivateApp::App.controllers do
       @cp[conversation_post.account_id] = [] if !@cp[conversation_post.account_id]
       @cp[conversation_post.account_id] << conversation_post.id    
     }
-    
-    @e = {}
-    events = @group.events
-    events = events.where(:created_at.gte => @from).where(:created_at.lt => @to+1)
-    events.only(:id, :account_id).each { |event|
-      @e[event.account_id] = [] if !@e[event.account_id]
-      @e[event.account_id] << event.id
-    }    
-    
+        
     erb :'group_administration/stats'    
   end   
         

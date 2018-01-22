@@ -25,13 +25,7 @@ ActivateApp::App.controllers do
       redirect "/groups/#{@group.slug}?#{request.query_string}"
     end
   end
-  
-  get '/conversations/new' do
-    sign_in_required!
-    @title = 'Start a conversation'
-    partial :'groups/pick', :locals => {:collection => 'conversations'}, :layout => (:modal if request.xhr?)
-  end
-  
+    
   get '/groups/:slug/conversations/new' do
     @group = Group.find_by(slug: params[:slug]) || not_found
     @membership = @group.memberships.find_by(account: current_account)    

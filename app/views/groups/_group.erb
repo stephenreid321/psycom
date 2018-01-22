@@ -1,11 +1,11 @@
 <div class="media">
-  <span class="pull-left">      
+  <span class="mr-3">      
     <a href="/groups/<%=group.slug%>">
-      <img class="media-object" style="width: 70px" src="<%=group.picture ? group.picture.thumb('70x70#').url : '/images/blank.png'%>">
+      <img style="width: 70px" src="<%=group.picture ? group.picture.thumb('70x70#').url : '/images/blank.png'%>">
     </a>
   </span>
   <div class="media-body">
-    <h4 class="media-heading" style="display:inline; margin-right: 5px"><a href="/groups/<%=group.slug%>"><%= group.name %></a> <% if group.name != group.slug %><small><%=group.email%></small><% end %></h4>
+    <h4 class="mt-0" style="display:inline; margin-right: 5px"><a href="/groups/<%=group.slug%>"><%= group.name %></a> <% if group.name != group.slug %><small><%=group.email%></small><% end %></h4>
 
     <span style="position: relative; top: -3px">
       <% if !current_account or !(membership = group.memberships.find_by(account: current_account)) %>
