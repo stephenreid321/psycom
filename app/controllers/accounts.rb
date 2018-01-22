@@ -18,7 +18,7 @@ ActivateApp::App.controllers do
   end  
   
   get '/people' do      
-    erb :people
+    erb :'accounts/people'
   end      
                
   get '/accounts/results' do

@@ -4,6 +4,12 @@
   <%= partial :'accounts/nav' %>
 <% end %>
 
+<script>
+  $(function () {
+    var autocomplete = new google.maps.places.Autocomplete($('#account_location')[0]);
+  })
+</script>
+
 <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :name %>
@@ -20,17 +26,18 @@
     <style>#account_headline { height: 6em }</style>
     <script>
       $(function () {
-        $('#account_headline').simplyCountable({
-          counter: '#headline-counter',
-          maxCount: <%= 150 %>
-        });
-      })
+      $('#account_headline').simplyCountable({
+      counter: '#headline-counter',
+              maxCount: <%= 150 %>
+      });
+      }
+      )
     </script>
     <%= f.text_area_block :headline, hint: %Q{<span id="headline-counter"></span>} %>          
     <%= f.text_area_block :story %>
-    
+
     <%= f.url_block :website %>
-    
+
     <% if Config['ACCOUNT_TAGS_PREDEFINED'] %>
       <% if AccountTag.count > 0  %>
         <%= f.check_boxes_block :account_tag_ids, options: AccountTag.order('name asc').map { |account_tag| [account_tag.name, account_tag.id] }, checked: @account.account_tagships.map(&:account_tag_id) %>
@@ -53,9 +60,9 @@
       <p><%= I18n.t(:delete_account_instructions) %></p>
 
       <% form_tag '/me/destroy', :class => 'form-inline' do %>
-        <%= text_field_tag :name, :class => 'form-control mr-2' %>
+    <%= text_field_tag :name, :class => 'form-control mr-2' %>
         <button class="btn btn-danger"><%= I18n.t(:delete_account).capitalize %></button>
-      <% end %>   
+  <% end %>   
     </div>
   </div>          
 <% end %>
