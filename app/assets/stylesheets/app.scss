@@ -24,7 +24,8 @@ $font-family-sans-serif: 'Raleway', -apple-system, BlinkMacSystemFont, "Segoe UI
   }
 }
 
-h1, h2, h3, h4, h5, h6, .h { text-transform: uppercase; font-weight: 900 }
+h1, h2, h3, h4, h5, h6, .h { font-weight: 900 }
+h1  { text-transform: uppercase;  }
 
 body { padding-top: 4rem }
 
@@ -35,3 +36,5 @@ body { padding-top: 4rem }
 
 .group { font-size: 0.75rem; opacity: 0.5 }
 .group:hover { opacity: 1 }
+
+.nav-pills-custom li a { background: #E9ECEF; margin-right: 0.5rem }
