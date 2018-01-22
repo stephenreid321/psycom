@@ -2,7 +2,7 @@ ActivateApp::App.controllers do
   
   get '/me' do
     sign_in_required!
-    redirect "/accounts/#{current_account.id}"
+    redirect "/#{current_account.username_or_id}"
   end
    
   get '/me/edit' do

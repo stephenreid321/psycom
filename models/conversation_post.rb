@@ -72,7 +72,7 @@ class ConversationPost
     string.gsub!('[conversation_url]', "#{Config['BASE_URI']}/conversations/#{conversation.slug}")
     string.gsub!('[members]', "#{m = members.count} #{m == 1 ? 'member' : 'members'}")
     most_recently_updated_account = members.order_by([:has_picture.desc, :updated_at.desc]).first
-    string.gsub!('[most_recently_updated_url]', "#{Config['BASE_URI']}/accounts/#{most_recently_updated_account.id}")
+    string.gsub!('[most_recently_updated_url]', "#{Config['BASE_URI']}/#{most_recently_updated_account.username_or_id}")
     string.gsub!('[most_recently_updated_name]', most_recently_updated_account.name)
     string
   end  

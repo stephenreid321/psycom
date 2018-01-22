@@ -17,7 +17,7 @@
       <td>
         <% if conversation.last_conversation_post %>
           <%=I18n.t(:last_post).capitalize%> <%=timeago(conversation.last_conversation_post.created_at)%>        
-          by <a href="/accounts/<%=conversation.last_conversation_post.account.id%>"><%=conversation.last_conversation_post.account.name%></a>
+          by <a href="/<%=conversation.last_conversation_post.account.username_or_id%>"><%=conversation.last_conversation_post.account.name%></a>
         <% end %>
       </td>
     </tr>

@@ -56,7 +56,7 @@
   <% @membership_requests.each { |membership_request| account = membership_request.account %>
     <tr>
       <td>
-        <a href="/accounts/<%=account.id%>"><%= account.name %></a>        
+        <a href="/<%=account.username_or_id%>"><%= account.name %></a>        
       </td>      
       <td>
         <%=account.email%>

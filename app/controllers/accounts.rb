@@ -60,13 +60,5 @@ ActivateApp::App.controllers do
     @accounts = @accounts.per_page(params[:per_page] || 8).page(params[:page])
     partial :'accounts/results', locals: {full_width: params[:full_width]}
   end  
-    
-  get '/accounts/:id' do
-    sign_in_required!
-    @account = Account.find(params[:id]) || not_found
-    @shared_conversations = current_account.visible_conversation_posts.where(account_id: @account.id).order_by(:created_at.desc).limit(10).map(&:conversation).uniq if current_account
-    @title = @account.name
-    erb :'accounts/account'
-  end    
-               
+                   
 end

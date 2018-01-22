@@ -55,15 +55,19 @@ module ActivateApp
     get '/' do    
       erb :home
     end
-                               
-    get '/:slug' do      
+                                   
+    get '/:slug' do
       if @fragment = Fragment.find_by(slug: params[:slug], page: true)
         sign_in_required! unless @fragment.public?
         erb :page
+      elsif @account = Account.find_by(username: params[:slug]) or @account = Account.find(params[:slug])
+        @title = @account.name
+        @shared_conversations = current_account.visible_conversation_posts.where(account_id: @account.id).order_by(:created_at.desc).limit(10).map(&:conversation).uniq if current_account
+        erb :'accounts/account'
       else
         pass
       end
-    end   
+    end     
                              
   end
 end

@@ -49,12 +49,12 @@
         <td style="width: 170px;" <% if current_account and k == current_account %> class="stats-highlight" <% end %>>
           <div class="media">
             <span class="mr-3" >      
-              <a href="/accounts/<%=k.id%>">
+              <a href="/<%=k.username_or_id%>">
                 <img style="width: 32px" src="<%=k.picture ? k.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
               </a>
             </span>
             <div class="media-body">    
-              <a href="/accounts/<%=k.id%>"><%=k.name%></a>
+              <a href="/<%=k.username_or_id%>"><%=k.name%></a>
             </div>
           </div>           
         </td>

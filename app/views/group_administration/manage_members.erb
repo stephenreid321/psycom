@@ -66,7 +66,7 @@
   <% @accounts.each { |account| membership = @group.memberships.find_by(account: account) %>
     <tr>
       <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %>  >
-        <a href="/accounts/<%=account.id%>"><%= account.name %></a>
+        <a href="/<%=account.username_or_id%>"><%= account.name %></a>
         <% if membership.status == 'pending' %>
           <span title="<%=account.firstname%> needs to sign in to start receiving emails" class="badge badge-primary">Not yet receiving emails</span>
         <% end %>                  
