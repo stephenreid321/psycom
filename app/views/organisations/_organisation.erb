@@ -3,7 +3,7 @@
     <img style="max-width: 64px" src="<%=organisation.picture ? organisation.picture.thumb('64x64#').url : '/images/square.png' %>">
   </a>
   <div class="media-body">
-    <h4 class="mt-0"><a href="/organisations/<%=organisation.id%>"><%=organisation.name%></a></h4>      
+    <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>      
     <ul class="fa-ul">
       <% if organisation.website%>
         <li><i title="Website" class="fa-li fa fa-globe"></i><a target="_blank" href="<%=organisation.website%>"><%=organisation.website%></a></li>

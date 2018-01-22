@@ -32,3 +32,6 @@ body { padding-top: 4rem }
 
 .table-hr td:first-child { width: 1px; white-space: nowrap; font-weight: bold; padding-right: 1rem; }
 .table-hr td { border: 0 !important; border-bottom: 0.1rem solid #eee !important; }
+
+.group { font-size: 0.75rem; opacity: 0.5 }
+.group:hover { opacity: 1 }

@@ -22,8 +22,14 @@ ActivateApp::App.controllers do
   end  
   
   get '/organisations/:id' do
-    sign_in_required!
-    @organisation = Organisation.find(params[:id]) || not_found
+    redirect "/o/#{params[:id]}"
+  end
+  
+  get '/o/:username' do
+    @organisation = Organisation.find_by(username: params[:username])
+    if !@organisation
+      @organisation = Organisation.find(params[:username]) || not_found
+    end
     @title = @organisation.name
     erb :'organisations/organisation'
   end

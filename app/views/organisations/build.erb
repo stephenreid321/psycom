@@ -1,4 +1,11 @@
 
+<ol class="breadcrumb">
+  
+  <li class="breadcrumb-item"><a href="/organisations"><%=I18n.t(:organisations).capitalize%></a></li>
+  <li class="breadcrumb-item"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></li>
+  <li class="breadcrumb-item active">Edit</li>
+</ol>
+
 <% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :name %>

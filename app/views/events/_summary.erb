@@ -17,7 +17,7 @@
         <td>Host</td>
         <td>
           <% if event.organisation_id %>
-            <a href="<%=Config['BASE_URI']%>/organisations/<%=event.organisation_id%>"><%= event.organisation.name %></a>
+            <a href="<%=Config['BASE_URI']%>/o/<%=event.organisation.username_or_id%>"><%= event.organisation.name %></a>
           <% else %>
             <%= event.organisation_name %>
           <% end %>

@@ -1,52 +1,50 @@
+<% content_for :cover_bottom_left_wrap do %>
+  <% if @organisation.picture %>    
+    <a href="/o/<%=@organisation.username_or_id%>"><img style="background: white; border: 3px solid white; width: 200px;" src="<%=@organisation.picture.thumb('500x500#').url%>" /></a>
+  <% end %>
+  <h1><a style="color: white" href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
+<% end %>
 
-<% @pills = [
-  [%Q{<i class="fa fa-pencil"></i> Edit #{I18n.t(:organisation)}}, "/organisations/#{@organisation.id}/edit"]
-  ] %>
-<%= partial :pills %>
+<% content_for :cover_top_right do %>
+  <a class="btn btn-primary" href="/organisations/<%=@organisation.id%>/edit"><i class="fa fa-pencil"></i> Edit organisation</a>
+<% end %>
+
+<%= partial :cover %>
 
 <div class="row">
-  <div class="col-sm-8">
 
-    <div class="row">
-      <div class="col-sm-3">
-        <img style="width: 100%" src="<%=@organisation.picture.try(:url) || '/images/square.png' %>" />
-      </div>
-      <div class="col-sm-9">
-        <h1 style="margin-top: 0"><%=@organisation.name%></h1>          
+  <div class="col-sm-4 cover-sidebar">
 
-        <div class="table-hr-container">
-          <table class="table table-hr" >
+    <div class="table-hr-container">
+      <table class="table table-hr" >
 
-            <% if @organisation.website%>
-              <tr>
-                <td>Website</td>
-                <td><a target="new" href="<%=@organisation.website%>"><%=@organisation.website%></a></td>
-              </tr>
-            <% end %>                  
+        <% if @organisation.website %>
+          <tr>
+            <td>Website</td>
+            <td>
+              <a target="_blank" href="<%=@organisation.website%>"><%=@organisation.website%></a>
+            </td>  
+          </tr>
+        <% end %>          
 
-            <% if @organisation.address%>
-              <tr>
-                <td>
-                  Address
-                </td>
-                <td>
-                  <a target="new" href="http://www.google.co.uk/maps?q=<%=URI.escape(@organisation.address)%>"><%=@organisation.address%></a>
-                </td>          
-              </tr>
-            <% end %>           
-           
-          </table>
+      </table>     
+
+      <%= partial :share %>
+
+      <% if @organisation.coordinates or @organisation.affiliations.any? { |affiliation| affiliation.account.coordinates } %>
+        <div style="margin-top: 20px">
+          <style>#map-canvas { height: 200px !important }</style>
+          <%= partial :'maps/map', :locals => {:points => [@organisation] + @organisation.affiliations.map(&:account)} %>      
         </div>
+      <% end %>      
 
-        <% if @organisation.coordinates or @organisation.affiliations.any? { |affiliation| affiliation.account.coordinates } %>
-          <%= partial :'maps/panel', :locals => {:points => ([@organisation] + @organisation.affiliations.map(&:account))} %>
-        <% end %>
-      </div>
     </div>
 
   </div>
-  <div class="col-sm-4">
-    <h2><%=pluralize(@organisation.affiliations.count,'person')%> from this <%=I18n.t(:organisation)%></h2>
+  <div class="col-sm-8">
+
+    <h2 class="mt-3"><%=pluralize(@organisation.affiliations.count,'person')%> from this <%=I18n.t(:organisation)%></h2>
     <%= partial :'accounts/list', :locals => {:scope => 'organisation', :scope_id => @organisation.id} %>
+
   </div>
 </div>

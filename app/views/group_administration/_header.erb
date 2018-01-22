@@ -2,7 +2,7 @@
 <% @pills = [
   ['<i class="fa fa-group"></i> ' + I18n.t(:manage_members).capitalize, "/groups/#{@group.slug}/manage_members"],
   ['<i class="fa fa-plus"></i> ' + I18n.t(:add_members).capitalize, "/groups/#{@group.slug}/add_members"],
-  (['<i class="fa fa-question"></i> ' + 'Membership requests' + (@group.membership_requests.where(:status => 'pending').count > 0 ? %Q{ <span class="badge">#{@group.membership_requests.where(:status => 'pending').count}</span>}  : ''), "/groups/#{@group.slug}/membership_requests"] if @group.closed?),
+  (['<i class="fa fa-question"></i> ' + 'Membership requests' + (@group.membership_requests.where(:status => 'pending').count > 0 ? %Q{ <span class="badge badge-primary">#{@group.membership_requests.where(:status => 'pending').count}</span>}  : ''), "/groups/#{@group.slug}/membership_requests"] if @group.closed?),
   ['<i class="fa fa-pencil"></i> ' + I18n.t(:settings).capitalize, "/groups/#{@group.slug}/edit"],
   ['<i class="fa fa-envelope"></i> ' + I18n.t(:emails).capitalize, "/groups/#{@group.slug}/emails"],
   ['<i class="fa fa-question"></i> ' + I18n.t(:did_you_know).capitalize, "/groups/#{@group.slug}/didyouknows"],

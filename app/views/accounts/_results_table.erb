@@ -26,7 +26,7 @@
       </td>       
       <td>
         <% account.affiliations.each { |affiliation|%>
-          <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/organisations/<%=affiliation.organisation_id%>"><%=affiliation.organisation.name%></a> <br />
+          <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a> <br />
         <% } %> 
       </td>
       <td>

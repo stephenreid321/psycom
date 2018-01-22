@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  
   <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
   <li class="breadcrumb-item">
     <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
@@ -90,7 +90,7 @@
       </td>       
       <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %> >
         <% account.affiliations.each { |affiliation|%>
-          <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/organisations/<%=affiliation.organisation_id%>"><%=affiliation.organisation.name%></a> <br />
+          <%=affiliation.title%> <%=I18n.t(:at)%> <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a> <br />
         <% } %> 
       </td>
       <td <% if membership.status == 'pending' %> style="opacity: 0.5" <% end %>>
