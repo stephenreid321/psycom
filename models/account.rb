@@ -29,6 +29,7 @@ class Account
   field :gender, :type => String
   field :date_of_birth, :type => Date
   field :cover_image_uid, :type => String
+  field :trust_count, :type => Integer
   
   def self.protected_attributes
     %w{admin}
@@ -76,6 +77,19 @@ class Account
   
   has_many :account_tagships, :dependent => :destroy
   accepts_nested_attributes_for :account_tagships, allow_destroy: true, reject_if: :all_blank
+  
+  def update_trust_count
+    update_attribute(:trust_count, trusts_as_trustee.count)
+  end
+  
+  has_many :trusts_as_truster, :class_name => 'Trust', :inverse_of => :truster, :dependent => :destroy  
+  def trusts_in
+    Account.where(:id.in => trusts_as_truster.pluck(:trustee_id))
+  end
+  has_many :trusts_as_trustee, :class_name => 'Trust', :inverse_of => :trustee, :dependent => :destroy  
+  def trusted_by
+    Account.where(:id.in => trusts_as_trustee.pluck(:truster_id))
+  end  
     
   attr_accessor :account_tag_ids
   before_validation :create_account_tags
@@ -326,6 +340,7 @@ class Account
       :translator => :check_box,
       :time_zone => :select,
       :language_id => :lookup,
+      :trust_count => :number,
       :password => :password,
       :password_set_by_user => :check_box,
       :prevent_new_memberships => :check_box,      
