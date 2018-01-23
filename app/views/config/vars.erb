@@ -8,10 +8,10 @@
 
 <% form_tag '/config', :class => 'form-horizontal', :id => 'env' do %>
   <% @environment_variables.each { |k,v| if v.is_a? Array; v = v[0]; check_box = true; else; check_box = false; end %>
-    <div class="form-group">
-      <label class="control-label col-sm-4">
+    <div class="form-group row">
+      <label class="col-sm-4">
         <%=k%>
-        <p style="font-weight: normal" class="help-block"><%=v%></p>
+        <p style="font-weight: normal" class="text-muted"><%=v%></p>
       </label>
       <div class="col-sm-4">
         <% if check_box %>

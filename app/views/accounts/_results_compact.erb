@@ -5,7 +5,7 @@
   <div class="media">
     <span class="mr-3">      
       <a href="/<%=account.username_or_id%>">
-        <img style="width: 32px" src="<%=account.picture ? account.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
+        <img style="width: 32px" src="<%=account.picture ? account.picture.thumb('32x32#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
       </a>
     </span>
     <div class="media-body">    

@@ -45,8 +45,8 @@
 
     <% @group.request_questions_a.each { |q| %>
       <div class="form-group">
-        <label class="control-label col-sm-3"><%=q%></label>
-        <div class="col-sm-6">  
+        <label><%=q%></label>
+        <div>  
           <%= text_area_tag "answers[]", :class => 'form-control' %>
         </div>
       </div>  

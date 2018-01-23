@@ -16,7 +16,7 @@
 
 
       <% random(group.members.where(:picture_uid.ne => nil), 9).each {  |account| %>
-        <img style="margin: 10px; width: 90px" title="<%=account.name.split(' ').first%>" class="img-circle img-bordered" src="<%=account.picture ? account.picture.thumb('100x100#').url : '/images/silhouette.png' %>">
+        <img style="margin: 10px; width: 90px" title="<%=account.name.split(' ').first%>" class="rounded-circle img-bordered" src="<%=account.picture ? account.picture.thumb('100x100#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
       <% } %>
 
     </div>

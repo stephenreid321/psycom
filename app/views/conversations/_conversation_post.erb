@@ -1,7 +1,7 @@
 
 <div class="media">
   <span class="mr-3">
-    <img style="width: 32px" src="<%=conversation_post.account.picture ? conversation_post.account.picture.thumb('32x32#').url : '/images/silhouette.png' %>">
+    <img style="width: 32px" src="<%=conversation_post.account.picture ? conversation_post.account.picture.thumb('32x32#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(conversation_post.account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
   </span>
   <div class="media-body">
 
