@@ -11,7 +11,7 @@
       [I18n.t(:organisations).capitalize, '/organisations'],
       [I18n.t(:events).capitalize, '/events'],          
       ['Groups',         
-        (current_account ? current_account.memberships.map(&:group).reject { |group| group.hide_from_dropdown }.sort_by(&:name).map { |group| [group.name, "/groups/#{group.slug}"] } : []) + [[], [I18n.t(:all_groups).capitalize, '/groups']]
+        (current_account ? current_account.memberships.map(&:group).sort_by(&:name).map { |group| [group.name, "/groups/#{group.slug}"] } : []) + [[], [I18n.t(:all_groups).capitalize, '/groups']]
         ],        
       ], ul_class: 'navbar-nav'
   %>    

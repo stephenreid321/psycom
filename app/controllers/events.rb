@@ -11,12 +11,12 @@ ActivateApp::App.controllers do
   
   get '/events/ical' do
     sign_in_required!
-    Event.ical(current_account)
+    Event.ical
   end
         
   get '/events/feed' do
     sign_in_required!
-    Event.json(current_account, params[:start], params[:end])
+    Event.json(params[:start], params[:end])
   end  
   
   get '/events/new' do

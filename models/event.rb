@@ -4,7 +4,9 @@ class Event
   
   belongs_to :account, index: true
   belongs_to :organisation, index: true, optional: true
-
+  
+  index({coordinates: "2dsphere"})
+ 
   field :name, :type => String
   field :start_time, :type => Time
   field :end_time, :type => Time
@@ -12,13 +14,12 @@ class Event
   field :location, :type => String
   field :coordinates, :type => Array
   field :details, :type => String
-  field :reason, :type => String
   field :ticketing, :type => String
   field :tickets_link, :type => String
   field :more_info, :type => String
-  field :publicity_tweet, :type => String
   field :organisation_name, :type => String
   field :highlighted, :type => Boolean
+  field :approved, :type => Boolean
   
   include Geocoder::Model::Mongoid
   geocoded_by :location
@@ -54,8 +55,6 @@ class Event
       :coordinates => :geopicker,              
       :details => :text_area,
       :more_info => :text,
-      :reason => :text,
-      :publicity_tweet => :text,
       :ticketing => :select,
       :tickets_link => :text,
       :highlighted => :check_box,
@@ -85,10 +84,10 @@ class Event
     end
   end
   
-  def self.ical(eventable)
+  def self.ical
     cal = RiCal.Calendar do |rcal|
       rcal.add_x_property('X-WR-CALNAME', Config['DOMAIN'])
-      eventable.events.each { |event|
+      Event.all.each { |event|
         rcal.event do |revent|
           revent.summary = event.name
           revent.dtstart =  event.consider_time ? event.start_time : event.start_time.to_date
@@ -105,8 +104,8 @@ class Event
     self.where(:start_time.gte => Date.today).order_by(:start_time.asc)
   end
   
-  def self.json(eventable, period_start, period_end)
-    events = eventable.events
+  def self.json(period_start, period_end)
+    events = Event.all
     events = events.where(:start_time.lte => Time.zone.parse(period_end))
     events = events.where(:end_time.gte => Time.zone.parse(period_start))
     JSON.pretty_generate events.map { |event| 
@@ -117,7 +116,6 @@ class Event
         :allDay => !event.consider_time,
         :when_details => event.when_details,
         :location => event.location,
-        :reason => event.reason,
         :more_info => event.more_info,
         :ticketing => event.ticketing,
         :tickets_link => event.tickets_link,
@@ -126,8 +124,7 @@ class Event
         :organisation_id => event.organisation_id.to_s,
         :organisation_name => event.organisation_name,
         :id => event.id.to_s,
-        :className => "event-#{event.id}",
-        :eventable => eventable.class.to_s
+        :className => "event-#{event.id}"
       }
     }    
   end

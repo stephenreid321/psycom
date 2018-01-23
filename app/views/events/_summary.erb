@@ -45,17 +45,6 @@
       </tr>
     <% end %>   
 
-    <% if event.publicity_tweet %>
-      <tr>
-        <td>
-          Tweet this!
-        </td>
-        <td>
-          <a target="_blank" href="http://twitter.com/intent/tweet?text=<%=CGI::escape(event.publicity_tweet)%>"><%=event.publicity_tweet%></a>
-        </td>
-      </tr>
-    <% end %> 
-
     <tr>
       <td>Listed by</td>
       <td><a href="<%=Config['BASE_URI']%>/<%=event.account.username_or_id %>"><%=event.account.name%></a></td>
@@ -67,18 +56,6 @@
   <% if defined? read_more %>
     <a class="read-more" href="/events/<%=event.id%>">Read more&hellip;</a>
   <% else %>  
-
-    <%= event.details  %>
-
-    <% if event.reason %>
-      <br />
-      <br />
-      <div class="card">
-        <h3 class="card-header">Come because&hellip;</h3>
-        <div class="card-body">  
-          <%= event.reason %>
-        </div>
-      </div>
-    <% end %>  
+    <%= event.details  %>  
   <% end %>
 <% end %>

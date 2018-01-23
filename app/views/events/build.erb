@@ -6,7 +6,6 @@
 
 <style>
   .time { display: none }
-  #event_publicity_tweet { height: 8em }
 </style>
 <script>
   $(function () {
@@ -60,8 +59,6 @@
   <div id="tickets-link-div" style="display:none">
     <%= f.text_block :tickets_link %>
   </div>
-  <%= f.text_block :reason %>        
-  <%= f.text_area_block :publicity_tweet %>   
   <% if current_account.admin? %>
     <%= f.check_box_block :highlighted %>    
   <% end %>      

@@ -2,13 +2,28 @@ class Organisation
   include Mongoid::Document
   include Mongoid::Timestamps
   extend Dragonfly::Model
+  
+  index({coordinates: "2dsphere"})
 
   field :name, :type => String
   field :username, :type => String
   field :address, :type => String
+  field :coordinates, :type => Array
   field :website, :type => String
   field :picture_uid, :type => String  
-  field :coordinates, :type => Array
+  field :cover_image_uid, :type => String    
+  
+  # Cover
+  dragonfly_accessor :cover_image
+  before_validation do
+    if self.cover_image
+      begin
+        self.cover_image.format
+      rescue        
+        errors.add(:cover_image, 'must be an image')
+      end
+    end
+  end    
   
   include Geocoder::Model::Mongoid
   geocoded_by :address  
@@ -60,6 +75,7 @@ class Organisation
       :address => :text,
       :website => :text,
       :picture => :image,
+      :cover_image => :image,
       :affiliations => :collection
     }
   end

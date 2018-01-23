@@ -2,6 +2,8 @@ class Account
   include Mongoid::Document
   include Mongoid::Timestamps
   extend Dragonfly::Model
+  
+  index({coordinates: "2dsphere"})
     
   field :name, :type => String
   field :name_transliterated, :type => String
@@ -18,12 +20,15 @@ class Account
   field :location, :type => String
   field :coordinates, :type => Array 
   field :translator, :type => Boolean
-  field :password_reset_token, :type => String
-  field :twitter_profile_url, :type => String
-  field :facebook_profile_url, :type => String
+  field :password_reset_token, :type => String 
   field :prevent_new_memberships, :type => Boolean
   field :username, :type => String
   field :story, :type => String
+  field :facebook_profile_url, :type => String
+  field :twitter_profile_url, :type => String  
+  field :gender, :type => String
+  field :date_of_birth, :type => Date
+  field :cover_image_uid, :type => String
   
   def self.protected_attributes
     %w{admin}
@@ -40,6 +45,18 @@ class Account
   after_validation do
     self.geocode || (self.coordinates = nil)
   end
+  
+  # Cover
+  dragonfly_accessor :cover_image
+  before_validation do
+    if self.cover_image
+      begin
+        self.cover_image.format
+      rescue        
+        errors.add(:cover_image, 'must be an image')
+      end
+    end
+  end   
 
   has_many :sign_ins, :dependent => :destroy  
   has_many :memberships, :class_name => "Membership", :inverse_of => :account, :dependent => :destroy
@@ -262,10 +279,8 @@ class Account
     self.name_transliterated = I18n.transliterate(self.name)
     
     self.twitter_profile_url = "twitter.com/#{self.twitter_profile_url}" if self.twitter_profile_url and !self.twitter_profile_url.include?('twitter.com')      
-    errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')
-    
-    self.twitter_profile_url = self.twitter_profile_url.gsub('twitter.com/', 'twitter.com/@') if self.twitter_profile_url and !self.twitter_profile_url.include?('@')
-                
+    errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')    
+    self.twitter_profile_url = self.twitter_profile_url.gsub('twitter.com/', 'twitter.com/@') if self.twitter_profile_url and !self.twitter_profile_url.include?('@')                
     self.twitter_profile_url = "http://#{self.twitter_profile_url}" if self.twitter_profile_url and !(self.twitter_profile_url =~ /\Ahttps?:\/\//)
     self.facebook_profile_url = "http://#{self.facebook_profile_url}" if self.facebook_profile_url and !(self.facebook_profile_url =~ /\Ahttps?:\/\//)   
   end  
@@ -304,6 +319,7 @@ class Account
       :location => :text,
       :coordinates => :geopicker,      
       :picture => :image,
+      :cover_image => :image,
       :twitter_profile_url => :text,
       :facebook_profile_url => :text,
       :admin => :check_box,

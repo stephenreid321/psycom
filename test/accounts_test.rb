@@ -23,7 +23,7 @@ class TestAccounts < ActiveSupport::TestCase
     page.execute_script(%Q{$("a:contains('Add another affiliation')").click()})    
     fill_in 'account[affiliations_attributes][1][title]', :with => 'Thinker'
     fill_in 'account[affiliations_attributes][1][organisation_name]', :with => 'University'    
-    page.execute_script(%Q{$("a:contains('Add another area of expertise')").click()})    
+    page.execute_script(%Q{$("a:contains('Add another substance of interest')").click()})    
     fill_in 'account[account_tagships_attributes][0][account_tag_name]', :with => 'ruby'
     click_button 'Update account'
     assert page.has_content? 'Your account was updated successfully'
