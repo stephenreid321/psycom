@@ -20,12 +20,14 @@ ActivateApp::App.controllers do
   end  
   
   get '/events/new' do
+    sign_in_required!
     @title = 'Add an event'
     @event = Event.new
     erb :'events/build'
   end  
           
   post '/events/new' do
+    sign_in_required!
     @event = Event.new(params[:event])    
     @event.account = current_account
     if @event.save  
@@ -38,11 +40,13 @@ ActivateApp::App.controllers do
   end   
   
   get '/events/:id/edit' do
+    sign_in_required!
     @event = Event.find(params[:id]) || not_found
     erb :'events/build'
   end     
       
   post '/events/:id/edit' do
+    sign_in_required!
     @event = Event.find(params[:id]) || not_found
     if @event.update_attributes(params[:event])
       flash[:notice] = "<strong>Great!</strong> The event was updated successfully."
@@ -54,6 +58,7 @@ ActivateApp::App.controllers do
   end 
   
   get '/events/:id/destroy' do
+    sign_in_required!
     @event = Event.find(params[:id]) || not_found
     @event.destroy    
     redirect "/events/"

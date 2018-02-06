@@ -1,10 +1,15 @@
 <ol class="breadcrumb">
-  
   <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
   <li class="breadcrumb-item"><a href="/groups/<%=@group.slug%>"><%=@group.name%></a></li>
   <li class="breadcrumb-item active"><%=@conversation.subject%></li>
 </ol>
 
+<div class="row">
+
+  <div class="col-sm-8" style="margin-bottom: 20px">
+
+    <h1 style="margin-top: 0; text-transform: none"><%=@conversation.subject%></h1>
+    
 <% if @membership %>
 
   <% @pills = [
@@ -25,13 +30,7 @@
     ].compact %>
   <%= partial :pills %>
 
-<% end %>
-
-<div class="row">
-
-  <div class="col-sm-8" style="margin-bottom: 20px">
-
-    <h1 style="margin-top: 0; text-transform: none"><%=@conversation.subject%></h1>
+<% end %>    
 
     <%     
     @conversation_posts = @conversation.visible_conversation_posts.order_by(:created_at.asc).per_page(params[:per_page] || 20).page(params[:page])           
@@ -51,7 +50,7 @@
 
       <div class="media">
         <span class="mr-3">
-          <img style="width: 32px" src="<%=current_account.picture ? current_account.picture.thumb('32x32#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(current_account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
+          <%= partial :'accounts/square', :locals => {:account => current_account, :style => 'width: 32px;'} %>
         </span>
         <div class="media-body">
 

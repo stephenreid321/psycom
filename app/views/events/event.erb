@@ -2,12 +2,14 @@
 <% @pills = [
   [%Q{<i class="fa fa-pencil"></i> #{I18n.t(:edit_event).capitalize}}, "/events/#{@event.id}/edit"]
   ] %>
-<%= partial :pills %>
+
 
 <div class="row">
   <div class="col-sm-8">
 
     <h1 style="margin-top: 0; "><%= @event.name %></h1>
+    
+    <%= partial :pills %>
 
     <%= partial 'events/summary', :locals => {:event => @event} %>
 

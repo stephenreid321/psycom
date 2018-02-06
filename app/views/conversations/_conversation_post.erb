@@ -1,7 +1,7 @@
 
 <div class="media">
   <span class="mr-3">
-    <img style="width: 32px" src="<%=conversation_post.account.picture ? conversation_post.account.picture.thumb('32x32#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(conversation_post.account.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
+    <%= partial :'accounts/square', :locals => {:account => conversation_post.account, :style => 'width: 32px;'} %>
   </span>
   <div class="media-body">
 
@@ -19,7 +19,7 @@
 
     </div>
 
-    <div class="bg-light p-2 mb-2 rounded">
+    <div class="conversation-post-info bg-light p-2 mb-2 rounded">
       <%= partial :'conversations/conversation_post_info', :locals => {:conversation_post => conversation_post} %>
     </div>
 

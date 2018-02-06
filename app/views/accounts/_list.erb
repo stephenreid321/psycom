@@ -9,19 +9,19 @@
   <div class="row">
 
     <div class="<%=col_class%>" style="position: relative"> 
-      <%= text_field_tag :name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_name).capitalize %>
+      <%= text_field_tag :name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_name).capitalize, :value => params[:name] %>
       <i id="filter-spin" style="display: none; position: absolute; right: -5px; top: 9px" class="fa fa-spin fa-spinner"></i>
     </div>
 
     <%  if defined?(full_width) %>
       <div class="<%=col_class%>">   
-        <%= text_field_tag :organisation_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_organisation).capitalize %>
+        <%= text_field_tag :organisation_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_organisation).capitalize, :value => params[:organisation_name] %>
       </div>
     <% end %>
 
     <%  if defined?(full_width) %>
       <div class="<%=col_class%>">   
-        <%= text_field_tag :account_tag_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_account_tagship).capitalize %>
+        <%= text_field_tag :account_tag_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_account_tagship).capitalize, :value => params[:account_tag_name] %>
       </div>
     <% end %>
 

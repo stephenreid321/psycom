@@ -89,22 +89,24 @@
       <%= yield %>
     </div>
 
-    <div id="footer" class="bg-dark p-3 mt-3">
-      <div class="container-fluid">
-        <%= eval(f('footer')) %>
-        <ul class="list-inline" style="margin-bottom: 0">
-          <% if current_account %>
-            <% if current_account.admin? %>
-              <li class="list-inline-item"><a href="/config">Configuration</a></li>
-              <li class="list-inline-item"><a href="/analytics">Analytics</a></li>
+    <% if current_account and current_account.admin? %>
+      <div id="footer" class="bg-dark p-3 mt-3">
+        <div class="container-fluid">
+          <%= eval(f('footer')) %>
+          <ul class="list-inline" style="margin-bottom: 0">
+            <% if current_account %>
+              <% if current_account.admin? %>
+                <li class="list-inline-item"><a href="/config">Configuration</a></li>
+                <li class="list-inline-item"><a href="/analytics">Analytics</a></li>
+              <% end %>
+              <% if current_account.admin? or current_account.translator %>
+                <li class="list-inline-item"><a href="/translations">Translations</a></li>
+              <% end %>
             <% end %>
-            <% if current_account.admin? or current_account.translator %>
-              <li class="list-inline-item"><a href="/translations">Translations</a></li>
-            <% end %>
-          <% end %>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
+    <% end %>
 
 
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">

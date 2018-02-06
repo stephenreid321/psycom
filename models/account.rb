@@ -8,28 +8,35 @@ class Account
   field :name, :type => String
   field :name_transliterated, :type => String
   field :email, :type => String
-  field :secret_token, :type => String
-  field :crypted_password, :type => String
-  field :password_set_by_user, :type => Boolean
-  field :admin, :type => Boolean
+  field :username, :type => String
+
   field :time_zone, :type => String
   field :has_picture, :type => Boolean
   field :picture_uid, :type => String  
   field :website, :type => String 
   field :headline, :type => String 
   field :location, :type => String
-  field :coordinates, :type => Array 
-  field :translator, :type => Boolean
-  field :password_reset_token, :type => String 
-  field :prevent_new_memberships, :type => Boolean
-  field :username, :type => String
+  field :coordinates, :type => Array       
   field :story, :type => String
   field :facebook_profile_url, :type => String
   field :twitter_profile_url, :type => String  
+  
+  field :unsubscribe_meetup, :type => Boolean
+  field :unsubscribe_new_member, :type => Boolean
+  field :unsubscribe_endorsement, :type => Boolean
+  field :unsubscribe_message, :type => Boolean
+  
+  field :endorsement_count, :type => Integer  
+  field :secret_token, :type => String
+  field :crypted_password, :type => String  
+  field :password_reset_token, :type => String   
+  field :password_set_by_user, :type => Boolean
+  field :admin, :type => Boolean
+  field :translator, :type => Boolean  
+  field :prevent_new_memberships, :type => Boolean
+  
   field :gender, :type => String
-  field :date_of_birth, :type => Date
-  field :cover_image_uid, :type => String
-  field :trust_count, :type => Integer
+  field :date_of_birth, :type => Date  
   
   def self.protected_attributes
     %w{admin}
@@ -47,18 +54,6 @@ class Account
     self.geocode || (self.coordinates = nil)
   end
   
-  # Cover
-  dragonfly_accessor :cover_image
-  before_validation do
-    if self.cover_image
-      begin
-        self.cover_image.format
-      rescue        
-        errors.add(:cover_image, 'must be an image')
-      end
-    end
-  end   
-
   has_many :sign_ins, :dependent => :destroy  
   has_many :memberships, :class_name => "Membership", :inverse_of => :account, :dependent => :destroy
   has_many :memberships_added, :class_name => "Membership", :inverse_of => :added_by, :dependent => :nullify
@@ -78,17 +73,17 @@ class Account
   has_many :account_tagships, :dependent => :destroy
   accepts_nested_attributes_for :account_tagships, allow_destroy: true, reject_if: :all_blank
   
-  def update_trust_count
-    update_attribute(:trust_count, trusts_as_trustee.count)
+  def update_endorsement_count
+    update_attribute(:endorsement_count, endorsements_as_endorsee.count)
   end
   
-  has_many :trusts_as_truster, :class_name => 'Trust', :inverse_of => :truster, :dependent => :destroy  
-  def trusts_in
-    Account.where(:id.in => trusts_as_truster.pluck(:trustee_id))
+  has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  
+  def endorses
+    Account.where(:id.in => endorsements_as_endorser.pluck(:endorsee_id))
   end
-  has_many :trusts_as_trustee, :class_name => 'Trust', :inverse_of => :trustee, :dependent => :destroy  
-  def trusted_by
-    Account.where(:id.in => trusts_as_trustee.pluck(:truster_id))
+  has_many :endorsements_as_endorsee, :class_name => 'Endorsement', :inverse_of => :endorsee, :dependent => :destroy  
+  def endorsed_by
+    Account.where(:id.in => endorsements_as_endorsee.pluck(:endorser_id))
   end  
     
   attr_accessor :account_tag_ids
@@ -333,14 +328,13 @@ class Account
       :location => :text,
       :coordinates => :geopicker,      
       :picture => :image,
-      :cover_image => :image,
       :twitter_profile_url => :text,
       :facebook_profile_url => :text,
       :admin => :check_box,
       :translator => :check_box,
       :time_zone => :select,
       :language_id => :lookup,
-      :trust_count => :number,
+      :endorsement_count => :number,
       :password => :password,
       :password_set_by_user => :check_box,
       :prevent_new_memberships => :check_box,      
@@ -350,9 +344,38 @@ class Account
       :organisation_name_of_first_affiliation => {:type => :text, :edit => false},
       :memberships => :collection,
       :memberships_summary => {:type => :text, :edit => false},
-      :membership_requests => :collection
+      :membership_requests => :collection,
+      :unsubscribe_meetup => :check_box,
+      :unsubscribe_new_member => :check_box,
+      :unsubscribe_endorsement => :check_box,
+      :unsubscribe_message => :check_box,      
     }
   end
+  
+  after_create :send_new_member_email
+  def send_new_member_email
+    unless fto?
+          
+      account = self      
+      bcc = Account.where(:id.in => Account.geo_near(coordinates).spherical.max_distance(25 / 3963.167).pluck(:id)).where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
+      if bcc.count > 0        
+        mail = Mail.new
+        mail.bcc = bcc
+        mail.from = 'psychedelic.community <team@psychedelic.community>'
+        mail.subject = 'Someone joined near you'
+            
+        content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
+        html_part = Mail::Part.new do
+          content_type 'text/html; charset=UTF-8'
+          body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
+        end
+        mail.html_part = html_part
+      
+        mail.deliver if ENV['SMTP_USERNAME']   
+      end
+    end
+  end
+  handle_asynchronously :send_new_member_email  
   
   def affiliations_summary
     affiliations.map { |affiliation| "#{affiliation.title} at #{affiliation.organisation.name}" }.join(', ')

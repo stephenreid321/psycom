@@ -1,68 +1,77 @@
+
 <% if @event.persisted? %>
-  <h1>Edit event</h1>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/events"><%=I18n.t(:events).capitalize%></a></li>
+  <li class="breadcrumb-item"><a href="/events/<%=@event.id%>"><%=@event.name%></a></li>
+  <li class="breadcrumb-item active">Edit</li>
+</ol>
 <% else %>
   <h1>New event</h1>
 <% end %>
 
-<style>
-  .time { display: none }
-</style>
-<script>
-  $(function () {
+<div class="container">
 
-    var autocomplete = new google.maps.places.Autocomplete($('#event_location')[0]);
-
-    $('.time select').attr('required', false)
-    var add = $('<a href="javascript:;" style="margin-left: 5px">Add a time</a>');
-    $(add).click(function () {
-      $('.time').show();
-      $('#event_consider_time').prop('checked', true);
-      $(this).hide();
-    });
-    $(add).insertBefore($('.time').first());
-    if ($('#event_consider_time').prop('checked'))
-      $(add).click();
-
-    $("input[name='event[ticketing]']").click(function () {
-      if ($(this).val() == 'No ticket required') {
-        $('#tickets-link-div').hide();
-        $('#tickets-link-div input').val('');
-      } else if ($(this).val() == 'Free, but please RSVP') {
-        $('#tickets-link-div').show();
-        $('#tickets-link-div label').html('Link/email to RSVP');
-      } else if ($(this).val() == 'Ticket required') {
-        $('#tickets-link-div').show();
-        $('#tickets-link-div label').html('Link/email for tickets');
-      }
-    });
-    $("input[name='event[ticketing]']:checked").click();
-  });
-</script>        
-
-<% form_for @event, @event.new_record? ? "/events/new" : "/events/#{@event.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
-
-  <%= f.text_block :name %>
-  <%= f.datetime_block :start_time %>
-  <%= f.datetime_block :end_time %>
-  <%= f.check_box :consider_time, :style => 'display: none'%>
-  <%= f.text_block :location %>      
-  <%= f.text_block :organisation_name%>
+  <style>
+    .time { display: none }
+  </style>
   <script>
     $(function () {
-      var organisations = <%=Organisation.all.map(&:name).to_json %>;
-      $('#event_organisation_name').typeahead({source: organisations}).attr('autocomplete', 'off');
-    })
-  </script>
-  <%= f.wysiwyg_block :details %>        
-  <%= f.text_block :more_info %>        
-  <%= f.radio_block :ticketing %>
-  <div id="tickets-link-div" style="display:none">
-    <%= f.text_block :tickets_link %>
-  </div>
-  <% if current_account.admin? %>
-    <%= f.check_box_block :highlighted %>    
-  <% end %>      
 
-  <%= f.submit_block destroy_url: "/events/#{@event.id}/destroy" %>
+      var autocomplete = new google.maps.places.Autocomplete($('#event_location')[0]);
 
-<% end %>
+      $('.time select').attr('required', false)
+      var add = $('<a href="javascript:;" style="margin-left: 5px">Add a time</a>');
+      $(add).click(function () {
+        $('.time').show();
+        $('#event_consider_time').prop('checked', true);
+        $(this).hide();
+      });
+      $(add).insertBefore($('.time').first());
+      if ($('#event_consider_time').prop('checked'))
+        $(add).click();
+
+      $("input[name='event[ticketing]']").click(function () {
+        if ($(this).val() == 'No ticket required') {
+          $('#tickets-link-div').hide();
+          $('#tickets-link-div input').val('');
+        } else if ($(this).val() == 'Free, but please RSVP') {
+          $('#tickets-link-div').show();
+          $('#tickets-link-div label').html('Link/email to RSVP');
+        } else if ($(this).val() == 'Ticket required') {
+          $('#tickets-link-div').show();
+          $('#tickets-link-div label').html('Link/email for tickets');
+        }
+      });
+      $("input[name='event[ticketing]']:checked").click();
+    });
+  </script>        
+
+  <% form_for @event, @event.new_record? ? "/events/new" : "/events/#{@event.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
+
+    <%= f.text_block :name %>
+    <%= f.datetime_block :start_time %>
+    <%= f.datetime_block :end_time %>
+    <%= f.check_box :consider_time, :style => 'display: none'%>
+    <%= f.text_block :location %>      
+    <%= f.text_block :organisation_name%>
+    <script>
+      $(function () {
+        var organisations = <%=Organisation.all.map(&:name).to_json %>;
+        $('#event_organisation_name').typeahead({source: organisations}).attr('autocomplete', 'off');
+      })
+    </script>
+    <%= f.wysiwyg_block :details %>        
+    <%= f.text_block :more_info %>        
+    <%= f.radio_block :ticketing %>
+    <div id="tickets-link-div" style="display:none">
+      <%= f.text_block :tickets_link %>
+    </div>
+    <% if current_account.admin? %>
+      <%= f.check_box_block :highlighted %>    
+    <% end %>      
+
+    <%= f.submit_block destroy_url: "/events/#{@event.id}/destroy" %>
+
+  <% end %>
+
+</div>

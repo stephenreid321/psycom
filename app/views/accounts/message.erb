@@ -1,0 +1,20 @@
+<%= partial :'accounts/cover' %>
+
+<div class="row">
+
+  <div class="col-sm-4 cover-sidebar">
+
+    <%= partial :'accounts/sidebar' %>
+
+  </div>
+  <div class="col-sm-8">
+
+    <h2 class="mt-3">Send a message</h2>
+    <% form_tag "/accounts/#{@account.id}/message" do %>
+      <%= text_area_tag :message, :class => 'form-control', :placeholder => "Message", :style => 'height: 12em; margin-bottom: 5px' %>
+      <%= submit_tag 'Send', :class => 'btn btn-primary' %>
+    <% end %>
+
+  </div>
+</div>
+

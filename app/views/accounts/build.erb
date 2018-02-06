@@ -1,79 +1,83 @@
+
 <% if @account.new_record? %>
   <h1>Sign up</h1>
 <% else %>
 
-<ol class="breadcrumb">
-  
-  <li class="breadcrumb-item"><a href="/people"><%=I18n.t(:people).capitalize%></a></li>
-  <li class="breadcrumb-item"><a href="/<%=current_account.username_or_id%>"><%=current_account.name%></a></li>
-  <li class="breadcrumb-item active">Edit</li>
-</ol>
-  
+  <ol class="breadcrumb">
+
+    <li class="breadcrumb-item"><a href="/people"><%=I18n.t(:people).capitalize%></a></li>
+    <li class="breadcrumb-item"><a href="/<%=current_account.username_or_id%>"><%=current_account.name%></a></li>
+    <li class="breadcrumb-item active">Edit</li>
+  </ol>
+
 <% end %>
 
-<script>
-  $(function () {
-    var autocomplete = new google.maps.places.Autocomplete($('#account_location')[0]);
-  })
-</script>
+<div class="container">
 
-<% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'form-horizontal', :multipart => true do |f| %>
+  <script>
+    $(function () {
+      var autocomplete = new google.maps.places.Autocomplete($('#account_location')[0]);
+    })
+  </script>
 
-  <%= f.text_block :name %>
-  <%= f.email_block :email %>
-  <%= f.text_block :username %>
-  <%= f.text_block :location %>       
-  <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>
-  <%= f.password_block :password %>
+  <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'form-horizontal', :multipart => true do |f| %>
+
+    <%= f.text_block :name %>
+    <%= f.email_block :email %>
+    <%= f.text_block :username %>
+    <%= f.text_block :location %>       
+    <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>
+    <%= f.password_block :password %>
+
+
+    <% if @account.persisted? %>
+      <%= partial :'accounts/affiliations', :locals => {:f => f} %>  
+      <%= f.select_block :time_zone %>
+      <style>#account_headline { height: 6em }</style>
+      <script>
+        $(function () {
+          $('#account_headline').simplyCountable({
+            counter: '#headline-counter',
+            maxCount: <%= 150 %>
+          });
+        }
+        )
+      </script>
+      <%= f.text_area_block :headline, hint: %Q{<span id="headline-counter"></span>} %>          
+      <%= f.text_area_block :story %>
+
+      <%= f.url_block :website %>
+      <%= f.url_block :facebook_profile_url %>
+      <%= f.url_block :twitter_profile_url %>
+
+      <% if Config['ACCOUNT_TAGS_PREDEFINED'] %>
+        <% if AccountTag.count > 0  %>
+          <%= f.check_boxes_block :account_tag_ids, options: AccountTag.order('name asc').map { |account_tag| [account_tag.name, account_tag.id] }, checked: @account.account_tagships.map(&:account_tag_id) %>
+        <% end %>
+      <% else %>  
+        <%= partial :'accounts/tagships', :locals => {:f => f} %>
+      <% end %>
+
+    <% end %>  
+
+    <%= f.submit_block button_text: I18n.t(:update_account).capitalize %>
+
+  <% end %>
 
 
   <% if @account.persisted? %>
-    <%= partial :'accounts/affiliations', :locals => {:f => f} %>  
-    <%= f.select_block :time_zone %>
-    <style>#account_headline { height: 6em }</style>
-    <script>
-      $(function () {
-      $('#account_headline').simplyCountable({
-      counter: '#headline-counter',
-              maxCount: <%= 150 %>
-      });
-      }
-      )
-    </script>
-    <%= f.text_area_block :headline, hint: %Q{<span id="headline-counter"></span>} %>          
-    <%= f.text_area_block :story %>
+    <div class="card mt-3">
+      <h3 class="card-header bg-danger text-white"><%= I18n.t(:delete_account).capitalize %></h3>
+      <div class="card-body">
+        <p><%= I18n.t(:delete_account_instructions) %></p>
 
-    <%= f.url_block :website %>
-    <%= f.url_block :facebook_profile_url %>
-    <%= f.url_block :twitter_profile_url %>
-    
-    <% if Config['ACCOUNT_TAGS_PREDEFINED'] %>
-      <% if AccountTag.count > 0  %>
-        <%= f.check_boxes_block :account_tag_ids, options: AccountTag.order('name asc').map { |account_tag| [account_tag.name, account_tag.id] }, checked: @account.account_tagships.map(&:account_tag_id) %>
-      <% end %>
-    <% else %>  
-      <%= partial :'accounts/tagships', :locals => {:f => f} %>
-    <% end %>
-
-  <% end %>  
-
-  <%= f.submit_block button_text: I18n.t(:update_account).capitalize %>
-
-<% end %>
+        <% form_tag '/me/destroy', :class => 'form-inline' do %>
+          <%= text_field_tag :name, :class => 'form-control mr-2' %>
+          <button class="btn btn-danger"><%= I18n.t(:delete_account).capitalize %></button>
+        <% end %>   
+      </div>
+    </div>          
+  <% end %>
 
 
-<% if @account.persisted? %>
-  <div class="card mt-3">
-    <h3 class="card-header bg-danger text-white"><%= I18n.t(:delete_account).capitalize %></h3>
-    <div class="card-body">
-      <p><%= I18n.t(:delete_account_instructions) %></p>
-
-      <% form_tag '/me/destroy', :class => 'form-inline' do %>
-    <%= text_field_tag :name, :class => 'form-control mr-2' %>
-        <button class="btn btn-danger"><%= I18n.t(:delete_account).capitalize %></button>
-  <% end %>   
-    </div>
-  </div>          
-<% end %>
-
-
+</div>

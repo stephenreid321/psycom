@@ -49,9 +49,7 @@
         <td style="width: 170px;" <% if current_account and k == current_account %> class="stats-highlight" <% end %>>
           <div class="media">
             <span class="mr-3" >      
-              <a href="/<%=k.username_or_id%>">
-                <img style="width: 32px" src="<%=k.picture ? k.picture.thumb('32x32#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(k.email.downcase)}?s=400&d=#{URI::encode("#{ENV['BASE_URI']}/images/silhouette.png")}" %>">
-              </a>
+              <%= partial :'accounts/square', :locals => {:account => k, :style => 'width: 32px;'} %>
             </span>
             <div class="media-body">    
               <a href="/<%=k.username_or_id%>"><%=k.name%></a>

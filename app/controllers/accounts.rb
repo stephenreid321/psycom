@@ -22,7 +22,6 @@ ActivateApp::App.controllers do
   end      
                
   get '/accounts/results' do
-    sign_in_required!
     scope = params[:scope]
     scope_id = params[:scope_id]
     @o = (params[:o] ? params[:o] : 'date').to_sym
@@ -60,5 +59,59 @@ ActivateApp::App.controllers do
     @accounts = @accounts.per_page(params[:per_page] || 8).page(params[:page])
     partial :'accounts/results', locals: {full_width: params[:full_width]}
   end  
+  
+ get '/accounts/:id/message' do
+    sign_in_required!
+    @account = Account.find(params[:id]) || not_found
+    if @account.unsubscribe_message
+      flash[:error] = "That person has opted out of receiving messages"
+      redirect back      
+    end
+    erb :'accounts/message'    
+  end
+  
+  post '/accounts/:id/message' do
+    sign_in_required!
+    @account = Account.find(params[:id]) || not_found
+    if @account.unsubscribe_message
+      flash[:error] = "That person has opted out of receiving messages"
+      redirect back      
+    end
+    
+    mail = Mail.new
+    mail.to = @account.email
+    mail.bcc = 'stephen.reid@psychedelicsociety.org.uk'
+    mail.from = "#{current_account.name} <#{current_account.email}>"
+    mail.subject = "Message from #{current_account.name} via psychedelic.community"
+    
+    sender = current_account
+    receiver = @account
+    message = params[:message]    
+    content = ERB.new(File.read(Padrino.root('app/views/emails/message.erb'))).result(binding)
+    html_part = Mail::Part.new do
+      content_type 'text/html; charset=UTF-8'
+      body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
+    end
+
+    mail.html_part = html_part      
+    mail.deliver if ENV['SMTP_USERNAME']   
+    
+    flash[:notice] = 'The message was sent.'
+    redirect "/#{@account.username_or_id}"            
+  end  
+  
+  get '/accounts/:id/endorse' do
+    sign_in_required!
+    @account = Account.find(params[:id]) || not_found
+    Endorsement.create endorser: current_account, endorsee: @account, body: params[:body]
+    redirect back
+  end
+  
+  get '/accounts/:id/unendorse' do
+    sign_in_required!
+    @account = Account.find(params[:id]) || not_found
+    current_account.endorsements_as_endorser.find_by(endorsee: @account).try(:destroy)
+    redirect back
+  end    
                    
 end

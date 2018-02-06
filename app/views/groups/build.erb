@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-  
+
   <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
   <% if @group.persisted? %>
     <li class="breadcrumb-item">
@@ -20,47 +20,51 @@
   <%= partial :pills %>
 <% end %>  
 
-<% form_for @group, @group.new_record? ? '/groups/new' : "/groups/#{@group.slug}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
+<div class="container">
 
-  <%= f.text_block :name %>    
-  <%= f.slug_block :slug, :hint => %Q{Group email address: <span class="slug-replace">#{@group.slug}</span>@#{Config['MAIL_DOMAIN']}<br />Group URL: #{Config['BASE_URI']}/groups/<span class="slug-replace">#{@group.slug}</span>}, :tip => 'Lowercase letters, numbers and dashes only (no spaces)' %>           
-  <%= f.text_area_block :description %>
-  <%= f.image_block :picture %>        
-  <%= f.radio_block :privacy %>
-  <script>
-    $(function () {
-      function toggle_request_questions() {
-        if ($("input[name='group[privacy]']:checked").val() == 'closed')
-          $('.closed-only').show()
-        else
-          $('.closed-only').hide()
-      }
-      $("input[name='group[privacy]']").click(function () {
+  <% form_for @group, @group.new_record? ? '/groups/new' : "/groups/#{@group.slug}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
+
+    <%= f.text_block :name %>    
+    <%= f.slug_block :slug, :hint => %Q{Group email address: <span class="slug-replace">#{@group.slug}</span>@#{Config['MAIL_DOMAIN']}<br />Group URL: #{Config['BASE_URI']}/groups/<span class="slug-replace">#{@group.slug}</span>}, :tip => 'Lowercase letters, numbers and dashes only (no spaces)' %>           
+    <%= f.text_area_block :description %>
+    <%= f.image_block :picture %>        
+    <%= f.radio_block :privacy %>
+    <script>
+      $(function () {
+        function toggle_request_questions() {
+          if ($("input[name='group[privacy]']:checked").val() == 'closed')
+            $('.closed-only').show()
+          else
+            $('.closed-only').hide()
+        }
+        $("input[name='group[privacy]']").click(function () {
+          toggle_request_questions();
+        });
         toggle_request_questions();
       });
-      toggle_request_questions();
-    });
-  </script>
-  <div class="closed-only">
-    <%= f.wysiwyg_block :request_intro %>
-    <%= f.text_area_block :request_questions %>
-  </div>
-  <%= f.wysiwyg_block :landing_tab %>      
-  <%= f.select_block :default_notification_level %>
-  <% if GroupType.count > 0 %>
-    <%= f.select_block :group_type_id, :options => [''] + GroupType.all.map { |group_type| [I18n.t(:"group_type.#{group_type.slug}"),group_type.id] } %>
-  <% end %>
-  <% if current_account.admin? %>
-    <%= f.check_box_block :conversation_creation_by_admins_only %>
-  <% end %>      
-  <%= f.submit_block %>
+    </script>
+    <div class="closed-only">
+      <%= f.wysiwyg_block :request_intro %>
+      <%= f.text_area_block :request_questions %>
+    </div>
+    <%= f.wysiwyg_block :landing_tab %>      
+    <%= f.select_block :default_notification_level %>
+    <% if GroupType.count > 0 %>
+      <%= f.select_block :group_type_id, :options => [''] + GroupType.all.map { |group_type| [I18n.t(:"group_type.#{group_type.slug}"),group_type.id] } %>
+    <% end %>
+    <% if current_account.admin? %>
+      <%= f.check_box_block :conversation_creation_by_admins_only %>
+    <% end %>      
+    <%= f.submit_block %>
 
-<% end %> 
+  <% end %> 
 
-<script>
-  $(function () {
-    $('#group_slug, #group_name').keyup(function () {
-      $('.slug-replace').text($('#group_slug').val());
-    });
-  }).keyup();
-</script>     
+  <script>
+    $(function () {
+      $('#group_slug, #group_name').keyup(function () {
+        $('.slug-replace').text($('#group_slug').val());
+      });
+    }).keyup();
+  </script>     
+
+</div>

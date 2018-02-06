@@ -1,17 +1,21 @@
 
 <ol class="breadcrumb">
-  
   <li class="breadcrumb-item"><a href="/organisations"><%=I18n.t(:organisations).capitalize%></a></li>
   <li class="breadcrumb-item"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></li>
   <li class="breadcrumb-item active">Edit</li>
 </ol>
 
-<% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
+<div class="container">
 
-  <%= f.text_block :name %>
-  <%= f.text_block :address %>
-  <%= f.text_block :website %>
-  <%= f.image_block :picture, rotate: false %>
-  <%= f.submit_block destroy_url: ("/organisations/#{@organisation.id}/destroy" if @organisation.affiliations.empty?) %>
+  <% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
-<% end %>
+    <%= f.text_block :name %>
+    <%= f.text_block :username %>
+    <%= f.text_block :address %>
+    <%= f.text_block :website %>
+    <%= f.image_block :picture, rotate: false %>
+    <%= f.submit_block destroy_url: ("/organisations/#{@organisation.id}/destroy" if @organisation.affiliations.empty?) %>
+
+  <% end %>
+
+</div>

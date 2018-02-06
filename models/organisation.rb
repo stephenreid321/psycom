@@ -11,20 +11,7 @@ class Organisation
   field :coordinates, :type => Array
   field :website, :type => String
   field :picture_uid, :type => String  
-  field :cover_image_uid, :type => String    
-  
-  # Cover
-  dragonfly_accessor :cover_image
-  before_validation do
-    if self.cover_image
-      begin
-        self.cover_image.format
-      rescue        
-        errors.add(:cover_image, 'must be an image')
-      end
-    end
-  end    
-  
+    
   include Geocoder::Model::Mongoid
   geocoded_by :address  
   def lat; coordinates[1] if coordinates; end  
@@ -75,7 +62,6 @@ class Organisation
       :address => :text,
       :website => :text,
       :picture => :image,
-      :cover_image => :image,
       :affiliations => :collection
     }
   end

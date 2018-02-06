@@ -1,12 +1,15 @@
-<% content_for :cover_bottom_left_wrap do %>
-  <% if @organisation.picture %>    
-    <a href="/o/<%=@organisation.username_or_id%>"><img style="background: white; border: 3px solid white; width: 200px;" src="<%=@organisation.picture.thumb('500x500#').url%>" /></a>
-  <% end %>
-  <h1><a style="color: white" href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
+<% content_for :cover_right do %>
+  <a class="btn btn-primary" href="/organisations/<%=@organisation.id%>/edit"><i class="fa fa-pencil"></i> Edit organisation</a>
 <% end %>
 
-<% content_for :cover_top_right do %>
-  <a class="btn btn-primary" href="/organisations/<%=@organisation.id%>/edit"><i class="fa fa-pencil"></i> Edit organisation</a>
+<% content_for :cover_left_left do %>
+  <% if @organisation.picture %>    
+    <a href="/o/<%=@organisation.username_or_id%>"><img class="rounded-circle" style="width: 200px;" src="<%=@organisation.picture.thumb('500x500#').url%>" /></a>
+  <% end %>
+<% end %>
+
+<% content_for :cover_left_right do %>
+  <h1><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
 <% end %>
 
 <%= partial :cover %>

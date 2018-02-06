@@ -15,5 +15,7 @@
   <% } %>
 </div>
 
-<%= partial :'events/ical_instructions' %>
+<% if current_account %>
+  <%= partial :'events/ical_instructions' %>
+<% end %>
 
