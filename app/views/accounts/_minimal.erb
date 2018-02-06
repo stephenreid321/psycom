@@ -1,16 +1,18 @@
-<%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 130px;'} %>
+<div class="text-center">
+  <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 130px;'} %>
+</div>
 
 <h3><a href="/<%=account.username_or_id%>"><%=account.name%></a></h3>
 <ul class="fa-ul">    
-    <% account.affiliations.each { |affiliation|%>
-      <li><i title="<%=affiliation.title%> <%=I18n.t(:at)%> <%=affiliation.organisation.name%>" class="fa fa-li fa-briefcase"></i><%=affiliation.title%> <%=I18n.t(:at)%> <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a></li>
-    <% } %>  
+  <% account.affiliations.each { |affiliation|%>
+    <li><i title="<%=affiliation.title%> <%=I18n.t(:at)%> <%=affiliation.organisation.name%>" class="fa fa-li fa-briefcase"></i><%=affiliation.title%> <%=I18n.t(:at)%> <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a></li>
+  <% } %>  
 
-    <% if account.public_memberships.count > 0 %>
-      <li>
-        <i title="Groups" class="fa fa-li fa-group"></i>
-        <%=I18n.t(:member_of).capitalize%> <%= account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %>
-      </li>
-    <% end %>    
-    
+  <% if account.public_memberships.count > 0 %>
+    <li>
+      <i title="Groups" class="fa fa-li fa-group"></i>
+      <%=I18n.t(:member_of).capitalize%> <%= account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %>
+    </li>
+  <% end %>    
+
 </ul>

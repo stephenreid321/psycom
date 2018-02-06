@@ -7,7 +7,7 @@ class Endorsement
   belongs_to :endorser, index: true, class_name: "Account", inverse_of: :endorsements_as_endorser
   belongs_to :endorsee, index: true, class_name: "Account", inverse_of: :endorsements_as_endorsee
   
-  validates_presence_of :endorser, :endorsee
+  validates_presence_of :endorser, :endorsee, :body
   validates_uniqueness_of :endorsee, :scope => :endorser
   
   before_validation do

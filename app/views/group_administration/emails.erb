@@ -12,6 +12,8 @@
 <%= partial :'group_administration/header' %>
 <%= partial :pills %>
 
+<div class="container">
+
 <% form_for @group, "/groups/#{@group.slug}/emails", :class => 'form-horizontal', :multipart => true do |f| %>
 
   <%= f.text_block :invite_email_subject %>
@@ -27,3 +29,5 @@
   <%= f.submit_block %>
 
 <% end %> 
+
+  </div>

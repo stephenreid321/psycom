@@ -10,22 +10,31 @@
 
 <% content_for :cover_left_right do %>
   <h1><a href="/<%=@account.username_or_id%>"><%=@account.name%></a></h1>
-  <% if current_account and current_account.endorsements_as_endorser.find_by(endorsee: @account) %>
-    <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to remove your endorsement of this person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Remove endorsement</a>
-  <% else %>
-    <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary" <% if current_account %> onclick="
+  <% if @account.headline %>
+    <p class="lead"><%= @account.headline %></p>
+  <% end %>  
+
+  <% if !current_account or (current_account and @account.id != current_account.id) %>    
+
+    <% if current_account and current_account.endorsements_as_endorser.find_by(endorsee: @account) %>
+      <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to remove your endorsement of this person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Remove endorsement</a>
+    <% else %>
+      <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary" <% if current_account %> onclick="
 
                 var body = prompt('Your endorsement');
                 if (body != null) {
                   $(this).attr('href', $(this).attr('href') + '?body=' + ((body == 'undefined' || body == 'null') ? '' : body))
                 }
 
-         " <% end %> ><i class="fa fa-link"></i> Endorse</a>        
-     <% end %>
+           " <% end %> ><i class="fa fa-link"></i> Endorse</a>        
+       <% end %>
 
-  <% unless @account.unsubscribe_message %>
-    <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
+    <% unless @account.unsubscribe_message %>
+      <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
+    <% end %>
+
   <% end %>
+      
 <% end %>
 
 <%= partial :cover %>

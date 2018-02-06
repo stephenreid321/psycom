@@ -1,17 +1,6 @@
 
-<% if @account.headline %>
-  <p class="lead" style="margin: 10px 0"><%= @account.headline %></p>
-<% end %>
-
 <div class="table-hr-container">
   <table class="table table-hr" >
-
-    <% if @account.public_memberships.count > 0 %>
-      <tr>
-        <td><%=I18n.t(:member_of).capitalize%> </td>
-        <td><%= @account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %></td>
-      </tr>
-    <% end %>     
 
     <% if !@account.affiliations.empty? %>
       <tr>
@@ -23,6 +12,13 @@
         </td>
       </tr>
     <% end %>    
+
+    <% if @account.public_memberships.count > 0 %>
+      <tr>
+        <td><%=I18n.t(:member_of).capitalize%> </td>
+        <td><%= @account.public_memberships.map { |membership| %Q{<a href="/groups/#{membership.group.slug}">#{membership.group.name}</a>} }.to_sentence %></td>
+      </tr>
+    <% end %>        
 
     <% if @account.account_tagships.count > 0 %>
       <tr>

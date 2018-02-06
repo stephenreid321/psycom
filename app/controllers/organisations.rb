@@ -45,7 +45,7 @@ ActivateApp::App.controllers do
     @organisation = Organisation.find(params[:id]) || not_found
     if @organisation.update_attributes(params[:organisation])      
       flash[:notice] = "<strong>Great!</strong> The organisation was updated successfully."
-      redirect "/organisations/#{@organisation.id}/edit"
+      redirect "/organisations/#{@organisation.id}"
     else
       flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the organisation from being saved."
       erb :'organisations/build'

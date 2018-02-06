@@ -7,7 +7,7 @@
     <%= partial :'accounts/sidebar' %>
 
   </div>
-  <div class="col-sm-8 pt-3">
+  <div class="col-sm-8">
 
     <% if @account.story %>
       <h2><%=@account.firstname%>'s story</h2>
@@ -15,17 +15,12 @@
         <%= Rinku.auto_link(@account.story.gsub("\n",'<br />')) %>
       </p>   
     <% end %>  
-      
-    <h2>Endorsed by <span class="badge badge-primary"><%= @account.endorsements_as_endorsee.count%></span></h2>
+
+    <h2>Endorsed as a tripsitter by <span class="badge badge-primary"><%= @account.endorsements_as_endorsee.count%></span></h2>
 
     <div class="image-wall">
       <% @account.endorsed_by.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorsee.find_by(endorser: account) %>
-
-        <% if endorsement.body %>
-          <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px; border: 2px solid rgb(34,141,255)"} %>
-        <% else %>
-          <%= partial :'accounts/square', :locals => {:account => account, :width => '64px'} %>
-        <% end %>
+        <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>
       <% } %>   
     </div>
 
@@ -33,18 +28,12 @@
 
     <div class="image-wall">
       <% @account.endorses.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorser.find_by(endorsee: account) %>
-
-        <% if endorsement.body %>
-          <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px; border: 2px solid rgb(34,141,255)"} %>
-        <% else %>
-          <%= partial :'accounts/square', :locals => {:account => account, :width => '64px'} %>
-        <% end %>     
-
+        <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>        
       <% } %>   
     </div>      
 
     <% if @shared_conversations and !@shared_conversations.empty? %>
-      <h3>Recent conversations</h3>
+      <h2 class="mt-3">Recent conversations</h2>
       <%= partial :'conversations/conversations_table', :locals => {:conversations => @shared_conversations}%>
     <% end %>    
 
