@@ -14,20 +14,31 @@
       <p>
         <%= Rinku.auto_link(@account.story.gsub("\n",'<br />')) %>
       </p>   
-    <% end %>  
+    <% end %>
 
-    <h2>Endorsed as a tripsitter by <span class="badge badge-primary"><%= @account.endorsements_as_endorsee.count%></span></h2>
+    <% if !@account.root? %>
+
+      <div class="mb-3">
+        <h2>Endorsed as a tripsitter by <span class="badge badge-primary"><%= @account.endorsements_as_endorsed.count%></span></h2>
+
+        <div class="image-wall">
+          <% @account.endorsed_by.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorsed.find_by(endorser: account) %>
+            <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>
+          <% } %>   
+        </div>
+
+        <%=
+        #newick(Endorsement.tree(@account).deep_map { |account| account.name })
+        %>
+        
+      </div>
+
+    <% end %>
+
+    <h2>Endorses <span class="badge badge-primary"><%= @account.endorsements_as_endorser.count%></span></h2>
 
     <div class="image-wall">
-      <% @account.endorsed_by.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorsee.find_by(endorser: account) %>
-        <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>
-      <% } %>   
-    </div>
-
-    <h2 class="mt-3">Endorses <span class="badge badge-primary"><%= @account.endorsements_as_endorser.count%></span></h2>
-
-    <div class="image-wall">
-      <% @account.endorses.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorser.find_by(endorsee: account) %>
+      <% @account.endorses.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorser.find_by(endorsed: account) %>
         <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>        
       <% } %>   
     </div>      

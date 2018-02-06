@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git://github.com/wordsandwriting/activate-admin.git
-  revision: 488325705904d9940198df3db80ec7e5be860b7d
+  revision: f61e06ebf50f666f897813db7350ace41e506fcb
   specs:
     activate-admin (0.0.1)
       activate-tools
@@ -104,7 +104,7 @@ GEM
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
-    i18n (0.9.1)
+    i18n (0.9.3)
       concurrent-ruby (~> 1.0)
     i18n_data (0.8.0)
     incoming (0.1.8)
@@ -218,7 +218,7 @@ GEM
       htmlentities (>= 4.0.0)
     public_suffix (3.0.1)
     puma (3.11.2)
-    rack (2.0.3)
+    rack (2.0.4)
     rack-protection (2.0.0)
       rack
     rack-test (0.8.2)

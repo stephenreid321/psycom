@@ -34,6 +34,7 @@ class Account
   field :admin, :type => Boolean
   field :translator, :type => Boolean  
   field :prevent_new_memberships, :type => Boolean
+  field :root, :type => Boolean
   
   field :gender, :type => String
   field :date_of_birth, :type => Date  
@@ -74,16 +75,16 @@ class Account
   accepts_nested_attributes_for :account_tagships, allow_destroy: true, reject_if: :all_blank
   
   def update_endorsement_count
-    update_attribute(:endorsement_count, endorsements_as_endorsee.count)
+    update_attribute(:endorsement_count, endorsements_as_endorsed.count)
   end
   
   has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  
   def endorses
-    Account.where(:id.in => endorsements_as_endorser.pluck(:endorsee_id))
+    Account.where(:id.in => endorsements_as_endorser.pluck(:endorsed_id))
   end
-  has_many :endorsements_as_endorsee, :class_name => 'Endorsement', :inverse_of => :endorsee, :dependent => :destroy  
+  has_many :endorsements_as_endorsed, :class_name => 'Endorsement', :inverse_of => :endorsed, :dependent => :destroy  
   def endorsed_by
-    Account.where(:id.in => endorsements_as_endorsee.pluck(:endorser_id))
+    Account.where(:id.in => endorsements_as_endorsed.pluck(:endorser_id))
   end  
     
   attr_accessor :account_tag_ids
@@ -338,6 +339,7 @@ class Account
       :password => :password,
       :password_set_by_user => :check_box,
       :prevent_new_memberships => :check_box,      
+      :root => :check_box,
       :affiliations => :collection,
       :affiliations_summary => {:type => :text, :edit => false},
       :title_of_first_affiliation => {:type => :text, :edit => false},      
