@@ -80,7 +80,7 @@ ActivateApp::App.controllers do
     
     mail = Mail.new
     mail.to = @account.email
-    mail.bcc = 'stephen.reid@psychedelicsociety.org.uk'
+    mail.bcc = Config['HELP_ADDRESS']
     mail.from = "#{current_account.name} <#{current_account.email}>"
     mail.subject = "Message from #{current_account.name} via #{Config['SITE_NAME']}"
     
