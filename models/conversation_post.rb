@@ -66,13 +66,14 @@ class ConversationPost
   def didyouknow_replacements(string)
     group = conversation.group
     members = group.members
-    string.gsub!('[site_url]', Config['BASE_URI'])
+    base_uri = Config['BASE_URI']
+    string.gsub!('[site_url]', base_uri)
     string.gsub!('[name]', group.name)
     string.gsub!('[slug]', group.slug)        
-    string.gsub!('[conversation_url]', "#{Config['BASE_URI']}/conversations/#{conversation.slug}")
+    string.gsub!('[conversation_url]', "#{base_uri}/conversations/#{conversation.slug}")
     string.gsub!('[members]', "#{m = members.count} #{m == 1 ? 'member' : 'members'}")
     most_recently_updated_account = members.order_by([:has_picture.desc, :updated_at.desc]).first
-    string.gsub!('[most_recently_updated_url]', "#{Config['BASE_URI']}/#{most_recently_updated_account.username_or_id}")
+    string.gsub!('[most_recently_updated_url]', "#{base_uri}/#{most_recently_updated_account.username_or_id}")
     string.gsub!('[most_recently_updated_name]', most_recently_updated_account.name)
     string
   end  
