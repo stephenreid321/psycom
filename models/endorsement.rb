@@ -29,7 +29,7 @@ class Endorsement
       mail = Mail.new
       mail.to = endorsed.email
       mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
-      mail.subject = "#{endorsement.endorser.name} trusted you"
+      mail.subject = "You're now part of the #{Config['SITE_NAME']} trustchain"
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/endorse.erb'))).result(binding)
       html_part = Mail::Part.new do
