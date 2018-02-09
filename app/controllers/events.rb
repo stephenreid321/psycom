@@ -10,12 +10,10 @@ ActivateApp::App.controllers do
   end
   
   get '/events/ical' do
-    sign_in_required!
     Event.ical
   end
         
   get '/events/feed' do
-    sign_in_required!
     Event.json(params[:start], params[:end])
   end  
   
@@ -39,15 +37,15 @@ ActivateApp::App.controllers do
     end
   end   
   
-  get '/events/:id/edit' do
-    sign_in_required!
+  get '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
+    trustchain_only!(@event.account)
     erb :'events/build'
   end     
       
-  post '/events/:id/edit' do
-    sign_in_required!
+  post '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
+    trustchain_only!(@event.account)
     if @event.update_attributes(params[:event])
       flash[:notice] = "<strong>Great!</strong> The event was updated successfully."
       redirect "/events/#{@event.id}"
@@ -58,7 +56,7 @@ ActivateApp::App.controllers do
   end 
   
   get '/events/:id/destroy' do
-    sign_in_required!
+    trustchain_only!(@event.account)
     @event = Event.find(params[:id]) || not_found
     @event.destroy    
     redirect "/events/"

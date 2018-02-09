@@ -35,13 +35,13 @@ ActivateApp::App.controllers do
   end
        
   get '/organisations/:id/edit' do
-    sign_in_required!
+    trustchain_only!
     @organisation = Organisation.find(params[:id]) || not_found
     erb :'organisations/build'
   end
   
   post '/organisations/:id/edit' do
-    sign_in_required!
+    trustchain_only!
     @organisation = Organisation.find(params[:id]) || not_found
     if @organisation.update_attributes(params[:organisation])      
       flash[:notice] = "<strong>Great!</strong> The organisation was updated successfully."
@@ -53,7 +53,7 @@ ActivateApp::App.controllers do
   end  
   
   get '/organisations/:id/destroy' do
-    sign_in_required!
+    trustchain_only!
     @organisation = Organisation.find(params[:id]) || not_found
     @organisation.destroy    
     redirect '/organisations'

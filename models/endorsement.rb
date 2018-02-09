@@ -2,16 +2,14 @@ class Endorsement
   include Mongoid::Document
   include Mongoid::Timestamps
   
-  field :body, :type => String
-
   belongs_to :endorser, index: true, class_name: "Account", inverse_of: :endorsements_as_endorser
   belongs_to :endorsed, index: true, class_name: "Account", inverse_of: :endorsements_as_endorsed
   
-  validates_presence_of :endorser, :endorsed, :body
+  validates_presence_of :endorser, :endorsed
   validates_uniqueness_of :endorsed, :scope => :endorser
   
   before_validation do
-    errors.add(:endorser, "hasn't yet been endorsed") if Endorsement.where(endorsed_id: endorser.id).count == 0 and !endorser.root    
+    errors.add(:endorser, "hasn't yet been endorsed and isn't a root") if Endorsement.where(endorsed_id: endorser.id).count == 0 and !endorser.root    
     errors.add(:endorsed, "can't be the same as endorser") if endorser.id == endorsed.id
     errors.add(:endorsed, "is a root") if endorsed.root
     errors.add(:endorsed, "is already an ancestor of endorser") if tree = Endorsement.tree(endorser) and tree.flatten.include?(endorsed)    
@@ -45,7 +43,6 @@ class Endorsement
           
   def self.admin_fields
     {
-      :body => :text,
       :endorser_id => :lookup,
       :endorsed_id => :lookup
     }
@@ -56,13 +53,23 @@ class Endorsement
     if endorsements.count > 0
       x =  []
       endorsements.each { |endorsement|        
-          x << endorsement.endorser                  
-          if subtree = Endorsement.tree(endorsement.endorser)
-            x << subtree
-          end           
+        x << endorsement.endorser                  
+        if subtree = Endorsement.tree(endorsement.endorser)
+          x << subtree
+        end           
       }
       x
     end        
+  end
+  
+  after_destroy do
+    accounts = Account.where(:id.in => Endorsement.pluck(:endorser_id)).where(:root.ne => true).where(:id.nin => Endorsement.pluck(:endorsed_id))
+    while accounts.count > 0
+      accounts.each { |account|
+        account.endorsements_as_endorser.destroy_all
+      }
+      accounts = Account.where(:id.in => Endorsement.pluck(:endorser_id)).where(:root.ne => true).where(:id.nin => Endorsement.pluck(:endorsed_id))
+    end
   end
       
 end

@@ -16,32 +16,32 @@
       </p>   
     <% end %>
 
-    <% if !@account.root? %>
+    <% if !@account.root? and  @account.endorsements_as_endorsed.count > 0 %>
 
       <div class="mb-3">
-        <h2>Endorsed as a tripsitter by <span class="badge badge-primary"><%= @account.endorsements_as_endorsed.count%></span></h2>
+        <h2>Trusted by <span class="badge badge-primary"><%= @account.endorsements_as_endorsed.count%></span></h2>
 
         <div class="image-wall">
           <% @account.endorsed_by.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorsed.find_by(endorser: account) %>
-            <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>
+            <%= partial :'accounts/square', :locals => {:account => account, :style => "width: 64px"} %>
           <% } %>   
         </div>
 
-        <%=
-        #newick(Endorsement.tree(@account).deep_map { |account| account.name })
-        %>
-        
       </div>
 
     <% end %>
 
-    <h2>Endorses <span class="badge badge-primary"><%= @account.endorsements_as_endorser.count%></span></h2>
+    <% if @account.endorsements_as_endorser.count > 0 %>
+      
+      <h2>Trusts in <span class="badge badge-primary"><%= @account.endorsements_as_endorser.count%></span></h2>
 
-    <div class="image-wall">
-      <% @account.endorses.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorser.find_by(endorsed: account) %>
-        <%= partial :'accounts/square', :locals => {:account => account, :content => endorsement.body, :style => "width: 64px"} %>        
-      <% } %>   
-    </div>      
+      <div class="image-wall">
+        <% @account.endorses.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorser.find_by(endorsed: account) %>
+          <%= partial :'accounts/square', :locals => {:account => account, :style => "width: 64px"} %>        
+        <% } %>   
+      </div>  
+
+    <% end %>    
 
     <% if @shared_conversations and !@shared_conversations.empty? %>
       <h2 class="mt-3">Recent conversations</h2>

@@ -1,6 +1,7 @@
 ActivateApp::App.controllers do
   
   before do
+    site_admins_only!    
     @from = params[:from] ? Date.parse(params[:from]) : 1.week.ago.to_date
     @to =  params[:to] ? Date.parse(params[:to]) : Date.today
   end
@@ -9,14 +10,12 @@ ActivateApp::App.controllers do
     redirect '/analytics/cumulative_totals'
   end
 
-  get '/analytics/cumulative_totals' do
-    site_admins_only!      
+  get '/analytics/cumulative_totals' do      
     @collections = [ConversationPost, Account, Event]
     erb :'analytics/cumulative_totals'
   end
     
   get '/analytics/groups', :provides => [:html, :csv] do
-    site_admins_only!
     @header = [
       I18n.t(:group).capitalize,
       %Q{Members at start of period},
@@ -56,7 +55,6 @@ ActivateApp::App.controllers do
   end
   
   get '/analytics/organisations', :provides => [:html, :csv] do
-    site_admins_only!
     @header = [
       I18n.t(:organisation).capitalize,
       %Q{Members at start of period},

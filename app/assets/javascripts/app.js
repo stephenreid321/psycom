@@ -47,6 +47,19 @@ $(function () {
       }, 200);
     });
   }
+  
+  function tooltip() {
+    $('[data-toggle="tooltip"]').tooltip({
+      html: true,
+      viewport: false,
+      title: function () {
+        if ($(this).attr('title').length > 0)
+          return $(this).attr('title')
+        else
+          return $(this).next('span').html()
+      }
+    })
+  }  
 
   function timeago() {
     $("abbr.timeago").timeago()
@@ -91,11 +104,13 @@ $(function () {
   $(document).ajaxComplete(function () {
     wysify()
     popover()
+    tooltip()
     timeago()
     datepickers()
   });
   wysify()
   popover()
+  tooltip()
   timeago()
   datepickers()
 

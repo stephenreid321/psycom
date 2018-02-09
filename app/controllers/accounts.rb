@@ -103,7 +103,7 @@ ActivateApp::App.controllers do
   get '/accounts/:id/endorse' do
     sign_in_required!
     @account = Account.find(params[:id]) || not_found
-    Endorsement.create endorser: current_account, endorsed: @account, body: params[:body]
+    Endorsement.create endorser: current_account, endorsed: @account
     redirect back
   end
   
@@ -113,5 +113,9 @@ ActivateApp::App.controllers do
     current_account.endorsements_as_endorser.find_by(endorsed: @account).try(:destroy)
     redirect back
   end    
+  
+  get '/trustchain' do
+    erb :'accounts/trustchain'
+  end
                    
 end

@@ -1,13 +1,13 @@
 ActivateApp::App.controllers do
          
   get '/groups/new' do
-    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? site_admins_only! : sign_in_required!
+    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? trustchain_only! : sign_in_required!
     @group = Group.new
     erb :'groups/build'
   end
   
   post '/groups/new' do
-    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? site_admins_only! : sign_in_required!
+    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? trustchain_only! : sign_in_required!
     @group = Group.new(params[:group])    
     if @group.save  
       flash[:notice] = "<strong>Great!</strong> The group was created successfully."

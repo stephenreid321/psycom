@@ -149,7 +149,6 @@ ActivateApp::App.controllers do
   end  
        
   get '/conversation_posts/:id/resend' do
-    sign_in_required!
     @conversation_post = ConversationPost.find(params[:id])
     group_admins_only!(@conversation_post.group)
     @conversation_post.send_notifications!

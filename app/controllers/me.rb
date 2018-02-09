@@ -19,7 +19,6 @@ ActivateApp::App.controllers do
     sign_in_required!
     params[:account][:account_tag_ids] = [] if Config['ACCOUNT_TAGS_PREDEFINED'] and !params[:account][:account_tag_ids]
     @account = current_account  
-    @account.require_password_change if @account.sign_ins.count == 1
     if @account.update_attributes(mass_assigning(params[:account], Account))
       if params[:return]
         redirect back

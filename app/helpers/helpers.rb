@@ -60,6 +60,14 @@ ActivateApp::App.helpers do
     end
   end
   
+  def trustchain_only!(plus=nil)
+    unless current_account and (current_account.trustchain? or (plus and plus.id == current_account.id))
+      flash[:notice] = 'You must be part of the trustchain to access that page.'
+      session[:return_to] = request.url
+      request.xhr? ? halt(403) : redirect((current_account ? '/' : '/sign_in'))
+    end 
+  end
+  
   def site_admins_only!
     unless current_account and current_account.admin?
       flash[:notice] = 'You must be a site admin to access that page.'

@@ -19,17 +19,6 @@
 
       var autocomplete = new google.maps.places.Autocomplete($('#event_location')[0]);
 
-      $('.time select').attr('required', false)
-      var add = $('<a href="javascript:;" style="margin-left: 5px">Add a time</a>');
-      $(add).click(function () {
-        $('.time').show();
-        $('#event_consider_time').prop('checked', true);
-        $(this).hide();
-      });
-      $(add).insertBefore($('.time').first());
-      if ($('#event_consider_time').prop('checked'))
-        $(add).click();
-
       $("input[name='event[ticketing]']").click(function () {
         if ($(this).val() == 'No ticket required') {
           $('#tickets-link-div').hide();
@@ -51,7 +40,7 @@
     <%= f.text_block :name %>
     <%= f.datetime_block :start_time %>
     <%= f.datetime_block :end_time %>
-    <%= f.check_box :consider_time, :style => 'display: none'%>
+    <%= f.check_box_block :all_day %>
     <%= f.text_block :location %>      
     <%= f.text_block :organisation_name%>
     <script>

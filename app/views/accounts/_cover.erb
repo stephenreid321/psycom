@@ -9,7 +9,12 @@
 <% end %>
 
 <% content_for :cover_left_right do %>
-  <h1><a href="/<%=@account.username_or_id%>"><%=@account.name%></a></h1>
+  <h1>
+    <a href="/<%=@account.username_or_id%>"><%=@account.name%></a>
+    <% if @account.trustchain? %>
+      <a href="/trustchain"><i class="fa fa-check-circle text-primary" data-toggle="tooltip" title="Part of the psychedelic.community trustchain"></i></a>
+    <% end %>
+  </h1>
   <% if @account.headline %>
     <p class="lead"><%= @account.headline %></p>
   <% end %>  
@@ -17,30 +22,21 @@
   <% if !current_account or (current_account and @account.id != current_account.id) %>    
 
     <% if current_account and current_account.endorsements_as_endorser.find_by(endorsed: @account) %>
-      <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to remove your endorsement of this person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Remove endorsement</a>
+      <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to untrust person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Untrust</a>
     <% else %>
-      
-      
-      <% if tree = Endorsement.tree(current_account) and !tree.flatten.include?(@account) %>
-      
-      <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary" <% if current_account %> onclick="
 
-                var body = prompt('Your endorsement');
-                if (body != null) {
-                  $(this).attr('href', $(this).attr('href') + '?body=' + ((body == 'undefined' || body == 'null') ? '' : body))
-                }
-
-           " <% end %> ><i class="fa fa-link"></i> Endorse</a>        
-       <% end %>
-      
+      <% tree = Endorsement.tree(current_account); if current_account.trustchain? and (!tree or !tree.flatten.include?(@account)) %>
+        <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary"><i class="fa fa-link"></i> Trust</a>        
       <% end %>
+
+    <% end %>
 
     <% unless @account.unsubscribe_message %>
       <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
     <% end %>
 
   <% end %>
-      
+
 <% end %>
 
 <%= partial :cover %>

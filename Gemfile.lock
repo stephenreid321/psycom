@@ -19,9 +19,8 @@ GIT
       padrino
       will_paginate
 
-GIT
-  remote: git://github.com/wordsandwriting/activate-tools.git
-  revision: c625d78354fdce044753346cdfbd2e90b8084d83
+PATH
+  remote: ../activate-tools
   specs:
     activate-tools (0.0.1)
       padrino

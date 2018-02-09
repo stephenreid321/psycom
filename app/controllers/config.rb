@@ -1,6 +1,7 @@
 ActivateApp::App.controllers do
   
   before do
+    site_admins_only!
     @environment_variables = {      
       :BASE_URI => 'Base URI of web app (scheme + domain)',
       :DOMAIN => 'Domain of web app',
@@ -59,17 +60,14 @@ ActivateApp::App.controllers do
   end
   
   get '/config' do
-    site_admins_only!
     erb :'config/vars'
   end
   
   get '/fragments' do
-    site_admins_only!
     erb :'config/fragments'
   end
      
   post '/config' do
-    site_admins_only!
     @environment_variables.each { |k,v|
       config = Config.find_by(slug: k) || Config.create(slug: k)
       config.update_attribute(:body, params[k])

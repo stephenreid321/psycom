@@ -17,12 +17,12 @@
     $(".datepicker").datepicker({format: 'dd-M-yyyy', autoclose: true});
   });
 </script>
-<form style="display: inline">
-  <input type="text" style="width: 8em; display: inline-block" class="form-control datepicker" name="from" value="<%=@from.strftime('%d-%b-%Y')%>"/>
+<form class="form-inline">
+  <input type="text" class="form-control datepicker mr-1" name="from" value="<%=@from.strftime('%d-%b-%Y')%>"/>
   &ndash;
-  <input type="text" style="width: 8em; display: inline-block" class="form-control datepicker" name="to" value="<%=@to.strftime('%d-%b-%Y')%>"/>
+  <input type="text" class="form-control datepicker mx-1 " name="to" value="<%=@to.strftime('%d-%b-%Y')%>"/>
   Show all posters <input onchange="$(this).closest('form').submit()" type="checkbox" name="all" value="1" <% if @all %>checked="checked"<% end %> />
-  <button class="btn btn-primary">Submit</button>  
+  <button class="btn btn-primary mx-1">Submit</button>  
 </form>
 
 <table class="table" style="margin-top: 20px">

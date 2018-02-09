@@ -10,7 +10,7 @@ class Event
   field :name, :type => String
   field :start_time, :type => Time
   field :end_time, :type => Time
-  field :consider_time, :type => Boolean
+  field :all_day, :type => Boolean
   field :location, :type => String
   field :coordinates, :type => Array
   field :details, :type => String
@@ -50,7 +50,7 @@ class Event
       :name => :text,
       :start_time => :datetime,
       :end_time => :datetime,
-      :consider_time => :check_box,
+      :all_day => :check_box,
       :location => :text,
       :coordinates => :geopicker,              
       :details => :text_area,
@@ -69,18 +69,18 @@ class Event
   end
     
   def when_details
-    if consider_time
-      if start_time.to_date == end_time.to_date
-        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_s(:no_double_zeros)}"
-      else
-        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_date.to_s(:no_year)}, #{end_time.to_s(:no_double_zeros)}"
-      end
-    else
+    if all_day
       if start_time.to_date == end_time.to_date
         start_time.to_date.to_s(:no_year)
       else
         "#{start_time.to_date.to_s(:no_year)} &ndash; #{end_time.to_date.to_s(:no_year)}"
       end
+    else
+      if start_time.to_date == end_time.to_date
+        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_s(:no_double_zeros)}"
+      else
+        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_date.to_s(:no_year)}, #{end_time.to_s(:no_double_zeros)}"
+      end      
     end
   end
   
@@ -90,8 +90,8 @@ class Event
       Event.all.each { |event|
         rcal.event do |revent|
           revent.summary = event.name
-          revent.dtstart =  event.consider_time ? event.start_time : event.start_time.to_date
-          revent.dtend = event.consider_time ? event.end_time : (event.end_time.to_date + 1.day)
+          revent.dtstart =  event.all_day ? event.start_time.to_date : event.start_time
+          revent.dtend = event.all_day ? (event.end_time.to_date + 1.day) : event.end_time
           (revent.location = event.location) if event.location
           revent.description = "#{Config['BASE_URI']}/events/#{event.id}"
         end
@@ -113,7 +113,7 @@ class Event
         :title => event.name,
         :start => event.start_time.iso8601,
         :end => event.end_time.iso8601, 
-        :allDay => !event.consider_time,
+        :allDay => event.all_day,
         :when_details => event.when_details,
         :location => event.location,
         :more_info => event.more_info,

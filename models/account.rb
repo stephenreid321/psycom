@@ -30,7 +30,6 @@ class Account
   field :secret_token, :type => String
   field :crypted_password, :type => String  
   field :password_reset_token, :type => String   
-  field :password_set_by_user, :type => Boolean
   field :admin, :type => Boolean
   field :translator, :type => Boolean  
   field :prevent_new_memberships, :type => Boolean
@@ -76,6 +75,10 @@ class Account
   
   def update_endorsement_count
     update_attribute(:endorsement_count, endorsements_as_endorsed.count)
+  end
+  
+  def trustchain?
+    root? or !endorsements_as_endorsed.empty?
   end
   
   has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  
@@ -271,12 +274,7 @@ class Account
       end
     end
   end  
-  
-  attr_accessor :require_password_change
-  before_validation do
-    errors.add(:password, 'should be changed') if self.require_password_change and !self.password_set_by_user and !self.password
-  end    
-  
+    
   def username_or_id
     username or id
   end  
@@ -294,11 +292,7 @@ class Account
     self.twitter_profile_url = "http://#{self.twitter_profile_url}" if self.twitter_profile_url and !(self.twitter_profile_url =~ /\Ahttps?:\/\//)
     self.facebook_profile_url = "http://#{self.facebook_profile_url}" if self.facebook_profile_url and !(self.facebook_profile_url =~ /\Ahttps?:\/\//)   
   end  
-  
-  after_save do
-    update_attribute(:password_set_by_user, true) if !self.password_set_by_user and self.password and self.sign_ins.count > 0 
-  end
-    
+      
   before_validation :set_has_picture
   def set_has_picture
     self.has_picture = (self.picture ? true : false)
@@ -337,7 +331,6 @@ class Account
       :language_id => :lookup,
       :endorsement_count => :number,
       :password => :password,
-      :password_set_by_user => :check_box,
       :prevent_new_memberships => :check_box,      
       :root => :check_box,
       :affiliations => :collection,
