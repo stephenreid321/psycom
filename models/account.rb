@@ -81,6 +81,10 @@ class Account
     root? or !endorsements_as_endorsed.empty?
   end
   
+  def trustable_by?(account)    
+    !self.root? and account.trustchain? and (tree = Endorsement.tree(account); !tree or !tree.flatten.include?(self))
+  end
+  
   has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  
   def endorses
     Account.where(:id.in => endorsements_as_endorser.pluck(:endorsed_id))

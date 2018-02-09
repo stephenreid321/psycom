@@ -22,20 +22,18 @@
   <% if !current_account or (current_account and @account.id != current_account.id) %>    
 
     <% if current_account and current_account.endorsements_as_endorser.find_by(endorsed: @account) %>
-      <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to untrust person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Untrust</a>
-    <% else %>
-
-      <% tree = Endorsement.tree(current_account); if current_account.trustchain? and (!tree or !tree.flatten.include?(@account)) %>
-        <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary"><i class="fa fa-link"></i> Trust</a>        
-      <% end %>
-
-    <% end %>
-
-    <% unless @account.unsubscribe_message %>
-      <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
+      <a href="/accounts/<%=@account.id%>/unendorse" data-confirm="Are you sure you want to untrust this person?" class="btn btn-primary"><i class="fa fa-unlink"></i> Untrust</a>
+    <% elsif @account.trustable_by?(current_account) %>
+      <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary"><i class="fa fa-link"></i> Trust</a>        
     <% end %>
 
   <% end %>
+
+  <% unless @account.unsubscribe_message %>
+    <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
+  <% end %>
+
+<% end %>
 
 <% end %>
 
