@@ -26,13 +26,11 @@
     <%= f.email_block :email %>
     <%= f.text_block :username %>
     <%= f.text_block :location %>       
-    <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>
-    <%= f.password_block :password %>
-
-
+    <%= f.select_block :time_zone %>
+    <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>    
+  
     <% if @account.persisted? %>
-      <%= partial :'accounts/affiliations', :locals => {:f => f} %>  
-      <%= f.select_block :time_zone %>
+      <%= partial :'accounts/affiliations', :locals => {:f => f} %>        
       <style>#account_headline { height: 6em }</style>
       <script>
         $(function () {
@@ -58,8 +56,14 @@
         <%= partial :'accounts/tagships', :locals => {:f => f} %>
       <% end %>
 
+      <%= f.check_box_block :unsubscribe_events %>
+      <%= f.check_box_block :unsubscribe_new_member %>
+      <%= f.check_box_block :unsubscribe_endorsement %>
+      <%= f.check_box_block :unsubscribe_message %>      
+
     <% end %>  
 
+    <%= f.password_block :password %>
     <%= f.submit_block button_text: I18n.t(:update_account).capitalize %>
 
   <% end %>

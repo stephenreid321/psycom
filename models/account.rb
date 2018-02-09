@@ -10,18 +10,18 @@ class Account
   field :email, :type => String
   field :username, :type => String
 
-  field :time_zone, :type => String
-  field :has_picture, :type => Boolean
-  field :picture_uid, :type => String  
-  field :website, :type => String 
-  field :headline, :type => String 
   field :location, :type => String
   field :coordinates, :type => Array       
+  field :time_zone, :type => String
+  field :has_picture, :type => Boolean
+  field :picture_uid, :type => String    
+  field :headline, :type => String     
   field :story, :type => String
+  field :website, :type => String   
   field :facebook_profile_url, :type => String
   field :twitter_profile_url, :type => String  
   
-  field :unsubscribe_meetup, :type => Boolean
+  field :unsubscribe_events, :type => Boolean
   field :unsubscribe_new_member, :type => Boolean
   field :unsubscribe_endorsement, :type => Boolean
   field :unsubscribe_message, :type => Boolean
@@ -332,7 +332,7 @@ class Account
       :memberships => :collection,
       :memberships_summary => {:type => :text, :edit => false},
       :membership_requests => :collection,
-      :unsubscribe_meetup => :check_box,
+      :unsubscribe_events => :check_box,
       :unsubscribe_new_member => :check_box,
       :unsubscribe_endorsement => :check_box,
       :unsubscribe_message => :check_box,      
