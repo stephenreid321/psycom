@@ -31,7 +31,6 @@ ActivateApp::App.controllers do
       :DEFAULT_TIME_ZONE => 'Default time zone (see dropdown in profile for options, defaults to London)',
       :SANITIZE => ['Sanitize user input'],  
       :GROUP_CREATION_BY_ADMINS_ONLY => ['Only allow admins to create new groups'],
-      :LIST_EMAIL_ADDRESSES => ['Enables the \'List email addresses\' link in groups, allowing group members to copy a full list of emails'],                  
       :ACCOUNT_TAGS_PREDEFINED => ['Turns the tagships profile field into a series of checkboxes'],           
       :REPLY_TO_GROUP => ['Sets the reply-to header to the group address'],      
       :GROUP_INDEX_CONVERSATION_LIMIT => 'Shows this many conversations per group on /groups',

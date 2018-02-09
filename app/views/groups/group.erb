@@ -6,7 +6,6 @@
 
 <% @pills = [
   ([%Q{<i class="fa fa-sign-out"></i> #{I18n.t(:leave_group).capitalize}}, "/groups/#{@group.slug}/leave"] if @membership),
-  ([%Q{<i class="fa fa-list"></i> List email addresses}, "/groups/#{@group.slug}/list_emails"] if @membership and Config['LIST_EMAIL_ADDRESSES']),
   ([%Q{<i class="fa fa-sign-in"></i> #{I18n.t(:join_group).capitalize}}, "/groups/#{@group.slug}/join"] if current_account and !@membership )
   ].compact %>
 
