@@ -343,27 +343,24 @@ class Account
     }
   end
   
-  after_create :send_new_member_email
-  def send_new_member_email
-    unless fto?
-          
-      account = self      
-      bcc = Account.where(:id.in => Account.geo_near(coordinates).spherical.max_distance(25 / 3963.167).pluck(:id)).where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
-      if bcc.count > 0        
-        mail = Mail.new
-        mail.bcc = bcc
-        mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
-        mail.subject = 'Someone joined near you'
+  # after_create :send_new_member_email
+  def send_new_member_email          
+    account = self      
+    bcc = Account.where(:id.in => Account.geo_near(coordinates).spherical.max_distance(25 / 3963.167).pluck(:id)).where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
+    if bcc.count > 0        
+      mail = Mail.new
+      mail.bcc = bcc
+      mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+      mail.subject = 'Someone joined near you'
             
-        content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
-        html_part = Mail::Part.new do
-          content_type 'text/html; charset=UTF-8'
-          body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
-        end
-        mail.html_part = html_part
-      
-        mail.deliver
+      content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
+      html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
       end
+      mail.html_part = html_part
+      
+      mail.deliver
     end
   end
   handle_asynchronously :send_new_member_email  
