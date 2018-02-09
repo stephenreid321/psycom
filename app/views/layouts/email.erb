@@ -2,32 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">    
-    <title><%=@title || Config['SITE_NAME']%></title>      
     <style>
-      body, p, td, input { font-family: Lato, ​Helvetica,​ Arial,​ sans-serif }
-      h1 { font-family: 'Raleway',​ Helvetica,​ Arial,​ sans-serif }
-      h1 small, h2 small, h3 small { color: #bbb }
-      a { text-decoration: none; color: <%=Config['SECONDARY_COLOR'] || DEFAULT_COLORS['secondary']%> !important }
-      a.btn { font-weight: normal; color: <%=Config['PRIMARY_CONTRAST_COLOR'] || DEFAULT_COLORS['primary-contrast']%>;  background: <%=Config['PRIMARY_COLOR'] || DEFAULT_COLORS['primary']%>; padding: 5px 10px; border-radius: 5px; font-size: 14px }
-      table.table { width: 100% }
-      span.badge { background: <%=Config['SECONDARY_COLOR'] || DEFAULT_COLORS['secondary']%>; border-radius: 5px; padding: 3px 5px; color: white }
-      .img-circle { display: inline-block !important }
-      ul.list-unstyled { padding: 0 }
-      ul.list-unstyled li { margin-left: 0 }
-      div.password { font-size: 200%; font-weight: bold; margin-top: 10px }
-    </style>
+      p, ul, ol, input, select, .form-control, body, blockquote, div { font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px }
+      h1, h2, h3, h4, h5, h6, .h { font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif; text-transform: uppercase; font-weight: 900 }
+      a, a:hover, a:focus { color: rgb(34,141,255) !important; }
+      blockquote { border-left: 8px solid #E6F0FA; padding-left: 1em }
+    </style>    
   </head>
   <body>
 
-    <div style="background: <%=Config['GREY_LIGHT_COLOR'] || DEFAULT_COLORS['grey-light']%>; padding: 20px;">
+    <div style="background-image: url('<%=Config['BASE_URI']%>/images/soap-film.jpg'); background-size: cover; padding: 20px;">
 
       <div style="max-width: 600px; margin: 0 auto; background: white;">
-        <div style="padding: 20px;">   
-          <h1 style="margin-top: 0"><a href="<%=Config['BASE_URI']%>"><%=Config['SITE_NAME']%></a></h1>
-          <%= defined?(content) ? content : yield %>   
+        <div style="padding: 20px;">
+          <h1><%=Config['SITE_NAME']%></h1>
+          <%= content %>
+          <p class="unsubscribe">
+            <a style="font-size: 12px; color: #aaa" href="<%=Config['BASE_URI']%>/me/edit">Edit email notification settings</a>
+          </p>          
         </div>
       </div>
     </div>
 
   </body>
-</html>
+</html>         

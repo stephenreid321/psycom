@@ -1,18 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,400i,700,700i,900,900i');
 
-$primary: colors('primary');
-$primary-dark: darken($primary, 15%);
-$primary-contrast: colors('primary-contrast');
-$secondary: colors('secondary');
-$secondary-dark: darken($secondary, 15%);
-$grey-light: colors('grey-light');
-$grey-mid: colors('grey-mid');
-$dark: colors('dark');
-$dark-light: lighten($dark, 40%);
-$dark-contrast: colors('dark-contrast');
-
-$theme-colors: (
-);
 $font-size-base: 0.9rem;
 $font-family-sans-serif: 'Raleway', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
 

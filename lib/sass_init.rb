@@ -2,16 +2,6 @@ require 'sass'
 require 'sass/util'
 require 'sass/script'
 
-DEFAULT_COLORS = {
-  'primary' => '#228DFF',
-  'primary-contrast' => '#ffffff',
-  'secondary' => '#228DFF',
-  'grey-light' => '#ECF0F1',
-  'grey-mid' => '#D6DBDF',
-  'dark' => '#333333',
-  'dark-contrast' => '#228DFF'
-}
-
 module Sass::Script::Functions
   def colors(color)
     color = color.to_s.gsub('"','')       

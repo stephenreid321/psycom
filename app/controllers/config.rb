@@ -42,15 +42,7 @@ ActivateApp::App.controllers do
       :FACEBOOK_KEY => 'Facebook API key',
       :FACEBOOK_SECRET => 'Facebook API secret',
       :GOOGLE_KEY => 'Google API key',
-      :GOOGLE_SECRET => 'Google API secret',
-                                                                 
-      :PRIMARY_COLOR => 'Default #228DFF',
-      :PRIMARY_CONTRAST_COLOR => 'Default #FFFFFF',
-      :SECONDARY_COLOR => 'Default #228DFF',      
-      :GREY_LIGHT_COLOR => 'Default #ECF0F1',
-      :GREY_MID_COLOR => 'Default #D6DBDF',
-      :DARK_COLOR => 'Default #333333',    
-      :DARK_CONTRAST_COLOR => 'Default #228DFF'    
+      :GOOGLE_SECRET => 'Google API secret'                                                                  
     } 
     
     @fragments = {
