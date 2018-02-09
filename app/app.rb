@@ -31,7 +31,7 @@ module ActivateApp
     set :default_builder, 'ActivateFormBuilder'    
                       
     before do
-      redirect "#{ENV['BASE_URI']}#{request.path}" if ENV['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != ENV['BASE_URI']
+      redirect "#{Config['BASE_URI']}#{request.path}" if Config['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != Config['BASE_URI']
       Time.zone = (current_account and current_account.time_zone) ? current_account.time_zone : (Config['DEFAULT_TIME_ZONE'] || 'London')
       I18n.locale = (current_account and current_account.language) ? current_account.language.code : Language.default.code      
       fix_params!

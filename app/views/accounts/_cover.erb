@@ -12,7 +12,7 @@
   <h1>
     <a href="/<%=@account.username_or_id%>"><%=@account.name%></a>
     <% if @account.trustchain? %>
-      <a href="/trustchain"><i class="fa fa-check-circle text-primary" data-toggle="tooltip" title="Part of the psychedelic.community trustchain"></i></a>
+      <a href="/trustchain"><i class="fa fa-check-circle text-primary" data-toggle="tooltip" title="Part of the <%=Config['SITE_NAME']%> trustchain"></i></a>
     <% end %>
   </h1>
   <% if @account.headline %>

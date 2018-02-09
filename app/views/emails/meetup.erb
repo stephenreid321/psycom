@@ -1,6 +1,6 @@
 
 <p>
-  <a href="<%=ENV['BASE_URI']%>/<%=meetup.account.username_or_id%>"><%= meetup.account.name %></a> suggested a meetup at <%= meetup.location %> from <%= meetup.when_details %>.
+  <a href="<%=Config['BASE_URI']%>/<%=meetup.account.username_or_id%>"><%= meetup.account.name %></a> suggested a meetup at <%= meetup.location %> from <%= meetup.when_details %>.
 </p>
 
 <% if meetup.details %>
@@ -8,5 +8,5 @@
 <% end %>
 
 <p>
-  <a href="<%=ENV['BASE_URI']%>/meetups/<%=meetup.id%>">View details</a> &middot; <a href="<%=ENV['BASE_URI']%>/meetups/<%=meetup.id%>/rsvp?status=Going">I'm going</a> &middot; <a href="<%=ENV['BASE_URI']%>/meetups/<%=meetup.id%>/rsvp?status=Interested">I'm interested</a>
+  <a href="<%=Config['BASE_URI']%>/meetups/<%=meetup.id%>">View details</a> &middot; <a href="<%=Config['BASE_URI']%>/meetups/<%=meetup.id%>/rsvp?status=Going">I'm going</a> &middot; <a href="<%=Config['BASE_URI']%>/meetups/<%=meetup.id%>/rsvp?status=Interested">I'm interested</a>
 </p>

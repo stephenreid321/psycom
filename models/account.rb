@@ -356,7 +356,7 @@ class Account
       if bcc.count > 0        
         mail = Mail.new
         mail.bcc = bcc
-        mail.from = 'psychedelic.community <team@psychedelic.community>'
+        mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
         mail.subject = 'Someone joined near you'
             
         content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
@@ -366,7 +366,7 @@ class Account
         end
         mail.html_part = html_part
       
-        mail.deliver if ENV['SMTP_USERNAME']   
+        mail.deliver
       end
     end
   end

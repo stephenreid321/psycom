@@ -27,7 +27,7 @@ class Endorsement
       endorsement = self
       mail = Mail.new
       mail.to = endorsed.email
-      mail.from = 'psychedelic.community <team@psychedelic.community>'
+      mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
       mail.subject = "#{endorsement.endorser.name} endorsed you"
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/endorse.erb'))).result(binding)
