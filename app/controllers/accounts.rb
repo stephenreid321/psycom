@@ -94,7 +94,7 @@ ActivateApp::App.controllers do
     end
 
     mail.html_part = html_part      
-    mail.deliver if ENV['SMTP_USERNAME']   
+    mail.deliver
     
     flash[:notice] = 'The message was sent.'
     redirect "/#{@account.username_or_id}"            

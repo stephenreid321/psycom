@@ -37,7 +37,7 @@ class Endorsement
       end
       mail.html_part = html_part
       
-      mail.deliver if ENV['SMTP_USERNAME']  
+      mail.deliver
     end
   end
           
