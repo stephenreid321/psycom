@@ -89,9 +89,6 @@ ActivateApp::App.controllers do
       (flash[:error] = "The membership request could not be created" and redirect back) unless @membership_request.persisted?
       
       group = @group
-      Mail.defaults do
-        delivery_method :smtp, group.smtp_settings
-      end      
       
       if @group.admins_receiving_membership_requests.count > 0
         mail = Mail.new(

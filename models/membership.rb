@@ -59,9 +59,6 @@ class Membership
   
   def send_welcome_email
     group = self.group
-    Mail.defaults do
-      delivery_method :smtp, group.smtp_settings
-    end    
       
     sign_in_details = ''
     if status == 'pending'

@@ -113,11 +113,7 @@ class Account
       groups_to_join.each { |group_id| memberships.create(:group_id => group_id) }
     end
   end  
-    
-  def self.smtp_settings
-    {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
-  end
-  
+      
   attr_accessor :request_membership
   attr_accessor :antispam
   before_validation do
@@ -142,11 +138,7 @@ class Account
         @groups_to_join.each { |group_id|
           memberships.create(:group_id => group_id, :status => ('confirmed' if (account.sign_ins.count == 0 and account.confirm_memberships.to_i == 1)))
         }
-            
-        Mail.defaults do
-          delivery_method :smtp, Account.smtp_settings
-        end
-                            
+                                        
         sign_in_details = ''              
         if account.sign_ins.count == 0 and account.confirm_memberships.to_i == 0
           sign_in_details << "You need to sign in to start receiving email notifications. "

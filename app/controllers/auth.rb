@@ -13,9 +13,6 @@ ActivateApp::App.controllers do
     if params[:email] and @account = Account.find_by(email: /^#{::Regexp.escape(params[:email])}$/i)
       @account.update_attribute(:password_reset_token, SecureRandom.uuid)
          
-      Mail.defaults do
-        delivery_method :smtp, Account.smtp_settings
-      end
       mail = Mail.new(
         :to => @account.email,
         :from => "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>",

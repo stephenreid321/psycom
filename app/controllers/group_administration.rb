@@ -228,9 +228,6 @@ ActivateApp::App.controllers do
     end
     
     group = @group # instance var not available in defaults block
-    Mail.defaults do
-      delivery_method :smtp, group.smtp_settings
-    end    
                 
     mail = Mail.new
     mail.to = @account.email
@@ -298,9 +295,6 @@ ActivateApp::App.controllers do
       end 
             
       group = @group # instance var not available in defaults block
-      Mail.defaults do
-        delivery_method :smtp, group.smtp_settings
-      end      
                     
       mail = Mail.new
       mail.to = account.email

@@ -46,11 +46,7 @@ class ConversationPostBcc
     conversation = conversation_post.conversation
     group = conversation.group    
     previous_conversation_posts = conversation.visible_conversation_posts.order_by(:created_at.desc)[1..-1]
-        
-    Mail.defaults do
-      delivery_method :smtp, group.smtp_settings
-    end    
-                
+                        
     mail = Mail.new
     mail.to = group.email
     if Config['REPLY_TO_GROUP']

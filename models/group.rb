@@ -67,10 +67,6 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
   def email(suffix = '')
     "#{self.slug}#{suffix}@#{Config['MAIL_DOMAIN']}"
   end
-                 
-  def smtp_settings
-    {:address => Config['SMTP_ADDRESS'], :user_name => Config['SMTP_USERNAME'], :password => Config['SMTP_PASSWORD'], :port => 587}
-  end  
     
   has_many :conversations, :dependent => :destroy
   has_many :conversation_posts, :dependent => :destroy

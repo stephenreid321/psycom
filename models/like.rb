@@ -18,9 +18,7 @@ class Like
   def notify
     if Config['SMTP_ADDRESS']
       group = conversation_post.group
-      Mail.defaults do
-        delivery_method :smtp, group.smtp_settings
-      end 
+      
       mail = Mail.new(
         :to => conversation_post.account.email,
         :from => "#{group.slug} <#{group.email('-noreply')}>",

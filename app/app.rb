@@ -29,6 +29,15 @@ module ActivateApp
     
     set :public_folder, Padrino.root('app', 'assets')
     set :default_builder, 'ActivateFormBuilder'    
+    
+    Mail.defaults do
+      delivery_method :smtp, {
+        :user_name => Config['SMTP_USERNAME'],
+        :password => Config['SMTP_PASSWORD'],
+        :address => Config['SMTP_ADDRESS'],
+        :port => 587
+      }   
+    end     
                       
     before do
       redirect "#{Config['BASE_URI']}#{request.path}" if Config['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != Config['BASE_URI']

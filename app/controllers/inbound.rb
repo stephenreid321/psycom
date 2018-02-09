@@ -14,9 +14,6 @@ ActivateApp::App.controllers do
     account = Account.find_by(email: /^#{::Regexp.escape(from)}$/i)     
     if !account or !account.memberships.find_by(:group => group, :status => 'confirmed', :muted.ne => true)
       begin
-        Mail.defaults do
-          delivery_method :smtp, group.smtp_settings
-        end 
         mail = Mail.new(
           :to => from,
           :bcc => Config['HELP_ADDRESS'],

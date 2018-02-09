@@ -25,6 +25,7 @@ class Endorsement
   after_create do
     unless endorsed.unsubscribe_endorsement
       endorsement = self
+
       mail = Mail.new
       mail.to = endorsed.email
       mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
