@@ -26,14 +26,12 @@
     <% elsif @account.trustable_by?(current_account) %>
       <a href="/accounts/<%=@account.id%>/endorse" class="btn btn-primary"><i class="fa fa-link"></i> Trust</a>        
     <% end %>
+      
+    <% unless @account.unsubscribe_message %>
+      <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
+    <% end %>
 
   <% end %>
-
-  <% unless @account.unsubscribe_message %>
-    <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
-  <% end %>
-
-<% end %>
 
 <% end %>
 
