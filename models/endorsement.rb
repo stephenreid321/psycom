@@ -9,7 +9,7 @@ class Endorsement
   validates_uniqueness_of :endorsed, :scope => :endorser
   
   before_validation do
-    errors.add(:endorser, "hasn't yet been endorsed and isn't a root") if Endorsement.where(endorsed_id: endorser.id).count == 0 and !endorser.root    
+    errors.add(:endorser, "isn't yet part of the trustchain and isn't a root") if Endorsement.where(endorsed_id: endorser.id).count == 0 and !endorser.root    
     errors.add(:endorsed, "can't be the same as endorser") if endorser.id == endorsed.id
     errors.add(:endorsed, "is a root") if endorsed.root
     errors.add(:endorsed, "is already an ancestor of endorser") if tree = Endorsement.tree(endorser) and tree.flatten.include?(endorsed)    
@@ -29,7 +29,7 @@ class Endorsement
       mail = Mail.new
       mail.to = endorsed.email
       mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
-      mail.subject = "#{endorsement.endorser.name} endorsed you"
+      mail.subject = "#{endorsement.endorser.name} trusted you"
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/endorse.erb'))).result(binding)
       html_part = Mail::Part.new do
