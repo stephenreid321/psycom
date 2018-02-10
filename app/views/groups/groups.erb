@@ -14,7 +14,7 @@
 <% end %>
 
 <% if current_account %>
-  <h2><%=I18n.t(:other_groups).capitalize%></h2>
+  <h2 class="mt-3"><%=I18n.t(:other_groups).capitalize%></h2>
 <% end %>
 <% Group.where(:id.nin => (current_account ? current_account.groups.pluck(:id) : [])).where(:privacy.ne => 'secret').order_by(:primary.desc, :slug.asc).each { |group| %>
   <hr />
