@@ -9,8 +9,9 @@ ActivateApp::App.controllers do
     @account = Account.new(params[:account])
     if @account.save
       SignIn.create(account: @account)
-      session[:account_id] = @account.id.to_s      
-      redirect '/me/edit'
+      session[:account_id] = @account.id.to_s     
+      flash[:notice] = "Welcome to #{Config['SITE_NAME']}!"
+      redirect '/me'
     else
       flash.now[:error] = 'Some errors prevented the account from being saved'
       erb :'accounts/build'

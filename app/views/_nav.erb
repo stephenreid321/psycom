@@ -18,17 +18,16 @@
   %>    
 
     <%=
-    ul_nav [       
-      if current_account
-        ["Hello #{current_account.firstname}",         
+    ul_nav [             
+      (["Hello #{current_account.firstname}",         
           [
             ['My profile', '/me'],
             [I18n.t(:edit_profile).capitalize, '/me/edit'],
             [I18n.t(:sign_out).capitalize, '/sign_out']
           ]
-        ] else
-        [I18n.t(:sign_in).capitalize, '/sign_in']
-      end
+          ] if current_account),
+      (['Sign up', '/sign_up'] if !current_account),
+      ([I18n.t(:sign_in).capitalize, '/sign_in'] if !current_account)
       ], ul_class: 'navbar-nav ml-auto'
   %>    
 
