@@ -47,13 +47,8 @@
         ]
       },
     });
-<% accounts.each_with_index { |account,i|
-  img_url = account.picture ? account.picture.thumb('400x400#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(account.email.downcase)}?s=400&d=#{URI::encode("#{Config['BASE_URI']}/images/silhouette.png")}"
-  img_type = img_url.split('.')[-1]
-  img_binary = open(img_url).read
-  img_data = Base64.encode64(img_binary).gsub("\n", '')
-%>
-      cy.nodes()[0].css("background-image", "data:image/<%=img_type%>;base64,<%=img_data%>")
+<% accounts.each_with_index { |account,i| %>
+      cy.nodes()[<%=i%>].css("background-image", "<%=account.picture ? account.picture.thumb('400x400#').url : "https://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(account.email.downcase)}?s=400&d=#{URI::encode("#{Config['BASE_URI']}/images/silhouette.png")}" %>")
 <% } %>
 
     cy.on('tap', 'node', function () {
