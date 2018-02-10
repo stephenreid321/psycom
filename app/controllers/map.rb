@@ -12,7 +12,7 @@ ActivateApp::App.controllers do
       if params[:organisations]
         @points += Organisation.all
       end      
-      partial :'maps/map', :locals => {:points => @points}
+      partial :'maps/map', :locals => {:points => @points, :global => params[:global]}
     else
       redirect '/'
     end

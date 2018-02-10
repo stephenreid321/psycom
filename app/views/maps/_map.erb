@@ -57,7 +57,10 @@
 
   var markerClusterer = new MarkerClusterer(map, markers, {zoomOnClick: false});
 
-<% if !points.empty? %>
+<% if global %>
+    map.setCenter(new google.maps.LatLng(40, -20))
+    map.setZoom(3)
+<% elsif !points.empty? %>
     map.fitBounds(bounds);
 <% end %>
 
@@ -74,8 +77,8 @@
   }
   );</script>
 
-<div style="position: relative">
-  <div style="width: 100%; height: 80vh" id="map-canvas"></div>
+<div style="position: relative; height: 100%">
+  <div style="width: 100%; height: 100%" id="map-canvas"></div>
 
   <% if params[:form] %>
     <script>
