@@ -9,7 +9,7 @@ class ConversationPostBcc
   field :delivered_at, :type => Time
   field :message_id, :type => String
   
-  index({message_id: 1}, {unique: true, sparse: true})
+  index({message_id: 1})
     
   has_many :conversation_post_bcc_recipients, :dependent => :destroy
   accepts_nested_attributes_for :conversation_post_bcc_recipients

@@ -20,7 +20,7 @@ class ConversationPost
   validates_presence_of :body
   validates_uniqueness_of :message_id, :allow_nil => true
       
-  index({message_id: 1}, {unique: true, sparse: true})
+  index({message_id: 1})
   
   before_validation :set_group
   def set_group
