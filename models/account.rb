@@ -39,7 +39,7 @@ class Account
   field :date_of_birth, :type => Date  
   
   def self.protected_attributes
-    %w{admin}
+    %w{endorsement_count secret_token crypted_password password_reset_token admin translator prevent_new_memberships root}
   end  
         
   def self.e(email)
@@ -82,7 +82,7 @@ class Account
   end
   
   def trustable_by?(account)    
-    !self.root? and account.trustchain? and (tree = Endorsement.tree(account); !tree or !tree.flatten.include?(self))
+    account and account.trustchain? and (tree = Endorsement.tree(account); !tree or !tree.flatten.include?(self)) and !self.root?
   end
   
   has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  

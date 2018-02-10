@@ -24,6 +24,8 @@ class Organisation
     username or id
   end  
   
+  validates_presence_of :name
+  validates_uniqueness_of :name, :case_sensitive => false   
   validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
   validates_uniqueness_of :username, :allow_nil => true  
   
@@ -42,10 +44,7 @@ class Organisation
   def conversations
     Conversation.where(:id.in => conversation_posts.pluck(:conversation_id))
   end  
-  
-  validates_presence_of :name
-  validates_uniqueness_of :name, :case_sensitive => false 
-  
+    
   before_validation do
     self.username = self.username.downcase if self.username
     self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
