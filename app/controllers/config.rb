@@ -46,7 +46,8 @@ ActivateApp::App.controllers do
     
     @fragments = {
       :'head' => 'Extra content for &lt;head&gt;',
-      :'footer' => 'Extra content for footer'
+      :'footer' => 'Extra content for footer',
+      :'navbar-brand' => '.navbar-brand'
     }     
   end
   

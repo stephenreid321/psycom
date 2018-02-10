@@ -25,3 +25,10 @@ body { padding-top: 4rem }
 
 .conversation-post-info a { opacity: 0.5 }
 .conversation-post-info a:hover { opacity: 1 } 
+
+.rainbow  {
+  margin: 0 auto;
+  background: linear-gradient(to right, #e647a6, #e6d647, #54e645, #47a6e6, #8747e6); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

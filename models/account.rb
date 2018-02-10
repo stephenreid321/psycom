@@ -276,6 +276,7 @@ class Account
   end  
   
   before_validation do    
+    errors.add(:name, 'must not contain an @') if self.name and self.name.include?('@')
     self.username = self.username.downcase if self.username
     self.email = self.email.gsub(' ','') if self.email # strip unicode \u00a0
     self.secret_token = SecureRandom.uuid if !self.secret_token

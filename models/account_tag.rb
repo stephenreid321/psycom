@@ -10,6 +10,7 @@ class AccountTag
   validates_uniqueness_of :name, :case_sensitive => false
   
   before_validation do
+    errors.add(:name, 'must not contain commas') if self.name and self.name.include?(',')
     self.name = self.name.strip.downcase if self.name
   end
     
