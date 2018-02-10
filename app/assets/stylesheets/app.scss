@@ -11,6 +11,8 @@ $font-family-sans-serif: 'Raleway', -apple-system, BlinkMacSystemFont, "Segoe UI
   }
 }
 
+img { image-orientation: from-image; }
+
 h1, h2, h3, h4, h5, h6, .h { font-weight: 900 }
 
 body { padding-top: 4rem }
