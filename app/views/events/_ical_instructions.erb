@@ -1,5 +1,5 @@
 <% if current_account %>
-  <div>
+  <div class="d-none">
     <%=I18n.t(:add_events_to_your_google_calendar)%>
     <span style="border: 1px dotted #999; border-width: 0 0 1px 0"><%=Config['BASE_URI']%>/events/ical?token=<%=current_account.secret_token%></span>
   </div>
