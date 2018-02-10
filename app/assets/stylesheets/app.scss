@@ -32,3 +32,13 @@ body { padding-top: 4rem }
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+#elsewhere {
+  font-size: 0.8rem;
+}
+#elsewhere a {  
+  opacity: 0.7
+}
+#elsewhere a:hover {
+  opacity: 1
+}

@@ -90,6 +90,25 @@
 
     <div class="container-fluid">
       <%= yield %>
+
+      <div class="text-center my-3">
+        <hr />
+        A project of
+        <a href="https://psychedelicsociety.org.uk"><img src="https://psychedelicsociety.org.uk/images/logo.png" style="height: 60px" /></a>
+
+        <div id="elsewhere" class="mt-2">
+          <i class="fa fa-envelope"></i> 
+          <a href="mailto:enquiries@psychedelicsociety.org.uk">
+            enquiries@psychedelicsociety.org.uk</a>
+          &middot;
+          <i class="fa fa-facebook-square"></i> 
+          <a target="_blank" href="http://www.facebook.com/PsychedelicsUK">/PsychedelicsUK</a>
+          &middot;
+          <i class="fa fa-twitter"></i> 
+          <a target="_blank" href="http://twitter.com/PsychedelicsUK">@PsychedelicsUK</a>          
+        </div>        
+
+      </div>
     </div>
 
     <% if current_account and current_account.admin? %>
@@ -110,6 +129,7 @@
         </div>
       </div>
     <% end %>
+
 
 
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
