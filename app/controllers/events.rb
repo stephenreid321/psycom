@@ -10,11 +10,11 @@ ActivateApp::App.controllers do
   end
   
   get '/events/ical' do
-    Event.ical
+    # Event.ical
   end
         
   get '/events/feed' do
-    Event.json(params[:start], params[:end])
+    # Event.json(params[:start], params[:end])
   end  
   
   get '/events/new' do
