@@ -1,7 +1,7 @@
 ActivateApp::App.controllers do
   
   get '/organisations' do
-    erb :'organisations/index'
+    erb :'organisations/organisations'
   end
     
   get '/organisations/results' do

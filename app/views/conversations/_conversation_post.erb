@@ -7,11 +7,16 @@
 
     <div>
 
-      <% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
-        <a style="float: right" title="Hide post" data-confirm="Are you sure you want to hide this post?"  href="/conversations/<%=conversation_post.conversation.slug%>/hide_post/<%=conversation_post.id%>"><i class="fa fa-times"></i> Hide post</a>
-      <% end %>
-
-      <a href="/<%=conversation_post.account.username_or_id%>" style="font-weight: bold;"><%=conversation_post.account.name%></a>            
+      <div class="row justify-content-between">
+        <div class="col">
+          <a href="/<%=conversation_post.account.username_or_id%>" style="font-weight: bold;"><%=conversation_post.account.name%></a>            
+        </div>
+        <div class="col-auto">
+          <% if ((@membership and @membership.admin?) or (current_account and current_account.admin?)) %>
+            <a title="Hide post" data-confirm="Are you sure you want to hide this post?"  href="/conversations/<%=conversation_post.conversation.slug%>/hide_post/<%=conversation_post.id%>"><i class="fa fa-times"></i> Hide post</a>
+          <% end %>
+        </div>
+      </div>      
 
       <div id="conversation-post-<%=conversation_post.id%>" style="margin-bottom: 1em"><%= Rinku.auto_link(conversation_post.replace_cids!.body) %></div>
 

@@ -1,9 +1,14 @@
-<div>
-  <% if !Config['GROUP_CREATION_BY_ADMINS_ONLY'] or (current_account and current_account.admin?) %>
-    <a style="float: right" title="<%=I18n.t(:create_a_group).capitalize%>" class="btn btn-primary" href="/groups/new"><i class="fa fa-plus"></i> <%=I18n.t(:create_a_group).capitalize%></a>
-  <% end %>
-  <h1 style="margin-top: 0"><%=I18n.t(:groups).capitalize%></h1>
+<div class="row justify-content-between">
+  <div class="col">
+    <h1 style="margin-top: 0"><%=I18n.t(:groups).capitalize%></h1>
+  </div>
+  <div class="col-auto">
+    <% if !Config['GROUP_CREATION_BY_ADMINS_ONLY'] or (current_account and current_account.admin?) %>
+      <a title="<%=I18n.t(:create_a_group).capitalize%>" class="btn btn-primary" href="/groups/new"><i class="fa fa-plus"></i> <%=I18n.t(:create_a_group).capitalize%></a>
+    <% end %>
+  </div>
 </div>
+
 
 <% if current_account %>
   <h2><%=I18n.t(:your_groups).capitalize%></h2>

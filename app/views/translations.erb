@@ -1,9 +1,15 @@
 
-<% if current_account.admin? %>
-  <a style="float: right" class="btn btn-primary" target="_blank" href="/admin/new/Language">New language</a>
-<% end %>
+<div class="row justify-content-between">
+  <div class="col">
+    <h1 style="margin-top: 0">Translations</h1>
+  </div>
+  <div class="col-auto">
+    <% if current_account.admin? %>
+      <a class="btn btn-primary" target="_blank" href="/admin/new/Language">New language</a>
+    <% end %>    
+  </div>
+</div>
 
-<h2>Translations</h2>
 
 <% if current_account.admin? %>
   <p>Please note you must restart the app for new translations to take effect.</p>
