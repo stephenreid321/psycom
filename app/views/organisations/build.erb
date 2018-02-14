@@ -1,9 +1,13 @@
 
-<ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/organisations"><%=I18n.t(:organisations).capitalize%></a></li>
-  <li class="breadcrumb-item"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></li>
-  <li class="breadcrumb-item active">Edit</li>
-</ol>
+<% if @organisation.persisted? %>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/organisations"><%=I18n.t(:organisations).capitalize%></a></li>
+    <li class="breadcrumb-item"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></li>
+    <li class="breadcrumb-item active">Edit</li>
+  </ol>
+<% else %>
+  <h1>New organisation</h1>
+<% end %>
 
 <div class="container">
 

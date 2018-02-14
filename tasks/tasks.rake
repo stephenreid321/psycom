@@ -2,7 +2,9 @@
 namespace :cleanup do
   task :organisations => :environment do
     Organisation.each { |organisation|
-      organisation.destroy if organisation.affiliations.count == 0      
+      if organisation.affiliations.count == 0 and !organisation.username and !organisation.address and !organisation.website and !organisation.picture
+        organisation.destroy 
+      end
     }
   end 
 end

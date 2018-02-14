@@ -21,6 +21,24 @@ ActivateApp::App.controllers do
     partial :'organisations/results'    
   end  
   
+  get '/organisations/new' do
+    sign_in_required!
+    @organisation = Organisation.new
+    erb :'organisations/build'
+  end
+  
+  post '/organisations/new' do
+    sign_in_required!
+    @organisation = Organisation.new(params[:organisation])
+    if @organisation.save
+      flash[:notice] = "<strong>Great!</strong> The organisation was created successfully."
+      redirect "/organisations/#{@organisation.id}"
+    else
+      flash.now[:error] = "<strong>Oops.</strong> Some errors prevented the organisation from being saved."
+      erb :'organisations/build'
+    end
+  end
+  
   get '/organisations/:id' do
     redirect "/o/#{params[:id]}"
   end
