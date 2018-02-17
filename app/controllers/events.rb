@@ -39,13 +39,13 @@ ActivateApp::App.controllers do
   
   get '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    trustchain_only!(@event.account)
+    site_admins_only!
     erb :'events/build'
   end     
       
   post '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    trustchain_only!(@event.account)
+    site_admins_only!
     if @event.update_attributes(params[:event])
       flash[:notice] = "<strong>Great!</strong> The event was updated successfully."
       redirect "/events/#{@event.id}"
@@ -56,7 +56,7 @@ ActivateApp::App.controllers do
   end 
   
   get '/events/:id/destroy' do
-    trustchain_only!(@event.account)
+    site_admins_only!
     @event = Event.find(params[:id]) || not_found
     @event.destroy    
     redirect "/events/"

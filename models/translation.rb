@@ -72,7 +72,6 @@ class Translation
       :'mongoid.attributes.account.account_tag_ids' => 'substances of interest',
       :'mongoid.attributes.account.unsubscribe_events' => "Don't send me email notifications of events near me",
       :'mongoid.attributes.account.unsubscribe_new_member' => "Don't send me email notifications of new members near me",
-      :'mongoid.attributes.account.unsubscribe_endorsement' => "Don't send me email notifications when people trust me",      
       :'mongoid.attributes.account.unsubscribe_message' => "Don't allow people to send me messages",            
       :'mongoid.attributes.event.organisation_name' => 'Host organisation',
       :'mongoid.attributes.event.organisation_id' => 'Host organisation',

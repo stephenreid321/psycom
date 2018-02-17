@@ -23,10 +23,8 @@ class Account
   
   field :unsubscribe_events, :type => Boolean
   field :unsubscribe_new_member, :type => Boolean
-  field :unsubscribe_endorsement, :type => Boolean
   field :unsubscribe_message, :type => Boolean
   
-  field :endorsement_count, :type => Integer  
   field :secret_token, :type => String
   field :crypted_password, :type => String  
   field :password_reset_token, :type => String   
@@ -39,7 +37,7 @@ class Account
   field :date_of_birth, :type => Date  
   
   def self.protected_attributes
-    %w{endorsement_count secret_token crypted_password password_reset_token admin translator prevent_new_memberships root}
+    %w{secret_token crypted_password password_reset_token admin translator prevent_new_memberships root}
   end  
         
   def self.e(email)
@@ -72,28 +70,7 @@ class Account
   
   has_many :account_tagships, :dependent => :destroy
   accepts_nested_attributes_for :account_tagships, allow_destroy: true, reject_if: :all_blank
-  
-  def update_endorsement_count
-    update_attribute(:endorsement_count, endorsements_as_endorsed.count)
-  end
-  
-  def trustchain?
-    root? or !endorsements_as_endorsed.empty?
-  end
-  
-  def trustable_by?(account)    
-    account and account.trustchain? and (tree = Endorsement.tree(account); !tree or !tree.flatten.include?(self)) and !self.root?
-  end
-  
-  has_many :endorsements_as_endorser, :class_name => 'Endorsement', :inverse_of => :endorser, :dependent => :destroy  
-  def endorses
-    Account.where(:id.in => endorsements_as_endorser.pluck(:endorsed_id))
-  end
-  has_many :endorsements_as_endorsed, :class_name => 'Endorsement', :inverse_of => :endorsed, :dependent => :destroy  
-  def endorsed_by
-    Account.where(:id.in => endorsements_as_endorsed.pluck(:endorser_id))
-  end  
-    
+      
   attr_accessor :account_tag_ids
   before_validation :create_account_tags
   def create_account_tags
@@ -326,7 +303,6 @@ class Account
       :translator => :check_box,
       :time_zone => :select,
       :language_id => :lookup,
-      :endorsement_count => :number,
       :password => :password,
       :prevent_new_memberships => :check_box,      
       :root => :check_box,
@@ -339,7 +315,6 @@ class Account
       :membership_requests => :collection,
       :unsubscribe_events => :check_box,
       :unsubscribe_new_member => :check_box,
-      :unsubscribe_endorsement => :check_box,
       :unsubscribe_message => :check_box,      
     }
   end

@@ -16,21 +16,6 @@
       </p>   
     <% end %>
 
-    <% if !@account.root? and  @account.endorsements_as_endorsed.count > 0 %>
-
-      <div class="mb-3">
-        <h2>Trusted by <span class="badge badge-primary"><%= @account.endorsements_as_endorsed.count%></span></h2>
-
-        <div class="image-wall">
-          <% @account.endorsed_by.order('endorsement_count desc').each { |account| endorsement = @account.endorsements_as_endorsed.find_by(endorser: account) %>
-            <%= partial :'accounts/square', :locals => {:account => account, :style => "width: 64px"} %>
-          <% } %>   
-        </div>
-
-      </div>
-
-    <% end %>
-
     <% if @shared_conversations and !@shared_conversations.empty? %>
       <h2 class="mt-3">Recent conversations</h2>
       <%= partial :'conversations/conversations_table', :locals => {:conversations => @shared_conversations}%>
