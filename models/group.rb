@@ -171,6 +171,24 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   def create_default_didyouknows
     default_didyouknows.each { |d| didyouknows.create :body => d }
   end
+  
+  after_create :send_email
+  def send_email
+    mail = Mail.new
+    mail.to = Config['HELP_ADDRESS']
+    mail.from = self.email
+    mail.subject = "New group: #{name}"
+      
+    group = self
+    html_part = Mail::Part.new do
+      content_type 'text/html; charset=UTF-8'
+      body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{Config['BASE_URI']}/groups/#{group.slug}">#{group.name}</a>}
+    end
+    mail.html_part = html_part
+      
+    mail.deliver
+  end
+  handle_asynchronously :send_email  
       
   def self.admin_fields
     {
