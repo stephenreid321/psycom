@@ -31,13 +31,12 @@ class Account
   field :admin, :type => Boolean
   field :translator, :type => Boolean  
   field :prevent_new_memberships, :type => Boolean
-  field :root, :type => Boolean
   
   field :gender, :type => String
   field :date_of_birth, :type => Date  
   
   def self.protected_attributes
-    %w{secret_token crypted_password password_reset_token admin translator prevent_new_memberships root}
+    %w{secret_token crypted_password password_reset_token admin translator prevent_new_memberships}
   end  
         
   def self.e(email)
@@ -305,7 +304,6 @@ class Account
       :language_id => :lookup,
       :password => :password,
       :prevent_new_memberships => :check_box,      
-      :root => :check_box,
       :affiliations => :collection,
       :affiliations_summary => {:type => :text, :edit => false},
       :title_of_first_affiliation => {:type => :text, :edit => false},      
