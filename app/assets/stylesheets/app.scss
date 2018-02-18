@@ -5,6 +5,8 @@ $font-family-sans-serif: 'Raleway', -apple-system, BlinkMacSystemFont, "Segoe UI
 
 @import "bootstrap/bootstrap";
 
+.dropdown-menu { overflow-y: auto; max-height: 50vh }
+
 @media print {
   a[href]:after {
     content: none;
