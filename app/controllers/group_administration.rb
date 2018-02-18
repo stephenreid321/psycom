@@ -233,9 +233,9 @@ ActivateApp::App.controllers do
     mail.to = @account.email
     mail.from = "#{@group.slug} <#{@group.email('-noreply')}>"
     mail.cc = current_account.email
-    mail.subject = @group.reminder_email_subject
+    mail.subject = @group.prepare_email_subject(:reminder)
     
-    content = @group.reminder_email
+    content = @group.prepare_email(:reminder)
     .gsub('[firstname]',@account.name.split(' ').first)
     .gsub('[admin]', current_account.name)
     .gsub('[issue]',@issue)
@@ -299,9 +299,9 @@ ActivateApp::App.controllers do
       mail = Mail.new
       mail.to = account.email
       mail.from = "#{group.slug} <#{group.email('-noreply')}>"
-      mail.subject = group.membership_request_acceptance_email_subject
+      mail.subject = group.prepare_email_subject(:membership_request_acceptance)
 
-      content = group.membership_request_acceptance_email
+      content = group.prepare_email(:membership_request_acceptance)
       .gsub('[firstname]',account.name.split(' ').first)
       .gsub('[sign_in_details]', sign_in_details)
     

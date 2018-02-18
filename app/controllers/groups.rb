@@ -90,10 +90,10 @@ ActivateApp::App.controllers do
                       
       mail = Mail.new
       mail.to = @account.email
-      mail.from = "#{@group.slug} <#{@group.email('-noreply')}>"
-      mail.subject = @group.membership_request_thanks_email_subject
+      mail.from = "#{@group.slug} <#{@group.email('-noreply')}>"      
+      mail.subject = @group.prepare_email_subject(:membership_request_thanks)
 
-      content = @group.membership_request_thanks_email
+      content = @group.prepare_email(:membership_request_thanks)
       .gsub('[firstname]',@account.name.split(' ').first)
     
       html_part = Mail::Part.new do

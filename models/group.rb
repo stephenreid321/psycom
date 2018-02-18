@@ -8,7 +8,7 @@ class Group
   field :primary, :type => Boolean
   field :description, :type => String
   field :privacy, :type => String
-  field :default_notification_level, :type => String, :default => 'each'
+  field :default_notification_level, :type => String
   field :request_intro, :type => String  
   field :request_questions, :type => String
   field :landing_tab, :type => String
@@ -19,43 +19,83 @@ class Group
     after_assign { |picture| self.picture = picture.thumb('500x500>') }
   end  
     
-  field :reminder_email_subject, :type => String, :default => -> { "A reminder to complete your profile on #{Config['SITE_NAME_SHORT']}" }
-  field :reminder_email, :type => String, :default => -> {
+  field :reminder_email_subject, :type => String
+  def reminder_email_subject_default
+    "A reminder to complete your profile on [site_name]"
+  end
+  field :reminder_email, :type => String
+  def reminder_email_default
     %Q{Hi [firstname],
    <br /><br />
-[admin] noticed that you haven't yet [issue] on #{Config['SITE_NAME_DEFINITE']}.
+[admin] noticed that you haven't yet [issue] on [site_name].
 <br /><br />
 Well-maintained profiles help build a stronger community. Will you spare a minute to provide the missing details?
 <br /><br />
-You can sign in at #{Config['BASE_URI']}/sign_in.}
-  }
+You can sign in at [base_uri]/sign_in.}
+  end
     
-  field :invite_email_subject, :type => String, :default => -> { "You were added to the group #{self.name} (#{self.email}) on #{Config['SITE_NAME_SHORT']}" }
-  field :invite_email, :type => String, :default => -> { 
+  field :invite_email_subject, :type => String
+  def invite_email_subject_default
+    "You were added to the group [group_name] ([group_email]) on [site_name]"
+  end
+  field :invite_email, :type => String
+  def invite_email_default
     %Q{Hi [firstname],
 <br /><br />
-[admin] added you to the group #{self.name} (#{self.email}) on #{Config['SITE_NAME_DEFINITE']}.
+[admin] added you to the group [group_name] ([group_email]) on [site_name].
 <br /><br />
 [sign_in_details]}
-  }    
+  end
   
-  field :membership_request_thanks_email_subject, :type => String, :default => -> { "Thanks for requesting membership of #{self.name} (#{self.email}) on #{Config['SITE_NAME_SHORT']}" }
-  field :membership_request_thanks_email, :type => String, :default => -> {
+  field :membership_request_thanks_email_subject, :type => String
+  def membership_request_thanks_email_subject_default
+    "Thanks for requesting membership of [group_name] ([group_email]) on [site_name]"
+  end
+  field :membership_request_thanks_email, :type => String
+  def membership_request_thanks_email_default
     %Q{Hi [firstname],
 <br /><br />
-Thanks for requesting membership of the group #{self.name} (#{self.email}) on #{Config['SITE_NAME_DEFINITE']}.
+Thanks for requesting membership of the group [group_name] ([group_email]) on [site_name].
 <br /><br />
 The group administrators have been notified and will process your request shortly.}
-  }
+  end
   
-  field :membership_request_acceptance_email_subject, :type => String, :default => -> { "You're now a member of #{self.name} (#{self.email}) on #{Config['SITE_NAME_SHORT']}" }
-  field :membership_request_acceptance_email, :type => String, :default => -> {
+  field :membership_request_acceptance_email_subject, :type => String
+  def membership_request_acceptance_email_subject_default
+    "You're now a member of [group_name] ([group_email]) on [site_name]"
+  end
+  field :membership_request_acceptance_email, :type => String
+  def membership_request_acceptance_email_default
     %Q{Hi [firstname],
 <br /><br />
-You have been granted membership of the group #{self.name} (#{self.email}) on #{Config['SITE_NAME_DEFINITE']}.
+You have been granted membership of the group [group_name] ([group_email]) on [site_name].
 <br /><br />
-[sign_in_details]}
-  }
+[sign_in_details]}        
+  end
+  
+  def prepare_email_subject(e)
+    self.send("#{e}_email_subject")
+    .gsub('[site_name]',Config['SITE_NAME'])
+    .gsub('[base_uri]',Config['BASE_URI'])
+    .gsub('[group_name]',self.name)
+    .gsub('[group_email]',self.email)
+  end  
+  
+  def prepare_email(e)
+    self.send("#{e}_email")
+    .gsub('[site_name]',Config['SITE_NAME'])
+    .gsub('[base_uri]',Config['BASE_URI'])
+    .gsub('[group_name]',self.name)
+    .gsub('[group_email]',self.email)
+  end   
+  
+  before_validation do
+    %w{reminder invite membership_request_acceptance membership_request_thanks}.each { |e|
+      self.send("#{e}_email=",self.send("#{e}_email_default")) if Nokogiri::HTML(self.send("#{e}_email")).text.blank?
+      self.send("#{e}_email_subject=",self.send("#{e}_email_subject_default")) if Nokogiri::HTML(self.send("#{e}_email_subject")).text.blank?
+    }
+    self.default_notification_level = 'each' if !self.default_notification_level
+  end
     
   index({slug: 1 }, {unique: true})
   
@@ -159,11 +199,15 @@ You have been granted membership of the group #{self.name} (#{self.email}) on #{
     {
       :name => 'Full group name, all characters allowed',
       :request_intro => 'HTML to display above request form',
-      :request_questions => 'Questions to ask to people requesting membership. One per line.',
-      :invite_email => 'HTML. Replacements: [firstname], [admin], [sign_in_details]',
-      :reminder_email => 'HTML. Replacements: [firstname], [admin], [issue]',
-      :membership_request_thanks_email => 'HTML. Replacements: [firstname]',
-      :membership_request_acceptance_email => 'HTML. Replacements: [firstname], [sign_in_details]'
+      :request_questions => 'Questions to ask to people requesting membership. One per line.',          
+      :invite_email_subject => 'Replacements: [site_name] [base_uri] [group_name] [group_email]',
+      :invite_email => 'HTML. Replacements: [site_name] [base_uri] [group_name] [group_email] [firstname] [admin] [sign_in_details]',
+      :reminder_email_subject => 'Replacements: [site_name] [base_uri] [group_name] [group_email]',
+      :reminder_email => 'HTML. Replacements: [site_name] [base_uri] [group_name] [group_email] [firstname] [admin] [issue]',
+      :membership_request_thanks_email_subject => 'Replacements: [site_name] [base_uri] [group_name] [group_email]',
+      :membership_request_thanks_email => 'HTML. Replacements: [site_name] [base_uri] [group_name] [group_email] [firstname]',
+      :membership_request_acceptance_email_subject => 'Replacements: [site_name] [base_uri] [group_name] [group_email]',
+      :membership_request_acceptance_email => 'HTML. Replacements: [site_name] [base_uri] [group_name] [group_email] [firstname] [sign_in_details]'
     }
   end
   

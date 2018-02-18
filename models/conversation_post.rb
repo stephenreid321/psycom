@@ -4,7 +4,7 @@ class ConversationPost
 
   field :body, :type => String
   field :message_id, :type => String
-  field :hidden, :type => Boolean, :default => false
+  field :hidden, :type => Boolean
   
   belongs_to :conversation, index: true
   belongs_to :group, index: true

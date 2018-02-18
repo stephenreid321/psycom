@@ -26,7 +26,7 @@ class Conversation
   
   field :subject, :type => String
   field :slug, :type => Integer
-  field :hidden, :type => Boolean, :default => false
+  field :hidden, :type => Boolean
   field :pinned, :type => Boolean
   
   index({slug: 1 }, {unique: true})
