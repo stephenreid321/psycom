@@ -9,6 +9,7 @@ ActivateApp::App.controllers do
   post '/groups/new' do
     Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? site_admins_only! : sign_in_required!
     @group = Group.new(params[:group])    
+    @group.account = current_account
     if @group.save  
       flash[:notice] = "<strong>Great!</strong> The group was created successfully."
       @group.memberships.create! :account => current_account, :admin => true, :receive_membership_requests => true

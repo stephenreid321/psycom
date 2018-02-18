@@ -128,6 +128,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   end
   
   belongs_to :group_type, index: true, optional: true
+  belongs_to :account, index: true, optional: true
         
   def new_people(from,to)
     Account.where(:id.in => memberships.where(:created_at.gte => from).where(:created_at.lt => to+1).pluck(:account_id)).where(:has_picture => true)
@@ -177,12 +178,13 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
     mail = Mail.new
     mail.to = Config['HELP_ADDRESS']
     mail.from = self.email
-    mail.subject = "New group: #{name}"
+    mail.subject = "New group: #{self.name}"
       
     group = self
+    base_uri = Config['BASE_URI']
     html_part = Mail::Part.new do
       content_type 'text/html; charset=UTF-8'
-      body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{Config['BASE_URI']}/groups/#{group.slug}">#{group.name}</a>}
+      body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{base_uri}/groups/#{group.slug}">#{group.name}</a>}
     end
     mail.html_part = html_part
       
@@ -205,8 +207,9 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
       :invite_email => :text_area,
       :membership_request_thanks_email => :text_area,
       :membership_request_acceptance_email => :text_area,
-      :group_type_id => :lookup,
       :conversation_creation_by_admins_only => :check_box,
+      :group_type_id => :lookup,      
+      :account_id => :lookup,
       :memberships => :collection,
       :membership_requests => :collection,
       :conversations => :collection
