@@ -3,10 +3,10 @@ ActivateApp::App.controllers do
   get '/accounts/new' do
     site_admins_only!
     @account = Account.new
-    @account.welcome_email_subject = "You were added to #{Config['SITE_NAME_DEFINITE']}"
+    @account.welcome_email_subject = "You were added to #{Config['SITE_NAME']}"
     @account.welcome_email_body = %Q{Hi [firstname],
 <br /><br />
-You were added to the groups [group_list] on #{Config['SITE_NAME_DEFINITE']}.
+You were added to the groups [group_list] on #{Config['SITE_NAME']}.
 <br /><br />
 [sign_in_details]}
     erb :'accounts/build_admin'      
@@ -29,10 +29,10 @@ You were added to the groups [group_list] on #{Config['SITE_NAME_DEFINITE']}.
   get '/accounts/:id/edit' do
     site_admins_only!
     @account = Account.find(params[:id])
-    @account.welcome_email_subject = "You were added to groups on #{Config['SITE_NAME_DEFINITE']}"
+    @account.welcome_email_subject = "You were added to groups on #{Config['SITE_NAME']}"
     @account.welcome_email_body = %Q{Hi [firstname],
 <br /><br />
-You were added to the groups [group_list] on #{Config['SITE_NAME_DEFINITE']}.
+You were added to the groups [group_list] on #{Config['SITE_NAME']}.
 <br /><br />
 [sign_in_details]}    
     erb :'accounts/build_admin'

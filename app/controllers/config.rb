@@ -24,8 +24,6 @@ ActivateApp::App.controllers do
       :AIRBRAKE_API_KEY => 'Airbrake API key',  
                         
       :SITE_NAME => 'Name of site',
-      :SITE_NAME_DEFINITE => "Name of site with 'the' if appropriate",
-      :SITE_NAME_SHORT => 'Short site name',
       :HELP_ADDRESS => 'Email address for general queries',            
       
       :DEFAULT_TIME_ZONE => 'Default time zone (see dropdown in profile for options, defaults to London)',

@@ -82,7 +82,7 @@ ActivateApp::App.controllers do
         mail = Mail.new(
           :to => @group.admins_receiving_membership_requests.map(&:email),
           :from => "#{@group.slug} <#{@group.email('-noreply')}>",
-          :subject => "#{@account.name} requested membership of #{@group.slug} on #{Config['SITE_NAME_SHORT']}",
+          :subject => "#{@account.name} requested membership of #{@group.slug} on #{Config['SITE_NAME']}",
           :body => erb(:'emails/membership_request', :layout => false)
         )
         mail.deliver   
