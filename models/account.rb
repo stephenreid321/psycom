@@ -319,7 +319,7 @@ class Account
     }
   end
   
-  # after_create :send_new_member_email
+  after_create :send_new_member_email
   def send_new_member_email          
     account = self      
     bcc = Account.where(:id.in => Account.geo_near(coordinates).spherical.max_distance(25 / 3963.167).pluck(:id)).where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
