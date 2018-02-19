@@ -70,6 +70,13 @@ module ActivateApp
         sign_in_required! unless @fragment.public?
         erb :page
       elsif @account = Account.find_by(username: params[:slug]) or @account = Account.find(params[:slug])
+        if !@account.public?
+          unless current_account and (current_account.id == @account.id or current_account.admin?)
+            flash[:notice] = "You can't access that profile."
+            session[:return_to] = request.url
+            request.xhr? ? halt(403) : redirect((current_account ? '/' : '/sign_in'))
+          end         
+        end
         @title = @account.name
         @shared_conversations = current_account.visible_conversation_posts.where(account_id: @account.id).order_by(:created_at.desc).limit(10).map(&:conversation).uniq if current_account
         erb :'accounts/account'

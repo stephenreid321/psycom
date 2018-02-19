@@ -62,6 +62,14 @@ class Account
   has_many :events_as_creator, :class_name => 'Event', :inverse_of => :account, :dependent => :destroy
   has_many :likes, :dependent => :destroy
   
+  def public?
+    location
+  end
+  
+  def self.public
+    where(:location.ne => nil)
+  end  
+  
   belongs_to :language, index: true, optional: true
   
   has_many :affiliations, :dependent => :destroy
