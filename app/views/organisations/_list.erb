@@ -1,22 +1,20 @@
-<% col_class = 'col-sm-6 mb-1 mb-sm-0' %>
-
 <% form_tag '/organisations/results', :method => 'get', :id => 'results-form' do %>
 
-  <div class="row">
-
-    <div class="<%=col_class%>" style="position: relative"> 
-      <%= text_field_tag :name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_name).capitalize, :value => params[:name] %>
-      <i id="filter-spin" style="display: none; position: absolute; right: -5px; top: 9px" class="fa fa-spin fa-spinner"></i>
-    </div>
-
-    <div class="<%=col_class%>">
-      <div style="text-align: right" >      
-        <i style="margin-right: 4px" title="Sort by" class="fa fa-sort"></i>
-        <%= select_tag :o, :class => 'form-control input-sm', :style => 'display: inline; width: auto', :options => {'Last updated' => :date, 'Name' => :name}, :selected => (defined?(o) ? o : :date) %>                      
+  <div class="row justify-content-between">
+    <div class="col-sm">
+      <div class="row">
+        <div class="col-sm mb-1 mb-sm-0" style="position: relative"> 
+          <%= text_field_tag :name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_name).capitalize, :value => params[:name] %>
+          <i id="filter-spin" style="display: none; position: absolute; right: -5px; top: 9px" class="fa fa-spin fa-spinner"></i>
+        </div>
       </div>
-    </div>    
-
+    </div>
+    <div class="col-sm-auto">
+      <i style="margin-right: 4px" title="Sort by" class="fa fa-sort"></i>
+      <%= select_tag :o, :class => 'form-control input-sm', :style => 'display: inline; width: auto', :options => {'Last updated' => :date, 'Name' => :name}, :selected => (defined?(o) ? o : :date) %>                      
+    </div>
   </div>
+
 
   <%= submit_tag '', :style => 'display: none' %>
 
