@@ -116,7 +116,7 @@ ActivateApp::App.controllers do
     if current_account
       @account = current_account
     else
-      redirect back if !params[:account]
+      redirect "/groups/#{@group.slug}" if !params[:account]
       if !(@account = Account.find_by(email: /^#{::Regexp.escape(params[:account][:email])}$/i))   
         @new_account = true
         @account = Account.new(mass_assigning(params[:account], Account))
