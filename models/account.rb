@@ -66,7 +66,7 @@ class Account
     location
   end
   
-  def self.public
+  def self.publicly_accessible
     where(:location.ne => nil)
   end  
   

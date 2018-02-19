@@ -16,8 +16,14 @@
     <p class="lead"><%= @account.headline %></p>
   <% end %>  
 
+  <% if !@account.public? %>
+    <div class="alert alert-primary">
+      Since you haven't provided a location, this profile is private and only visible to you.
+    </div>
+  <% end %>    
+
   <% if !current_account or (current_account and @account.id != current_account.id) %>    
-      
+
     <% unless @account.unsubscribe_message %>
       <a class="btn btn-primary" href="/accounts/<%=@account.id%>/message"><i class="fa fa-envelope"></i> Message</a>
     <% end %>

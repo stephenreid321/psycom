@@ -4,7 +4,7 @@ ActivateApp::App.controllers do
     if request.xhr?      
       @points = []      
       if params[:accounts]
-        @points += Account.all
+        @points += Account.publicly_accessible
       end
       if params[:events]
         @points += Event.future
