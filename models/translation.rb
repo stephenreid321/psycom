@@ -63,6 +63,7 @@ class Translation
       :'mongoid.attributes.account.story' => 'Your story',
       :'mongoid.attributes.account.twitter_profile_url' => 'Twitter profile URL',
       :'mongoid.attributes.account.facebook_profile_url' => 'Facebook profile URL',
+      :'mongoid.attributes.account.linkedin_profile_url' => 'LinkedIn profile URL',
       :'mongoid.attributes.account.picture' => 'Picture',
       :'mongoid.attributes.account.password' => 'Password',
       :'mongoid.attributes.account.location' => 'Location',

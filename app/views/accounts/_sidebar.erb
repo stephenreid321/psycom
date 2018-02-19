@@ -48,6 +48,15 @@
         </td>  
       </tr>
     <% end %> 
+      
+    <% if @account.linkedin_profile_url %>
+      <tr>
+        <td>LinkedIn</td>
+        <td>
+          <a target="_blank" href="<%=@account.linkedin_profile_url%>"><%=@account.linkedin_profile_url.split('/')[3..-1].join('/')%></a>
+        </td>  
+      </tr>
+    <% end %>       
 
     <% if @account.website %>
       <tr>

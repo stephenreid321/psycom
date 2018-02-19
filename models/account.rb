@@ -20,6 +20,7 @@ class Account
   field :website, :type => String   
   field :facebook_profile_url, :type => String
   field :twitter_profile_url, :type => String  
+  field :linkedin_profile_url, :type => String
   
   field :unsubscribe_events, :type => Boolean
   field :unsubscribe_new_member, :type => Boolean
@@ -269,9 +270,11 @@ class Account
     
     self.twitter_profile_url = "twitter.com/#{self.twitter_profile_url}" if self.twitter_profile_url and !self.twitter_profile_url.include?('twitter.com')      
     errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')    
+    errors.add(:linkedin_profile_url, 'must contain linkedin.com') if self.linkedin_profile_url and !self.linkedin_profile_url.include?('linkedin.com')    
     self.twitter_profile_url = self.twitter_profile_url.gsub('twitter.com/', 'twitter.com/@') if self.twitter_profile_url and !self.twitter_profile_url.include?('@')                
     self.twitter_profile_url = "http://#{self.twitter_profile_url}" if self.twitter_profile_url and !(self.twitter_profile_url =~ /\Ahttps?:\/\//)
     self.facebook_profile_url = "http://#{self.facebook_profile_url}" if self.facebook_profile_url and !(self.facebook_profile_url =~ /\Ahttps?:\/\//)   
+    self.linkedin_profile_url = "http://#{self.linkedin_profile_url}" if self.linkedin_profile_url and !(self.linkedin_profile_url =~ /\Ahttps?:\/\//)   
   end  
       
   before_validation :set_has_picture
@@ -306,6 +309,7 @@ class Account
       :picture => :image,
       :twitter_profile_url => :text,
       :facebook_profile_url => :text,
+      :linkedin_profile_url => :text,
       :admin => :check_box,
       :translator => :check_box,
       :time_zone => :select,
