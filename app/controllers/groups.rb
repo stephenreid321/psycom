@@ -44,7 +44,7 @@ ActivateApp::App.controllers do
   get '/groups/:slug/request_membership' do
     @group = Group.find_by(slug: params[:slug]) || not_found
     @membership = @group.memberships.find_by(account: current_account)    
-    redirect "/groups/#{@group.slug}" if @group.public? or @group.open?
+    redirect "/groups/#{@group.slug}" if @group.public?
     (flash[:notice] = 'It is not possible to request membersip of that group' and redirect '/' if @group.secret?)
     @account = Account.new
     erb :'groups/request_membership'

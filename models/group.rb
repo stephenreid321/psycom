@@ -239,7 +239,6 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   def self.privacies
     p = {}
     p['Public: group content is public and anyone can choose to join'] = 'public'
-    p['Open: anyone can choose to join'] = 'open'
     p['Closed: people must request membership'] = 'closed'
     p['Secret: group is hidden and people can only join via invitation'] = 'secret'      
     p
@@ -248,11 +247,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   def public?
     privacy == 'public'
   end  
-  
-  def open?
-    privacy == 'open'
-  end
-  
+    
   def closed?
     privacy == 'closed'
   end

@@ -15,7 +15,7 @@ class TestGroups < ActiveSupport::TestCase
     click_link 'Create a group'
     fill_in 'Name', :with => 'Test Group'
     fill_in 'Slug', :with => 'test-group'
-    choose 'Open'
+    choose 'Public'
     click_button 'Create group'
     assert page.has_content? 'The group was created successfully'
   end
