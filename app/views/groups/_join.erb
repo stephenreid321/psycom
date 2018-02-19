@@ -15,9 +15,7 @@
       <% end %> 
 
       <% random(group.members.publicly_accessible.where(:picture_uid.ne => nil), 9).each {  |account| %>
-        <div class="m-3">
-          <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 100px;'} %>
-        </div>
+        <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 100px;', :klass => 'm-3'} %>
       <% } %>
 
     </div>
