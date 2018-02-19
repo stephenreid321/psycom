@@ -24,7 +24,6 @@ ActivateApp::App.controllers do
       %Q{Conversations},
       %Q{Conversation posts},
       %Q{Conversation post BCCs},
-      %Q{Open rate},
       %Q{Distinct posters},
       %Q{Fraction of people that posted},        
     ]

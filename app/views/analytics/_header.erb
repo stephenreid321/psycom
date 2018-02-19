@@ -11,9 +11,9 @@
   });
 </script>
 <form class="form-inline my-3">
-  <input type="text" class="form-control datepicker mr-1" name="from" value="<%=@from.strftime('%d-%b-%Y')%>"/>
+  <input type="text" class="form-control datepicker mr-1" name="from" value="<%=@from.to_s(:db)%>"/>
   &ndash;
-  <input type="text" class="form-control datepicker mx-1" name="to" value="<%=@to.strftime('%d-%b-%Y')%>"/>
+  <input type="text" class="form-control datepicker mx-1" name="to" value="<%=@to.to_s(:db)%>"/>
   <button class="btn btn-primary mr-1">Get data</button>
   <% if @csv %> <a class="btn btn-primary" href="<%=request.url.gsub('/groups','/groups.csv')%>"><i class="fa fa-download"></i> Download as CSV</a> <% end %>
 </form>
