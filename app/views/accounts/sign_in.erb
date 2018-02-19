@@ -1,41 +1,38 @@
 
-<div style="text-align: center; margin-bottom: 20px">
+<div class="row justify-content-center">
+  <div class="col-auto">
 
-  <p style="margin: 1em"><%=I18n.t(:welcome_to).capitalize%> <%=Config['SITE_NAME']%>!</p>   
+    <% form_tag '/auth/account/callback', :id => 'sign_in' do %>
+      <h2 class="mt-0">Sign in</h2>
+      <div class="form-group mb-1">
+        <label class="sr-only">Email</label>
+        <%= text_field_tag :email, :id => 'email', :class => 'form-control', :placeholder => 'Email'%>
+      </div>        
+      <div class="form-group mb-1">
+        <label class="sr-only">Password</label>
+        <%= password_field_tag :password, :id => 'password', :class => 'form-control', :placeholder => 'Password' %>
+      </div>
+      <button class="btn btn-primary" type="submit">Sign in</button>  
+      <div class="my-2">
+        <a href="javascript:;" onclick="$(this).hide();
+              $('#sign_in').hide();
+              $('#forgot').show();
+              $('#forgot-email').focus();">Forgot your password?</a>
+      </div>
+      <a href="/sign_up" class="btn btn-primary">
+        Not yet registered? Sign up here
+      </a>
+    <% end %>
 
-  <% form_tag '/auth/account/callback', :id => 'sign_in' do %>
-    <div class="form-group" style="display:block; margin-bottom: 0.5em">
-      <label class="sr-only">Email</label>
-      <%= text_field_tag :email, :id => 'email', :class => 'form-control', :placeholder => 'Email', :style => 'display: inline-block; max-width: 20em; ' %>
-    </div>        
-    <div class="form-group" style="display:block; margin-bottom: 0.5em">
-      <label class="sr-only">Password</label>
-      <%= password_field_tag :password, :id => 'password', :class => 'form-control', :placeholder => 'Password', :style => 'display: inline-block; max-width: 20em; ' %>
+    <div id="forgot" style="display: none">
+      <h2 class="mt-0">Reset password</h2>
+      <% form_tag '/accounts/forgot_password', :class => 'form-inline' do %>
+        <label class="sr-only">Email</label>   
+        <%= text_field_tag :email, :id => 'forgot-email', :class => 'form-control mr-sm-2', :placeholder => 'Email' %>
+        <button class="btn btn-primary" type="submit">Reset password</button>
+      <% end %>
     </div>
-    <button class="btn btn-primary" type="submit">Sign in</button>  
-    <div style="margin: 10px" >
-      <a href="javascript:;" onclick="$(this).hide();
-          $('#sign_in').hide();
-          $('#forgot').show();
-          $('#forgot_email').focus();">Forgot your password?</a>
-    </div>
-  <% end %>
 
-  <% form_tag '/accounts/forgot_password', :id => 'forgot', :class => 'form-inline', :style => 'display: none' do %>
-    <div class="form-group" style="display:block; margin-bottom: 0.5em">
-      <label class="sr-only">Email</label>   
-      <%= text_field_tag :email, :id => 'forgot-email', :class => 'form-control', :placeholder => 'Email', :style => 'display: inline-block; max-width: 20em;' %>
-    </div>
-    <button class="btn btn-primary" type="submit">Reset password</button>
-  <% end %>
-
-  <% if !Provider.registered.empty? %>
-    <p style="margin-top: 10px">If you've connected your account to an external service:</p>
-    <p style="margin: 1em 0">
-      <%  Provider.registered.each { |provider| %>             
-        <a class="btn btn-secondary" href="/auth/<%=provider.omniauth_name%>"><i class="fa fa-<%=provider.icon%>"></i> Sign in with <%=provider.display_name%></a>
-      <% } %>
-    </p>                    
-  <% end %>
-
+  </div>
 </div>
+

@@ -58,8 +58,13 @@
   var markerClusterer = new MarkerClusterer(map, markers, {zoomOnClick: false});
 
 <% if defined?(global) %>
-    map.setCenter(new google.maps.LatLng(40, -20))
-    map.setZoom(3)
+    if ($(window).width() > 768) {
+      map.setCenter(new google.maps.LatLng(40, -20))
+      map.setZoom(3)
+    } else {
+      map.setCenter(new google.maps.LatLng(53, -1))
+      map.setZoom(3)
+    }
 <% elsif !points.empty? %>
     map.fitBounds(bounds);
 <% end %>
@@ -77,8 +82,19 @@
   }
   );</script>
 
-<div style="position: relative; height: 100%">
-  <div style="width: 100%; height: 100%" id="map-canvas"></div>
+<style>  
+  #map-form { margin-top: 1rem }
+  #map-form i.fa-map-marker { float: right }
+  #map-canvas { height: 50vh }
+  @media(min-width: 768px) {
+    #map-container { position: relative; height: 100% }
+    #map-canvas { width: 100%; height: 100%; }        
+    #map-form { margin-top: 0; position: absolute; width: 20%; top: 0; right: 0; background: rgba(255,255,255,0.8); padding: 20px }   
+  }
+</style>
+
+<div id="map-container">
+  <div id="map-canvas"></div>
 
   <% if params[:form] %>
     <script>
@@ -97,12 +113,6 @@
           return false;
         });
       });</script>
-    <style>
-      #map-form i.fa-map-marker { float: right }
-      @media(min-width: 768px) {
-        #map-form { position: absolute; width: 20%; top: 0; right: 0; background: rgba(255,255,255,0.8); padding: 20px }
-      }
-    </style>
     <form id="map-form">
       <input type="hidden" name="form" value="1" />
       <div class="checkbox">
@@ -123,7 +133,6 @@
           <%= I18n.t(:events).capitalize%>  <i class="fa fa-map-marker" style="color: <%= "##{Event.marker_color}" %>"></i>
         </label>
       </div>      
-      <button type="submit" class="btn btn-primary"><%= I18n.t(:search).capitalize%></button>
       <i class="fa fa-spin fa-spinner" style="display: none"></i>
     </form>
   <% end %>
