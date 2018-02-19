@@ -13,7 +13,7 @@
       ['Groups',         
         [[I18n.t(:all_groups).capitalize, '/groups'], []] + (current_account ? current_account.memberships.map(&:group).sort_by { |group| group.name.downcase.naturalized }.map { |group| [group.name, "/groups/#{group.slug}"] } : [])
         ],        
-      ], ul_class: 'navbar-nav'
+      ].compact, ul_class: 'navbar-nav'
   %>    
 
     <%=
@@ -27,7 +27,7 @@
           ] if current_account),
       (['Sign up', '/sign_up'] if !current_account),
       ([I18n.t(:sign_in).capitalize, '/sign_in'] if !current_account)
-      ], ul_class: 'navbar-nav ml-auto'
+      ].compact, ul_class: 'navbar-nav ml-auto'
   %>    
 
   </div>
