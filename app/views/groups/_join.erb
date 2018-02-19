@@ -14,9 +14,11 @@
         <button type="submit" class="btn btn-primary">Join</button>
       <% end %> 
 
-      <% random(group.members.where(:picture_uid.ne => nil), 9).each {  |account| %>
-        <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 100px;'} %>
-      <% } %>
+      <div class="mt-3">
+        <% random(group.members.where(:picture_uid.ne => nil), 9).each {  |account| %>
+          <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 100px;'} %>
+        <% } %>
+      </div>
 
     </div>
   </div>
