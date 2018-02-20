@@ -9,6 +9,14 @@
   <h1>New organisation</h1>
 <% end %>
 
+<script>
+  $(function () {
+
+    var autocomplete = new google.maps.places.Autocomplete($('#organisation_address')[0]);
+
+  })
+</script>
+
 <div class="container">
 
   <% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>

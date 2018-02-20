@@ -8,5 +8,9 @@
     $('#map').load('/map?<%= {form: true, global: true, accounts: true, events: true, organisations: true}.to_query %>')
   });
 </script>
-<style>#map, #map-canvas { height: 80vh !important }</style>
+<style>
+  @media(min-width: 768px) {
+    #map { height: 80vh }
+  }
+</style>
 <div id="map"><i class="fa fa-spin fa-spinner"></i></div>
