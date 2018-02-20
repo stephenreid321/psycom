@@ -47,7 +47,7 @@ $(function () {
       }, 200);
     });
   }
-  
+
   function tooltip() {
     $('[data-toggle="tooltip"]').tooltip({
       html: true,
@@ -59,39 +59,21 @@ $(function () {
           return $(this).next('span').html()
       }
     })
-  }  
+  }
 
   function timeago() {
     $("abbr.timeago").timeago()
   }
 
   function wysify() {
-    $('textarea.wysiwyg').not('textarea.wysified').each(function () {
-      var textarea = this;
-      var summernote = $('<div class="summernote"></div>');
-      $(summernote).insertAfter(this);
-      $(summernote).summernote({
-        toolbar: [
-          ['view', ['codeview', 'fullscreen']],
-          ['style', ['style']],
-          ['font', ['bold', 'italic', 'underline', 'clear']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['height', ['height']],
-          ['table', ['table']],
-          ['insert', ['picture', 'link', 'video']],
-        ],
-        height: 200,
-        codemirror: {
-          theme: 'monokai'
+    $('textarea.wysiwyg').each(function () {
+      textboxio.replace(this, {
+        css: {
+          stylesheets: ['/stylesheets/app.css']
+        },
+        images: {
+          allowLocal: false
         }
-      });
-      $('.note-image-input').parent().hide();
-      $(textarea).prop('required', false);
-      $(summernote).code($(textarea).val());
-      $(textarea).addClass('wysified').hide();
-      $(textarea.form).submit(function () {
-        $(textarea).val($(summernote).code());
       });
     });
   }
