@@ -94,7 +94,11 @@ ActivateApp::App.controllers do
           session[:account_id] = account.id.to_s
           flash[:notice] = "Signed in!"
           if account.sign_ins.count == 1
-            redirect '/me/edit'
+            if account.memberships.count == 1
+              redirect "/groups/#{account.memberships.first.group.slug}"
+            else
+              redirect '/me/edit'
+            end
           elsif session[:return_to]
             redirect session[:return_to]
           else
