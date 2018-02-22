@@ -1,7 +1,7 @@
 
 <% form_for (@conversation ||= @group.conversations.build), "/groups/#{@group.slug}/conversations/new", :id => 'new-conversation', :class => 'form-horizontal', :multipart => true do |f| %>
   <%= f.text_block :subject, label_class: 'd-none' %>
-  <%= f.wysiwyg_block :body, label_class: 'd-none', required: true %>
+  <%= f.wysiwyg_block :body, label_class: 'd-none' %>
   <a class="btn btn-secondary" href="javascript:;" onclick="$(this).hide();
       $(this).next().show();
       $(this).next().find('input').click();"><%=I18n.t(:attach_a_file).capitalize%></a>
