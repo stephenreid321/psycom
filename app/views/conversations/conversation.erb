@@ -55,7 +55,7 @@
         <div class="media-body">
 
           <% form_for (@conversation_post ||= @conversation.conversation_posts.build), "/conversations/#{@conversation.slug}", :class => 'form-horizontal', :multipart => true do |f| %>
-            <%= f.wysiwyg_block :body, label_class: 'd-none', required: false %>
+            <%= f.wysiwyg_block :body, label_class: 'd-none' %>
             <a class="btn btn-secondary" href="javascript:;" onclick="$(this).hide();
           $(this).next().show();
           $(this).next().find('input').click();"><%=I18n.t(:attach_a_file).capitalize%></a>

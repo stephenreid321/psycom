@@ -17,7 +17,9 @@ class ConversationPost
   accepts_nested_attributes_for :attachments
   has_many :likes, :dependent => :destroy
   
-  validates_presence_of :body
+  before_validation do
+    errors.add(:body, 'must be present') if !self.body # avoid validates_presence_of for wysiwyg
+  end
   validates_uniqueness_of :message_id, :allow_nil => true
       
   index({message_id: 1})
