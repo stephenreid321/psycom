@@ -13,6 +13,6 @@
 <div id="events">
   <% Event.future.each { |event| %>
     <hr />
-    <%= partial :'events/minimal', :locals => {:event => event} %>
+    <%= partial :'events/event', :locals => {:event => event} %>
   <% } %>
 </div>

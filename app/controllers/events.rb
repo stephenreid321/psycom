@@ -59,10 +59,5 @@ ActivateApp::App.controllers do
     @title = @event.name
     erb :'events/event'
   end  
-  
-  get '/events/:id/minimal' do
-    @event = Event.find(params[:id]) || not_found
-    partial :'events/minimal', :locals => {:event => @event, :read_more => true}
-  end    
-  
+    
 end
