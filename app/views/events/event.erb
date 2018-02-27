@@ -1,7 +1,7 @@
 
 <% @pills = [
   [%Q{<i class="fa fa-pencil"></i> #{I18n.t(:edit_event).capitalize}}, "/events/#{@event.id}/edit"],
-  ([%Q{<i class="fa fa-check"></i> Approve}, "/events/#{@event.id}/approve"] if admin?),
+  ([%Q{<i class="fa fa-check"></i> Approve}, "/events/#{@event.id}/approve"] if admin? && !@event.approved?),
   ] %>
 
 <div class="row">
