@@ -108,7 +108,7 @@ class Event
       end
       mail.html_part = html_part
       
-      mail.deliver if ENV['SMTP_USERNAME']         
+      mail.deliver
     end
     update_attribute(:sent_email, true)
   end
