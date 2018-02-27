@@ -16,7 +16,7 @@ ActivateApp::App.controllers do
       mail = Mail.new(
         :to => @account.email,
         :from => "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>",
-        :subject => "New password",
+        :subject => "Password reset",
         :body => erb(:'emails/forgot_password', :layout => false)
       )
       mail.deliver 
