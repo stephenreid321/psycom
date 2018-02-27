@@ -61,7 +61,7 @@ ActivateApp::App.helpers do
   end
   
   def admin?
-    current_account and current_acount.admin?
+    current_account and current_account.admin?
   end
     
   def admins_only!
@@ -117,22 +117,6 @@ ActivateApp::App.helpers do
       window.close();
       </script>
     }
-  end
-
-  def newick(nested_array)
-    n = '<ul class="newick">'
-    nested_array.each_with_index { |x,i|      
-      if x.is_a? String
-        n << '<li>'
-        n << x
-        if nested_array[i+1].is_a? Array
-          n << newick(nested_array[i+1])
-        end
-        n << '</li>'
-      end    
-    }   
-    n << '</ul>'
-    n.html_safe
   end
       
 end
