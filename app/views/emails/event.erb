@@ -1,0 +1,12 @@
+
+<p>
+  <a href="<%=Config['BASE_URI']%>/<%=event.account.username_or_id%>"><%= event.account.name %></a> listed the event <%=event.name%> at <%= event.location %> from <%= event.when_details %>.
+</p>
+
+<% if event.details %>
+  <blockquote><%= event.details %></blockquote>
+<% end %>
+
+<p>
+  <a href="<%=Config['BASE_URI']%>/events/<%=event.id%>">View details</a>
+</p>

@@ -16,6 +16,7 @@ class Event
   field :more_info, :type => String
   field :organisation_name, :type => String
   field :approved, :type => Boolean
+  field :sent_email, :type => Boolean
   
   include Geocoder::Model::Mongoid
   geocoded_by :location
@@ -52,7 +53,8 @@ class Event
       :more_info => :text,
       :account_id => :lookup,
       :organisation_name => :text,
-      :organisation_id => :lookup
+      :organisation_id => :lookup,
+      :sent_email => :check_box
     }
   end
         
@@ -79,5 +81,36 @@ class Event
   def self.past(from=Date.today)
     where(:start_time.lt => from).order('start_time desc')
   end      
+  
+  def nearby_accounts(d=25)
+    Account.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
+  end  
+  
+  after_save do
+    if self.approved and !self.sent_email
+      send_email
+    end
+  end
+  def send_email
+    event = self
+    bcc = nearby_accounts.where(:unsubscribe_events.ne => true).pluck(:email)
+    if bcc.count > 0      
+      mail = Mail.new
+      mail.bcc = bcc
+      mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+      mail.subject = 'New event near you'
+            
+      content = ERB.new(File.read(Padrino.root('app/views/emails/event.erb'))).result(binding)
+      html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
+      end
+      mail.html_part = html_part
+      
+      mail.deliver if ENV['SMTP_USERNAME']         
+    end
+    update_attribute(:sent_email, true)
+  end
+  handle_asynchronously :send_email  
     
 end
