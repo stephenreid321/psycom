@@ -71,7 +71,7 @@
 
   <%= partial :share %>
 
-  <% if @account.coordinates and (accounts = Account.geo_near(@account.coordinates).spherical.max_distance(25 / 3963.167)).count > 0 %>
+  <% if @account.coordinates and (accounts = @account.nearby_accounts).count > 0 %>
     <div style="margin-top: 20px">
       <style>#map-canvas { height: 200px !important }</style>     
       <%= partial :'maps/map', :locals => {:points => accounts} %>      
