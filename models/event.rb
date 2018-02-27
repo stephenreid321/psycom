@@ -89,10 +89,10 @@ class Event
   
   after_create do
     mail = Mail.new
-    mail.to = Config['HELP_ADDRESS']
-    mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+    mail.to = ENV['HELP_ADDRESS']
+    mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
     mail.subject = "New event: #{name}"
-    mail.body = "#{Config['BASE_URI']}/events/#{id}"     
+    mail.body = "#{ENV['BASE_URI']}/events/#{id}"     
     mail.deliver    
   end
   
@@ -107,7 +107,7 @@ class Event
     if bcc.count > 0      
       mail = Mail.new
       mail.bcc = bcc
-      mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+      mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
       mail.subject = 'New event near you'
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/event.erb'))).result(binding)

@@ -68,7 +68,7 @@ class ConversationPost
   def didyouknow_replacements(string)
     group = conversation.group
     members = group.members
-    base_uri = Config['BASE_URI']
+    base_uri = ENV['BASE_URI']
     string.gsub!('[site_url]', base_uri)
     string.gsub!('[name]', group.name)
     string.gsub!('[slug]', group.slug)        
@@ -81,7 +81,7 @@ class ConversationPost
   end  
   
   def self.dmarc_fail_domains
-    %w{yahoo.com y7mail.com yahoo.at yahoo.be yahoo.bg yahoo.ca yahoo.cl yahoo.co.hu yahoo.co.id yahoo.co.il yahoo.co.in yahoo.co.kr yahoo.co.nz yahoo.co.th yahoo.co.uk yahoo.co.za yahoo.com.ar yahoo.com.au yahoo.com.br yahoo.com.co yahoo.com.hk yahoo.com.hr yahoo.com.mx yahoo.com.my yahoo.com.pe yahoo.com.ph yahoo.com.sg yahoo.com.tr yahoo.com.tw yahoo.com.ua yahoo.com.ve yahoo.com.vn yahoo.cz yahoo.de yahoo.dk yahoo.ee yahoo.es yahoo.fi yahoo.fr yahoo.gr yahoo.hr yahoo.hu yahoo.ie yahoo.in yahoo.it yahoo.lt yahoo.lv yahoo.nl yahoo.no yahoo.pl yahoo.pt yahoo.ro yahoo.rs yahoo.se yahoo.si yahoo.sk yahoogroups.co.kr yahoogroups.com.cn yahoogroups.com.sg yahoogroups.com.tw yahoogrupper.dk yahoogruppi.it yahooxtra.co.nz aol.com protonmail.com} + (Config['DMARC_FAIL_DOMAINS'] ? Config['DMARC_FAIL_DOMAINS'].split(',') : [])
+    %w{yahoo.com y7mail.com yahoo.at yahoo.be yahoo.bg yahoo.ca yahoo.cl yahoo.co.hu yahoo.co.id yahoo.co.il yahoo.co.in yahoo.co.kr yahoo.co.nz yahoo.co.th yahoo.co.uk yahoo.co.za yahoo.com.ar yahoo.com.au yahoo.com.br yahoo.com.co yahoo.com.hk yahoo.com.hr yahoo.com.mx yahoo.com.my yahoo.com.pe yahoo.com.ph yahoo.com.sg yahoo.com.tr yahoo.com.tw yahoo.com.ua yahoo.com.ve yahoo.com.vn yahoo.cz yahoo.de yahoo.dk yahoo.ee yahoo.es yahoo.fi yahoo.fr yahoo.gr yahoo.hr yahoo.hu yahoo.ie yahoo.in yahoo.it yahoo.lt yahoo.lv yahoo.nl yahoo.no yahoo.pl yahoo.pt yahoo.ro yahoo.rs yahoo.se yahoo.si yahoo.sk yahoogroups.co.kr yahoogroups.com.cn yahoogroups.com.sg yahoogroups.com.tw yahoogrupper.dk yahoogruppi.it yahooxtra.co.nz aol.com protonmail.com} + (ENV['DMARC_FAIL_DOMAINS'] ? ENV['DMARC_FAIL_DOMAINS'].split(',') : [])
   end
 
   def from_address
@@ -110,14 +110,14 @@ class ConversationPost
   def replace_cids!
     self.body = body.gsub(/src="cid:(\S+)"/) { |match|
       begin
-        %Q{src="#{Config['BASE_URI']}#{attachments.find_by(cid: $1).file.url}"}
+        %Q{src="#{ENV['BASE_URI']}#{attachments.find_by(cid: $1).file.url}"}
       rescue
         nil
       end
     }    
     self.body = body.gsub(/\[cid:(\S+)\]/) { |match|
       begin
-        %Q{<img src="#{Config['BASE_URI']}#{attachments.find_by(cid: $1).file.url}">}
+        %Q{<img src="#{ENV['BASE_URI']}#{attachments.find_by(cid: $1).file.url}">}
       rescue
         nil
       end

@@ -16,7 +16,7 @@ ActivateApp::App.controllers do
       begin
         mail = Mail.new(
           :to => from,
-          :bcc => Config['HELP_ADDRESS'],
+          :bcc => ENV['HELP_ADDRESS'],
           :from => "#{group.slug} <#{group.email('-noreply')}>",
           :subject => "Delivery failed: #{mail.subject}",
           :body => ERB.new(File.read(Padrino.root('app/views/emails/delivery_failed.erb'))).result(binding)
@@ -58,7 +58,7 @@ ActivateApp::App.controllers do
         (mail.in_reply_to and (conversation = ConversationPostBcc.find_by(message_id: mail.in_reply_to).try(:conversation)) and conversation.group == group) or
           (
           html.match(/Respond\s+by\s+replying\s+above\s+this\s+line/) and
-            (conversation_url_match = html.match(/#{Config['BASE_URI']}\/conversations\/(\d+)/)) and
+            (conversation_url_match = html.match(/#{ENV['BASE_URI']}\/conversations\/(\d+)/)) and
             conversation = group.conversations.find_by(slug: conversation_url_match[-1])
         )
       )
@@ -79,7 +79,7 @@ ActivateApp::App.controllers do
     # html.search('.gmail_extra').remove
     html = html.search('body').inner_html
              
-    conversation_post = conversation.conversation_posts.create :body => html, :account => account, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{Config['DOMAIN']}")
+    conversation_post = conversation.conversation_posts.create :body => html, :account => account, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{ENV['DOMAIN']}")
     if !conversation_post.persisted? # failed to create the conversation post
       puts "failed to create conversation post, deleting conversation"
       conversation.destroy if new_conversation

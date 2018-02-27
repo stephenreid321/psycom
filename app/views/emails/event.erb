@@ -1,6 +1,6 @@
 
 <p>
-  <%= event.account.name %> listed the event <a href="<%=Config['BASE_URI']%>/events/<%=event.id%>"><%=event.name%></a> at <%= event.location %> from <%= event.when_details %>.
+  <%= event.account.name %> listed the event <a href="<%=ENV['BASE_URI']%>/events/<%=event.id%>"><%=event.name%></a> at <%= event.location %> from <%= event.when_details %>.
 </p>
 
 <% if event.details %>
@@ -8,5 +8,5 @@
 <% end %>
 
 <p>
-  <a href="<%=Config['BASE_URI']%>/events/<%=event.id%>">View details</a>
+  <a href="<%=ENV['BASE_URI']%>/events/<%=event.id%>">View details</a>
 </p>

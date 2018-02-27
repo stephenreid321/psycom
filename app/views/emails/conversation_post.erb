@@ -9,7 +9,7 @@
   </head>
   <body>
     <span style="display:none !important;visibility: hidden;opacity: 0;font-size: 0"><%=(n = Nokogiri::HTML.parse(conversation_post.body)).css('style').remove; n.text[0..255]%><br /></span>
-    <span style="font-size: 80%">Respond by replying above this line or visit <a href="<%=Config['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%>"><%=Config['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%></a></span>
+    <span style="font-size: 80%">Respond by replying above this line or visit <a href="<%=ENV['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%>"><%=ENV['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%></a></span>
     <br />
 
     <% if group.didyouknows.count > 0 %>
@@ -17,7 +17,7 @@
       <br />
     <% end %>
 
-    <span style="font-size: 80%"><a href="<%=Config['BASE_URI']%>/conversation_posts/<%=conversation_post.id%>/like">Like this post</a></span>      
+    <span style="font-size: 80%"><a href="<%=ENV['BASE_URI']%>/conversation_posts/<%=conversation_post.id%>/like">Like this post</a></span>      
     <br />
     <br />
 
@@ -65,7 +65,7 @@
 
       <div style="margin-top: 1em">
         <span style="font-size: 80%">
-          Too many emails? <a href="<%=Config['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%>/mute">Mute this conversation</a> or <a href="<%=Config['BASE_URI']%>/groups/<%=group.slug%>">turn off email notifications completely</a>
+          Too many emails? <a href="<%=ENV['BASE_URI']%>/conversations/<%=conversation_post.conversation.slug%>/mute">Mute this conversation</a> or <a href="<%=ENV['BASE_URI']%>/groups/<%=group.slug%>">turn off email notifications completely</a>
         </span>
       </div>
 

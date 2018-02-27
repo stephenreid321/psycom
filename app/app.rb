@@ -20,7 +20,7 @@ module ActivateApp
     use OmniAuth::Builder do
       provider :account
       Provider.registered.each { |provider|
-        provider provider.omniauth_name, Config["#{provider.display_name.upcase}_KEY"], Config["#{provider.display_name.upcase}_SECRET"], {provider_ignores_state: true}
+        provider provider.omniauth_name, ENV["#{provider.display_name.upcase}_KEY"], ENV["#{provider.display_name.upcase}_SECRET"], {provider_ignores_state: true}
       }
     end  
     OmniAuth.config.on_failure = Proc.new { |env|
@@ -32,16 +32,16 @@ module ActivateApp
     
     Mail.defaults do
       delivery_method :smtp, {
-        :user_name => Config['SMTP_USERNAME'],
-        :password => Config['SMTP_PASSWORD'],
-        :address => Config['SMTP_ADDRESS'],
+        :user_name => ENV['SMTP_USERNAME'],
+        :password => ENV['SMTP_PASSWORD'],
+        :address => ENV['SMTP_ADDRESS'],
         :port => 587
       }   
     end     
                       
     before do
-      redirect "#{Config['BASE_URI']}#{request.path}" if Config['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != Config['BASE_URI']
-      Time.zone = (current_account and current_account.time_zone) ? current_account.time_zone : (Config['DEFAULT_TIME_ZONE'] || 'London')
+      redirect "#{ENV['BASE_URI']}#{request.path}" if ENV['BASE_URI'] and "#{request.scheme}://#{request.env['HTTP_HOST']}" != ENV['BASE_URI']
+      Time.zone = (current_account and current_account.time_zone) ? current_account.time_zone : (ENV['DEFAULT_TIME_ZONE'] || 'London')
       I18n.locale = (current_account and current_account.language) ? current_account.language.code : Language.default.code      
       fix_params!
       @_params = params; def params; @_params; end # force controllers to inherit the fixed params

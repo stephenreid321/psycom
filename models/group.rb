@@ -75,16 +75,16 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   
   def prepare_email_subject(e)
     self.send("#{e}_email_subject")
-    .gsub('[site_name]',Config['SITE_NAME'])
-    .gsub('[base_uri]',Config['BASE_URI'])
+    .gsub('[site_name]',ENV['SITE_NAME'])
+    .gsub('[base_uri]',ENV['BASE_URI'])
     .gsub('[group_name]',self.name)
     .gsub('[group_email]',self.email)
   end  
   
   def prepare_email(e)
     self.send("#{e}_email")
-    .gsub('[site_name]',Config['SITE_NAME'])
-    .gsub('[base_uri]',Config['BASE_URI'])
+    .gsub('[site_name]',ENV['SITE_NAME'])
+    .gsub('[base_uri]',ENV['BASE_URI'])
     .gsub('[group_name]',self.name)
     .gsub('[group_email]',self.email)
   end   
@@ -105,7 +105,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   validates_format_of :slug, :with => /\A[a-z0-9\-]+\z/  
   
   def email(suffix = '')
-    "#{self.slug}#{suffix}@#{Config['MAIL_DOMAIN']}"
+    "#{self.slug}#{suffix}@#{ENV['MAIL_DOMAIN']}"
   end
     
   has_many :conversations, :dependent => :destroy
@@ -176,12 +176,12 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   after_create :send_email
   def send_email
     mail = Mail.new
-    mail.to = Config['HELP_ADDRESS']
+    mail.to = ENV['HELP_ADDRESS']
     mail.from = self.email
     mail.subject = "New group: #{self.name}"
       
     group = self
-    base_uri = Config['BASE_URI']
+    base_uri = ENV['BASE_URI']
     html_part = Mail::Part.new do
       content_type 'text/html; charset=UTF-8'
       body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{base_uri}/groups/#{group.slug}">#{group.name}</a>}

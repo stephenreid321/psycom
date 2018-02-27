@@ -16,7 +16,7 @@ class Like
   
   after_create :notify
   def notify
-    if Config['SMTP_ADDRESS']
+    if ENV['SMTP_ADDRESS']
       group = conversation_post.group
       
       mail = Mail.new(

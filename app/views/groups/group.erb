@@ -51,7 +51,7 @@
         <p class="lead" style="margin: 10px 0"><%=@group.description%></p>
 
         <% if @group.closed? %>
-          <p style="font-size: 12px">Non-members can apply for membership by visiting <span style="border-bottom: 1px dotted #999"><%=Config['BASE_URI']%>/groups/<%=@group.slug%>/request_membership</span></p>
+          <p style="font-size: 12px">Non-members can apply for membership by visiting <span style="border-bottom: 1px dotted #999"><%=ENV['BASE_URI']%>/groups/<%=@group.slug%>/request_membership</span></p>
         <% end %>
       <% end %>
 

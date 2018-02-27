@@ -35,7 +35,7 @@
             <td>Host</td>
             <td>
               <% if @event.organisation_id %>
-                <a href="<%=Config['BASE_URI']%>/o/<%=@event.organisation.username_or_id%>"><%= @event.organisation.name %></a>
+                <a href="<%=ENV['BASE_URI']%>/o/<%=@event.organisation.username_or_id%>"><%= @event.organisation.name %></a>
               <% else %>
                 <%= @event.organisation_name %>
               <% end %>
@@ -52,7 +52,7 @@
 
         <tr>
           <td>Listed by</td>
-          <td><a href="<%=Config['BASE_URI']%>/<%=@event.account.username_or_id %>"><%=@event.account.name%></a></td>
+          <td><a href="<%=ENV['BASE_URI']%>/<%=@event.account.username_or_id %>"><%=@event.account.name%></a></td>
         </tr>
       </table>
     </div>

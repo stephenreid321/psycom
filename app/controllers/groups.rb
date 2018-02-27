@@ -1,13 +1,13 @@
 ActivateApp::App.controllers do
          
   get '/groups/new' do
-    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? admins_only! : sign_in_required!
+    ENV['GROUP_CREATION_BY_ADMINS_ONLY'] ? admins_only! : sign_in_required!
     @group = Group.new
     erb :'groups/build'
   end
   
   post '/groups/new' do
-    Config['GROUP_CREATION_BY_ADMINS_ONLY'] ? admins_only! : sign_in_required!
+    ENV['GROUP_CREATION_BY_ADMINS_ONLY'] ? admins_only! : sign_in_required!
     @group = Group.new(params[:group])    
     @group.account = current_account
     if @group.save  
@@ -83,7 +83,7 @@ ActivateApp::App.controllers do
         mail = Mail.new(
           :to => @group.admins_receiving_membership_requests.map(&:email),
           :from => "#{@group.slug} <#{@group.email('-noreply')}>",
-          :subject => "#{@account.name} requested membership of #{@group.slug} on #{Config['SITE_NAME']}",
+          :subject => "#{@account.name} requested membership of #{@group.slug} on #{ENV['SITE_NAME']}",
           :body => erb(:'emails/membership_request', :layout => false)
         )
         mail.deliver   

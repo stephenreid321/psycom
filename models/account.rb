@@ -134,15 +134,15 @@ class Account
         end    
         
         if account.sign_ins.count == 0 and account.password    
-          sign_in_details << %Q{Sign in at #{Config['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{account.password}</div>}
+          sign_in_details << %Q{Sign in at #{ENV['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{account.password}</div>}
         else
-          sign_in_details << "Sign in at #{Config['BASE_URI']}/sign_in."
+          sign_in_details << "Sign in at #{ENV['BASE_URI']}/sign_in."
         end
                   
-        if Config['SMTP_ADDRESS']
+        if ENV['SMTP_ADDRESS']
           mail = Mail.new
           mail.to = account.email
-          mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+          mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
           mail.subject = account.welcome_email_subject
 
           content = account.welcome_email_body
@@ -341,7 +341,7 @@ class Account
       if bcc.count > 0        
         mail = Mail.new
         mail.bcc = bcc
-        mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+        mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
         mail.subject = 'Someone joined near you'
             
         content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)

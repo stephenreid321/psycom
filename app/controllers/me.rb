@@ -17,7 +17,7 @@ ActivateApp::App.controllers do
     
   post '/me/edit' do
     sign_in_required!
-    params[:account][:account_tag_ids] = [] if Config['ACCOUNT_TAGS_PREDEFINED'] and !params[:account][:account_tag_ids]
+    params[:account][:account_tag_ids] = [] if ENV['ACCOUNT_TAGS_PREDEFINED'] and !params[:account][:account_tag_ids]
     @account = current_account  
     if @account.update_attributes(mass_assigning(params[:account], Account))
       if params[:return]

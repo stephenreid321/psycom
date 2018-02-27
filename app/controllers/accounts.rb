@@ -10,7 +10,7 @@ ActivateApp::App.controllers do
     if @account.save
       SignIn.create(account: @account)
       session[:account_id] = @account.id.to_s     
-      flash[:notice] = "Welcome to #{Config['SITE_NAME']}!"
+      flash[:notice] = "Welcome to #{ENV['SITE_NAME']}!"
       redirect '/me'
     else
       flash.now[:error] = 'Some errors prevented the account from being saved'
@@ -82,9 +82,9 @@ ActivateApp::App.controllers do
     
     mail = Mail.new
     mail.to = @account.email
-    mail.bcc = Config['HELP_ADDRESS']
+    mail.bcc = ENV['HELP_ADDRESS']
     mail.from = "#{current_account.name} <#{current_account.email}>"
-    mail.subject = "Message from #{current_account.name} via #{Config['SITE_NAME']}"
+    mail.subject = "Message from #{current_account.name} via #{ENV['SITE_NAME']}"
     
     sender = current_account
     receiver = @account

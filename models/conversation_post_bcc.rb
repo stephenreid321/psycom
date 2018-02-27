@@ -39,7 +39,7 @@ class ConversationPostBcc
             
   after_create :send_email
   def send_email
-    return unless Config['SMTP_ADDRESS']
+    return unless ENV['SMTP_ADDRESS']
     # set locals for ERB binding
     conversation_post_bcc = self
     conversation_post = conversation_post_bcc.conversation_post
@@ -49,7 +49,7 @@ class ConversationPostBcc
                         
     mail = Mail.new
     mail.to = group.email
-    if Config['REPLY_TO_GROUP']
+    if ENV['REPLY_TO_GROUP']
       mail.reply_to = group.email 
     end
     mail.from = "#{conversation_post.account.name} <#{conversation_post.from_address}>"
@@ -59,8 +59,8 @@ class ConversationPostBcc
         'Precedence' => 'list',
         'X-Auto-Response-Suppress' => 'OOF',
         'Auto-Submitted' => 'auto-generated',
-        'List-Id' => "<#{group.slug}.list-id.#{Config['MAIL_DOMAIN']}>",
-        'List-Unsubscribe' => "<http://#{Config['MAIL_DOMAIN']}/groups/#{group.slug}/notification_level?level=none>"
+        'List-Id' => "<#{group.slug}.list-id.#{ENV['MAIL_DOMAIN']}>",
+        'List-Unsubscribe' => "<http://#{ENV['MAIL_DOMAIN']}/groups/#{group.slug}/notification_level?level=none>"
       })
         
     if previous_conversation_posts

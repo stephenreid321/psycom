@@ -68,9 +68,9 @@ class Membership
     if account.sign_ins.count == 0
       password = Account.generate_password(8)
       account.update_attribute(:password, password) 
-      sign_in_details << %Q{Sign in at #{Config['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{password}</div>}
+      sign_in_details << %Q{Sign in at #{ENV['BASE_URI']}/sign_in with the email address #{account.email} and the password <div class="password">#{password}</div>}
     else
-      sign_in_details << "Check it out at #{Config['BASE_URI']}/groups/#{group.slug}."
+      sign_in_details << "Check it out at #{ENV['BASE_URI']}/groups/#{group.slug}."
     end    
                                
     mail = Mail.new
