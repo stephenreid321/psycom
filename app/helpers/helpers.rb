@@ -59,8 +59,12 @@ ActivateApp::App.helpers do
       request.xhr? ? halt(403) : redirect('/sign_in')
     end
   end
+  
+  def admin?
+    current_account and current_acount.admin?
+  end
     
-  def site_admins_only!
+  def admins_only!
     unless current_account and current_account.admin?
       flash[:notice] = 'You must be a site admin to access that page.'
       session[:return_to] = request.url

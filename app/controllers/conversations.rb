@@ -74,7 +74,7 @@ ActivateApp::App.controllers do
   end
   
   get '/conversation_post_email/:id' do
-    site_admins_only!
+    admins_only!
     @conversation_post = ConversationPost.find(params[:id])
     erb :'emails/conversation_post', :locals => {:conversation_post => @conversation_post, :group => @conversation_post.group}, :layout => false
   end

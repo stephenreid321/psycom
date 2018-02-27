@@ -1,7 +1,7 @@
 ActivateApp::App.controllers do
    
   get '/accounts/new' do
-    site_admins_only!
+    admins_only!
     @account = Account.new
     @account.welcome_email_subject = "You were added to #{Config['SITE_NAME']}"
     @account.welcome_email_body = %Q{Hi [firstname],
@@ -13,7 +13,7 @@ You were added to the groups [group_list] on #{Config['SITE_NAME']}.
   end  
     
   post '/accounts/new' do
-    site_admins_only!
+    admins_only!
     @account = Account.new(mass_assigning(params[:account], Account))
     password = Account.generate_password(8)
     @account.password = password
@@ -27,7 +27,7 @@ You were added to the groups [group_list] on #{Config['SITE_NAME']}.
   end
     
   get '/accounts/:id/edit' do
-    site_admins_only!
+    admins_only!
     @account = Account.find(params[:id])
     @account.welcome_email_subject = "You were added to groups on #{Config['SITE_NAME']}"
     @account.welcome_email_body = %Q{Hi [firstname],
@@ -39,7 +39,7 @@ You were added to the groups [group_list] on #{Config['SITE_NAME']}.
   end
   
   post '/accounts/:id/edit' do
-    site_admins_only!
+    admins_only!
     @account = Account.find(params[:id])
     if @account.update_attributes(mass_assigning(params[:account], Account))
       flash[:notice] = "<strong>Great!</strong> The account was updated successfully."
@@ -51,12 +51,12 @@ You were added to the groups [group_list] on #{Config['SITE_NAME']}.
   end
   
   get '/merge_tags' do
-    site_admins_only!
+    admins_only!
     erb :merge_tags
   end
     
   post '/merge_tags' do
-    site_admins_only!
+    admins_only!
     at1 = AccountTag.find(params[:at1])
     if params[:at2]
       at2 = AccountTag.find(params[:at2])

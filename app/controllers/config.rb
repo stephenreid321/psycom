@@ -1,7 +1,7 @@
 ActivateApp::App.controllers do
   
   before do
-    site_admins_only!
+    admins_only!
     @environment_variables = {      
       :BASE_URI => 'Base URI of web app (scheme + domain)',
       :DOMAIN => 'Domain of web app',

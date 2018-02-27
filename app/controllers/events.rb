@@ -31,13 +31,13 @@ ActivateApp::App.controllers do
   
   get '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    site_admins_only!
+    admins_only!
     erb :'events/build'
   end     
       
   post '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    site_admins_only!
+    admins_only!
     if @event.update_attributes(params[:event])
       flash[:notice] = "<strong>Great!</strong> The event was updated successfully."
       redirect "/events/#{@event.id}"
@@ -48,7 +48,7 @@ ActivateApp::App.controllers do
   end 
   
   get '/events/:id/destroy' do
-    site_admins_only!
+    admins_only!
     @event = Event.find(params[:id]) || not_found
     @event.destroy    
     redirect "/events/"
@@ -59,5 +59,12 @@ ActivateApp::App.controllers do
     @title = @event.name
     erb :'events/event'
   end  
+  
+  get '/events/:id/approve' do
+    admins_only!
+    @event = Event.find(params[:id]) || not_found
+    @event.update_attribute(:approved, true)
+    redirect back
+  end    
     
 end

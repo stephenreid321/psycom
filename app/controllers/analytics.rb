@@ -1,7 +1,7 @@
 ActivateApp::App.controllers do
   
   before do
-    site_admins_only!    
+    admins_only!    
     @from = params[:from] ? Date.parse(params[:from]) : 1.week.ago.to_date
     @to =  params[:to] ? Date.parse(params[:to]) : Date.today
   end
