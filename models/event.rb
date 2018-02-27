@@ -60,11 +60,11 @@ class Event
   end
         
   def when_details
-      if start_time.to_date == end_time.to_date
-        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_s(:no_double_zeros)}"
-      else
-        "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_date.to_s(:no_year)}, #{end_time.to_s(:no_double_zeros)}"
-      end      
+    if start_time.to_date == end_time.to_date
+      "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_s(:no_double_zeros)}"
+    else
+      "#{start_time.to_date.to_s(:no_year)}, #{start_time.to_s(:no_double_zeros)} &ndash; #{end_time.to_date.to_s(:no_year)}, #{end_time.to_s(:no_double_zeros)}"
+    end      
   end
   
   def future?(from=Date.today)
@@ -86,6 +86,15 @@ class Event
   def nearby_accounts(d=25)
     Account.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
   end  
+  
+  after_create do
+    mail = Mail.new
+    mail.to = Config['HELP_ADDRESS']
+    mail.from = "#{Config['SITE_NAME']} <#{Config['HELP_ADDRESS']}>"
+    mail.subject = "New event: #{name}"
+    mail.body = "#{Config['BASE_URI']}/events/#{id}"     
+    mail.deliver    
+  end
   
   after_save do
     if self.approved and !self.sent_email
