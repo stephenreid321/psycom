@@ -83,50 +83,5 @@ class Event
       end      
     end
   end
-  
-  def self.ical
-    cal = RiCal.Calendar do |rcal|
-      rcal.add_x_property('X-WR-CALNAME', Config['DOMAIN'])
-      Event.all.each { |event|
-        rcal.event do |revent|
-          revent.summary = event.name
-          revent.dtstart =  event.all_day ? event.start_time.to_date : event.start_time
-          revent.dtend = event.all_day ? (event.end_time.to_date + 1.day) : event.end_time
-          (revent.location = event.location) if event.location
-          revent.description = "#{Config['BASE_URI']}/events/#{event.id}"
-        end
-      }
-    end
-    cal.export
-  end
-  
-  def self.future
-    self.where(:start_time.gte => Date.today).order_by(:start_time.asc)
-  end
-  
-  def self.json(period_start, period_end)
-    events = Event.all
-    events = events.where(:start_time.lte => Time.zone.parse(period_end))
-    events = events.where(:end_time.gte => Time.zone.parse(period_start))
-    JSON.pretty_generate events.map { |event| 
-      {
-        :title => event.name,
-        :start => event.start_time.iso8601,
-        :end => event.end_time.iso8601, 
-        :allDay => event.all_day,
-        :when_details => event.when_details,
-        :location => event.location,
-        :more_info => event.more_info,
-        :ticketing => event.ticketing,
-        :tickets_link => event.tickets_link,
-        :account_id => event.account_id.to_s,
-        :account_name => event.account.name,
-        :organisation_id => event.organisation_id.to_s,
-        :organisation_name => event.organisation_name,
-        :id => event.id.to_s,
-        :className => "event-#{event.id}"
-      }
-    }    
-  end
-  
+    
 end

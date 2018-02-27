@@ -8,15 +8,7 @@ ActivateApp::App.controllers do
       erb :'events/events'    
     end
   end
-  
-  get '/events/ical' do
-    # Event.ical
-  end
-        
-  get '/events/feed' do
-    # Event.json(params[:start], params[:end])
-  end  
-  
+    
   get '/events/new' do
     sign_in_required!
     @title = 'Add an event'
