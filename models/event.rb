@@ -54,6 +54,7 @@ class Event
       :account_id => :lookup,
       :organisation_name => :text,
       :organisation_id => :lookup,
+      :approved => :check_box,
       :sent_email => :check_box
     }
   end
