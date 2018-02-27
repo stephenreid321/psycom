@@ -7,7 +7,12 @@
 <div class="row">
   <div class="col-sm-8">
 
-    <h1 style="margin-top: 0; "><%= @event.name %></h1>
+    <h1 style="margin-top: 0; ">
+      <%= @event.name %>
+      <% if admin? and !@event.approved %>
+        <i class="fa fa-warning"></i>
+      <% end %>      
+    </h1>
 
     <%= partial :pills %>
 
@@ -57,6 +62,6 @@
   </div>
   <div class="col-sm-4">
     <style>#map-canvas { height: 50vh !important }</style>
-    <%= partial :'maps/map', :locals => {:points => [@event]} %>
+    <%= partial :'maps/map', :locals => {:points => [@event] + @event.nearby_accounts} %>
   </div>
 </div>
