@@ -11,9 +11,11 @@
 
 <script>
   $(function () {
-
     var autocomplete = new google.maps.places.Autocomplete($('#organisation_address')[0]);
-
+    $('#organisation_address').keydown(function (e) {
+      if (e.which == 13 && $('.pac-container:visible').length)
+        return false;
+    });
   })
 </script>
 

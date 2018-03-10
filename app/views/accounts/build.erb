@@ -16,6 +16,10 @@
   <script>
     $(function () {
       var autocomplete = new google.maps.places.Autocomplete($('#account_location')[0]);
+      $('#account_location').keydown(function (e) {
+        if (e.which == 13 && $('.pac-container:visible').length)
+          return false;
+      });
     })
   </script>
 
@@ -27,7 +31,7 @@
     <%= f.text_block :location %>       
     <%= f.select_block :time_zone %>
     <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>    
-  
+
     <% if @account.persisted? %>
       <%= partial :'accounts/affiliations', :locals => {:f => f} %>        
       <style>#account_headline { height: 6em }</style>
