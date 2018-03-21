@@ -89,31 +89,12 @@
 
     <div class="container-fluid">
       <%= yield %>
-
-      <div class="text-center my-3">
-        <hr />
-        A project of
-        <a href="https://psychedelicsociety.org.uk"><img src="https://psychedelicsociety.org.uk/images/logo.png" style="height: 60px" /></a>
-
-        <div id="elsewhere" class="mt-2">
-          <i class="fa fa-envelope"></i> 
-          <a href="mailto:enquiries@psychedelicsociety.org.uk">
-            enquiries@psychedelicsociety.org.uk</a>
-          &middot;
-          <i class="fa fa-facebook-square"></i> 
-          <a target="_blank" href="http://www.facebook.com/PsychedelicsUK">/PsychedelicsUK</a>
-          &middot;
-          <i class="fa fa-twitter"></i> 
-          <a target="_blank" href="http://twitter.com/PsychedelicsUK">@PsychedelicsUK</a>          
-        </div>        
-
-      </div>
+      <%= eval(f('footer')) %>
     </div>
 
     <% if current_account and current_account.admin? %>
       <div id="footer" class="bg-dark p-3 mt-3">
         <div class="container-fluid">
-          <%= eval(f('footer')) %>
           <ul class="list-inline" style="margin-bottom: 0">
             <% if current_account %>
               <% if current_account.admin? %>
