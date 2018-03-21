@@ -81,7 +81,6 @@ $(function () {
       });
       if (textarea.form)
         $(textarea.form).submit(function () {
-          alert($(editor.content.get()).text().trim() == '')
           if ($(editor.content.get()).text().trim() == '')
             editor.content.set(' ')
         })
