@@ -257,7 +257,13 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   end
                      
   def send_welcome_emails
-    memberships.where(:welcome_email_pending => true).each(&:send_welcome_email)
+    memberships.where(:welcome_email_pending => true).each { |membership|
+      begin
+        membership.send_welcome_email
+      rescue => e
+        Airbrake.notify(e)
+      end
+    }
   end
   handle_asynchronously :send_welcome_emails
         
