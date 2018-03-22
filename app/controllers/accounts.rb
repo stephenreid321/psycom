@@ -42,7 +42,7 @@ ActivateApp::App.controllers do
       organisation = Organisation.find(scope_id)
       organisation.members
     else
-      Account.all
+      Account.publicly_accessible
     end 
     @q = []    
     @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(@organisation_name)}/i).pluck(:id)).pluck(:account_id)} if @organisation_name
