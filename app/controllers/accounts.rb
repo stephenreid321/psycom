@@ -56,7 +56,7 @@ ActivateApp::App.controllers do
     when :date
       @accounts.order_by(:created_at.desc)
     when :updated
-      @accounts.order_by([:has_picture.desc, :updated_at.desc])
+      @accounts.order_by(:updated_at.desc)
     end      
     @accounts = @accounts.per_page(params[:per_page] || 8).page(params[:page])
     partial :'accounts/results', locals: {full_width: params[:full_width]}
