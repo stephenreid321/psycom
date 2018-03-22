@@ -102,6 +102,7 @@ class Event
     end
   end
   def send_email
+    return unless coordinates
     event = self
     bcc = nearby_accounts.where(:unsubscribe_events.ne => true).pluck(:email)
     if bcc.count > 0      
