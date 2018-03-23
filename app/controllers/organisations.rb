@@ -53,13 +53,13 @@ ActivateApp::App.controllers do
   end
        
   get '/organisations/:id/edit' do
-    admins_only!
+    sign_in_required!
     @organisation = Organisation.find(params[:id]) || not_found
     erb :'organisations/build'
   end
   
   post '/organisations/:id/edit' do
-    admins_only!
+    sign_in_required!
     @organisation = Organisation.find(params[:id]) || not_found
     if @organisation.update_attributes(params[:organisation])      
       flash[:notice] = "<strong>Great!</strong> The organisation was updated successfully."
