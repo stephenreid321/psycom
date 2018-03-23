@@ -72,6 +72,15 @@ ActivateApp::App.helpers do
     end    
   end
   
+  
+  def admins_and_account_only!(account: nil)
+    unless admin? or (account and current_account and account.id == current_account.id)
+      flash[:notice] = %Q{You don't have access that page.}
+      session[:return_to] = request.url
+      request.xhr? ? halt(403) : redirect((current_account ? '/' : '/sign_in'))
+    end    
+  end    
+  
   def membership_required!(group=nil)
     group = @group if !group
     unless current_account and group and (group.memberships.find_by(account: current_account) or current_account.admin?)
