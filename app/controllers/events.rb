@@ -31,13 +31,13 @@ ActivateApp::App.controllers do
   
   get '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    admins_only!
+    sign_in_required!
     erb :'events/build'
   end     
       
   post '/events/:id/edit' do    
     @event = Event.find(params[:id]) || not_found
-    admins_only!
+    sign_in_required!
     if @event.update_attributes(params[:event])
       flash[:notice] = "<strong>Great!</strong> The event was updated successfully."
       redirect "/events/#{@event.id}"
