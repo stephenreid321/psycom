@@ -212,6 +212,15 @@ class Account
   dragonfly_accessor :picture do
     after_assign { |picture| self.picture = picture.thumb('500x500>') }
   end
+  before_validation do
+    if self.picture
+      begin
+        self.picture.format
+      rescue        
+        errors.add(:picture, 'must be an image')
+      end
+    end
+  end  
   attr_accessor :rotate_picture_by
   before_validation :rotate_picture
   def rotate_picture
