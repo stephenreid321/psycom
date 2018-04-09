@@ -7,6 +7,10 @@
           <%= text_field_tag :name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_name).capitalize, :value => params[:name] %>
           <i id="filter-spin" style="display: none; position: absolute; right: -5px; top: 9px" class="fa fa-spin fa-spinner"></i>
         </div>
+        
+        <div class="col-sm mb-1 mb-sm-0" style="position: relative"> 
+          <%= select_tag :organisation_type, :class => 'input-sm form-control', :options => Hash[[['All organisation types','']] + Organisation.organisation_types.reject { |ot| ot.blank? }.map { |ot| [ot,ot] }], :selected => params[:organisation_type] %>
+        </div>        
       </div>
     </div>
     <div class="col-sm-auto">

@@ -7,10 +7,12 @@ ActivateApp::App.controllers do
   get '/organisations/results' do
     @o = (params[:o] ? params[:o] : 'date').to_sym
     @name = params[:name]
+    @organisation_type = params[:organisation_type]
     @organisations = Organisation.all
     @q = []
     @organisations = @organisations.and(@q)
     @organisations = @organisations.where(:name => /#{::Regexp.escape(@name)}/i) if @name    
+    @organisations = @organisations.where(:organisation_type => @organisation_type) if @organisation_type
     @organisations = case @o
     when :name
       @organisations.order_by(:name.asc)
