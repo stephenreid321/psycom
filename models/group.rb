@@ -8,6 +8,7 @@ class Group
   field :primary, :type => Boolean
   field :description, :type => String
   field :privacy, :type => String
+  field :unlisted, :type => Boolean
   field :default_notification_level, :type => String
   field :request_intro, :type => String  
   field :request_questions, :type => String
@@ -94,6 +95,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
       self.send("#{e}_email=",self.send("#{e}_email_default")) if Nokogiri::HTML(self.send("#{e}_email")).text.blank?
       self.send("#{e}_email_subject=",self.send("#{e}_email_subject_default")) if Nokogiri::HTML(self.send("#{e}_email_subject")).text.blank?
     }
+    self.unlisted = nil if self.public?
     self.default_notification_level = 'each' if !self.default_notification_level
   end
     
@@ -200,6 +202,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
       :description => :text_area,
       :picture => :image,
       :privacy => :radio,
+      :unlisted => :check_box,
       :default_notification_level => :text,
       :request_intro => :text_area,      
       :request_questions => :text_area,
