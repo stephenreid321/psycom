@@ -75,7 +75,11 @@ class Organisation
     {
       :username => 'Letters, numbers, underscores and periods'
     }
-  end     
+  end
+    
+  def self.edit_tips
+    self.new_tips
+  end    
     
   # Picture
   dragonfly_accessor :picture do
