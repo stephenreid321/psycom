@@ -11,6 +11,7 @@ class Organisation
   field :coordinates, :type => Array
   field :website, :type => String
   field :picture_uid, :type => String  
+  field :organisation_type, :type => String
     
   include Geocoder::Model::Mongoid
   geocoded_by :address  
@@ -61,8 +62,13 @@ class Organisation
       :address => :text,
       :website => :text,
       :picture => :image,
+      :organisation_type => :select,
       :affiliations => :collection
     }
+  end
+  
+  def self.organisation_types
+    ['', 'Psychedelic Society', 'NGO', 'Service provider'].sort
   end
   
   def self.new_tips
