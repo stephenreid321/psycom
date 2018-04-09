@@ -21,6 +21,15 @@
     <div class="table-hr-container">
       <table class="table table-hr" >
         
+        <% if @organisation.organisation_type %>
+          <tr>
+            <td>Organisation type</td>
+            <td>
+              <span class="badge badge-primary"><%=@organisation.organisation_type%></span>
+            </td>  
+          </tr>
+        <% end %>         
+        
         <% if @organisation.address %>
           <tr>
             <td>Address</td>
