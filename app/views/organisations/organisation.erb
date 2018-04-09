@@ -9,7 +9,10 @@
 <% end %>
 
 <% content_for :cover_left_right do %>
-  <h1><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
+  <h1 class="mb-1"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
+  <% if @organisation.organisation_type %>
+  <big><a href="/organisations?organisation_type=<%=@organisation.organisation_type%>" class="badge badge-primary"><%=@organisation.organisation_type%></a></big>
+  <% end %>           
 <% end %>
 
 <%= partial :cover %>
@@ -20,16 +23,7 @@
 
     <div class="table-hr-container">
       <table class="table table-hr" >
-        
-        <% if @organisation.organisation_type %>
-          <tr>
-            <td>Organisation type</td>
-            <td>
-              <a href="/organisations?organisation_type=<%=@organisation.organisation_type%>" class="badge badge-primary"><%=@organisation.organisation_type%></a>
-            </td>  
-          </tr>
-        <% end %>         
-        
+
         <% if @organisation.address %>
           <tr>
             <td>Address</td>
