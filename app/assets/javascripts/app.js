@@ -189,7 +189,7 @@ $(function () {
     });
   });
 
-  $('#results-form input[type=radio], #results-form select').change(function () {
+  $('#results-form input[type=radio], #results-form select, #results-form input[type=checkbox]').change(function () {
     $(this.form).submit();
   });
 

@@ -25,10 +25,7 @@ ActivateApp::App.controllers do
   get '/accounts/results' do
     scope = params[:scope]
     scope_id = params[:scope_id]
-    @o = (params[:o] ? params[:o] : 'date').to_sym
-    @name = params[:name]    
-    @organisation_name = params[:organisation_name]
-    @account_tag_name = params[:account_tag_name]
+    @o = (params[:o] ? params[:o] : 'date').to_sym    
     @accounts = case scope      
     when 'group'
       group = Group.find(scope_id)
@@ -45,10 +42,10 @@ ActivateApp::App.controllers do
       Account.publicly_accessible
     end 
     @q = []    
-    @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(@organisation_name)}/i).pluck(:id)).pluck(:account_id)} if @organisation_name
-    @q << {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{::Regexp.escape(@account_tag_name)}/i).pluck(:id)).pluck(:account_id)} if @account_tag_name    
+    @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(params[:organisation_name])}/i).pluck(:id)).pluck(:account_id)} if params[:organisation_name]
+    @q << {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{::Regexp.escape(params[:account_tag_name])}/i).pluck(:id)).pluck(:account_id)} if params[:account_tag_name]    
     @accounts = @accounts.and(@q)    
-    @accounts = @accounts.or({:name => /#{::Regexp.escape(@name)}/i}, {:name_transliterated => /#{::Regexp.escape(@name)}/i}) if @name            
+    @accounts = @accounts.or({:name => /#{::Regexp.escape(params[:name])}/i}, {:name_transliterated => /#{::Regexp.escape(params[:name])}/i}) if params[:name]            
     @accounts = case @o
     when :name
       @accounts.order_by(:name.asc)
