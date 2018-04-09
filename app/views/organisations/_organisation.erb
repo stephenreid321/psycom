@@ -5,7 +5,7 @@
   <div class="media-body">
     <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>      
     <% if organisation.organisation_type %>
-      <span class="mb-1 badge badge-primary"><%=organisation.organisation_type%></span>
+      <a href="/organisations?organisation_type=<%=organisation.organisation_type%>" class="mb-1 badge badge-primary"><%=organisation.organisation_type%></a>
     <% end %>
     <ul class="fa-ul">
       <% if organisation.website%>
