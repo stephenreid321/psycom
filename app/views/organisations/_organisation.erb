@@ -3,14 +3,17 @@
     <img style="max-width: 64px" class="rounded-circle" src="<%=organisation.picture ? organisation.picture.thumb('64x64#').url : '/images/square.png' %>">
   </a>
   <div class="media-body">
-    <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>      
+    <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>          
+    <% if organisation.website%>
+      <a target="_blank" href="<%=organisation.website%>"><%=organisation.website%></a>
+    <% end %>  
     <% if organisation.organisation_type %>
       <a href="/organisations?organisation_type=<%=organisation.organisation_type%>" class="mb-1 badge badge-primary"><%=organisation.organisation_type%></a>
-    <% end %>
-    <ul class="fa-ul">
-      <% if organisation.website%>
-        <li><i title="Website" class="fa-li fa fa-globe"></i><a target="_blank" href="<%=organisation.website%>"><%=organisation.website%></a></li>
-          <% end %>             
-    </ul>
+    <% end %>        
+    <div class="mt-1">
+      <% organisation.members.each { |account| %>      
+        <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 50px;'} %>
+      <% } %>
+    </div>
   </div>
 </div>   
