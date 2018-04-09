@@ -4,12 +4,16 @@
   </a>
   <div class="media-body">
     <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>          
-    <% if organisation.website%>
-      <a target="_blank" href="<%=organisation.website%>"><%=organisation.website%></a>
-    <% end %>  
     <% if organisation.organisation_type %>
-      <a href="/organisations?organisation_type=<%=organisation.organisation_type%>" class="mb-1 badge badge-primary"><%=organisation.organisation_type%></a>
-    <% end %>        
+      <div>
+        <a href="/organisations?organisation_type=<%=organisation.organisation_type%>" class="mb-1 badge badge-primary"><%=organisation.organisation_type%></a>
+      </div>
+    <% end %>            
+    <% if organisation.website%>
+      <div>
+        <a target="_blank" href="<%=organisation.website%>"><%=organisation.website%></a>
+      </div>
+    <% end %>             
     <div class="mt-1">
       <% organisation.members.each { |account| %>      
         <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 50px;'} %>
