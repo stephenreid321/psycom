@@ -76,7 +76,7 @@
       <style>#map-canvas { height: 200px !important }</style>     
       <%= partial :'maps/map', :locals => {:points => accounts} %>      
       <p style="color: #959595; margin-top: 5px">
-        Map shows the 100 closest people within 25 miles of <%=@account.firstname%>.
+        Map shows people within 25 miles of <%=@account.firstname%>.
         Locations are offset for privacy.
       </p>
     </div>
