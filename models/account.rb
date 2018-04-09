@@ -169,7 +169,7 @@ class Account
   end
     
   def public_memberships
-    Membership.where(:id.in => memberships.select { |membership| !membership.group.secret? }.map(&:id))
+    Membership.where(:id.in => memberships.select { |membership| group = membership.group; group.public? or (group.closed? and !group.unlisted) }.map(&:id))
   end  
           
   def network    
