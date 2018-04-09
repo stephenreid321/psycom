@@ -3,7 +3,7 @@
     <img style="max-width: 64px" class="rounded-circle" src="<%=organisation.picture ? organisation.picture.thumb('64x64#').url : '/images/square.png' %>">
   </a>
   <div class="media-body">
-    <h4 class="mt-0"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>          
+    <h4 class="mt-0 mb-1"><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h4>          
     <% if organisation.organisation_type %>
       <div>
         <a href="/organisations?organisation_type=<%=organisation.organisation_type%>" class="mb-1 badge badge-primary"><%=organisation.organisation_type%></a>
