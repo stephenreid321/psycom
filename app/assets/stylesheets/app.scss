@@ -46,7 +46,7 @@ body { padding-top: 4rem }
 }
 
 @media(min-width: 768px) {
-  #results .fixed-height-result { height: 300px; overflow-y: hidden; overflow-x: hidden; position: relative }
+  #results .fixed-height-result { height: 300px; margin-bottom: 20px; overflow-y: hidden; overflow-x: hidden; position: relative }
   #results .fixed-height-result:before {
     content:'';
     width:100%;
@@ -56,6 +56,6 @@ body { padding-top: 4rem }
     top:0;
     background:linear-gradient(rgba(255,255,255,0.001) 280px, white);
     z-index: 99;
-    pointer-events: none
+    pointer-events: none;    
   }
 }
