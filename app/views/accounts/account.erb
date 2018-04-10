@@ -10,14 +10,14 @@
   <div class="col-sm-8">
 
     <% if @account.story %>
-      <h2><%=@account.firstname%>'s story</h2>
+      <h2 class="mt-0"><%=@account.firstname%>'s story</h2>
       <p>
         <%= Rinku.auto_link(@account.story.gsub("\n",'<br />')) %>
       </p>   
     <% end %>
 
     <% if @shared_conversations and !@shared_conversations.empty? %>
-      <h2 class="mt-3">Recent conversations</h2>
+      <h2 class="mt-0">Recent conversations</h2>
       <%= partial :'conversations/conversations_table', :locals => {:conversations => @shared_conversations}%>
     <% end %>    
 
