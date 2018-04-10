@@ -3,7 +3,7 @@
 
 <div class="row">
   <% @accounts.each { |account| %>
-    <div class="<%= full_width ? 'col-sm-4 col-md-2' : 'col-sm-6' %>">
+    <div class="fixed-height-result <%= full_width ? 'col-sm-4 col-md-2' : 'col-sm-6' %>">
       <%= partial :'accounts/minimal', :locals => {:account => account}  %>
     </div>
   <% } %>

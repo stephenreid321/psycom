@@ -44,3 +44,18 @@ body { padding-top: 4rem }
 #elsewhere a:hover {
   opacity: 1
 }
+
+@media(min-width: 768px) {
+  #results .fixed-height-result { height: 300px; overflow-y: hidden; overflow-x: hidden; position: relative }
+  #results .fixed-height-result:before {
+    content:'';
+    width:100%;
+    height:100%;    
+    position:absolute;
+    left:0;
+    top:0;
+    background:linear-gradient(rgba(255,255,255,0.001) 280px, white);
+    z-index: 99;
+    pointer-events: none
+  }
+}
