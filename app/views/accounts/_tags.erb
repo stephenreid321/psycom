@@ -1,8 +1,0 @@
-<% if account.account_tagships.count > 0 %>
-  <li>
-    <i title="<%=I18n.t(:account_tagships).capitalize%>" class="fa fa-li fa-tags"></i>
-    <% account.account_tagships.each { |account_tagship|%>
-      <a href="/people?q=<%=account_tagship.account_tag.name%>" class="badge badge-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
-    <% } %>
-  </li>
-<% end %>    
