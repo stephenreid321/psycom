@@ -4,6 +4,12 @@ ActivateApp::App.controllers do
     group = Group.find_by(slug: params[:slug]) || (halt 406)
 		mail = EmailReceiver.receive(request)
 
+    begin 
+      raise 'EmailReceived'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:body => mail.html_part.body})
+    end
+    
     (halt 406) unless mail.from
     from = mail.from.first
     
