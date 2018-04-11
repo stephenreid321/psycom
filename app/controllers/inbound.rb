@@ -47,25 +47,13 @@ ActivateApp::App.controllers do
     html = begin; body.decoded.force_encoding(charset).encode('UTF-8'); rescue; body.to_s; end
     html = html.gsub("\n", "<br>\n") if nl2br
     html = html.gsub(/<o:p>/, '')
-    html = html.gsub(/<\/o:p>/, '')
-    
-    begin 
-      raise 'before premailer'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => html})
-    end    
+    html = html.gsub(/<\/o:p>/, '') 
     
     begin
       html = Premailer.new(html, :with_html_string => true, :adapter => 'nokogiri', :input_encoding => 'UTF-8').to_inline_css
     rescue => e
       Airbrake.notify(e)
-    end
-    
-    begin 
-      raise 'after premailer'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => html})
-    end      
+    end    
 
     if (
         (mail.in_reply_to and (conversation = ConversationPostBcc.find_by(message_id: mail.in_reply_to).try(:conversation)) and conversation.group == group) or
@@ -85,13 +73,7 @@ ActivateApp::App.controllers do
       conversation = group.conversations.create :subject => (mail.subject.blank? ? '(no subject)' : mail.subject), :account => account
       (halt 406) if !conversation.persisted? # failed to find/create a valid conversation - probably a dupe
       puts "created new conversation id #{conversation.id}"
-    end
-    
-    begin 
-      raise 'before nokogiri'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => html})
-    end     
+    end 
       
     html = Nokogiri::HTML.parse(html)
     html.search('style').remove
@@ -102,9 +84,22 @@ ActivateApp::App.controllers do
       raise 'after nokogiri'
     rescue => e
       Airbrake.notify(e, :parameters => {:html => html})
-    end         
-             
+    end      
+     
     conversation_post = conversation.conversation_posts.create :body => html, :account => account, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{ENV['DOMAIN']}")
+    
+    begin 
+      raise 'after create, html'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => html})
+    end   
+
+    begin 
+      raise 'after create, conversation_post.body'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => conversation_post.body})
+    end       
+    
     if !conversation_post.persisted? # failed to create the conversation post
       puts "failed to create conversation post, deleting conversation"
       conversation.destroy if new_conversation
