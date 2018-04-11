@@ -18,7 +18,7 @@
         </div>
       </div>      
 
-      <div id="conversation-post-<%=conversation_post.id%>" style="margin-bottom: 1em"><%= Rinku.auto_link(conversation_post.replace_cids!.body) %></div>
+      <div id="conversation-post-<%=conversation_post.id%>" style="margin-bottom: 1em"><%= Rinku.auto_link(conversation_post.body) %></div>
 
       <%= partial :'conversations/conversation_post_attachments', :locals => {:conversation_post => conversation_post} %>
 
