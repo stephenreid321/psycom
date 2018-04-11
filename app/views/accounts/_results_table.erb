@@ -31,7 +31,7 @@
       </td>
       <td>
         <%account.account_tagships.each { |account_tagship|%>
-          <a href="/people?account_tag_name=<%=account_tagship.account_tag.name%>" class="badge badge-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
+          <a href="/people?q=<%=account_tagship.account_tag.name%>" class="badge badge-primary" style="text-indent: 0"><%=account_tagship.account_tag.name%></a>
         <% } %>
       </td>             
     </tr>
