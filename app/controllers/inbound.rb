@@ -3,12 +3,6 @@ ActivateApp::App.controllers do
   post '/groups/:slug/inbound' do    
     group = Group.find_by(slug: params[:slug]) || (halt 406)
 		mail = EmailReceiver.receive(request)
-
-    begin 
-      raise 'EmailReceived'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:body => mail.html_part.body})
-    end
     
     (halt 406) unless mail.from
     from = mail.from.first
@@ -54,11 +48,24 @@ ActivateApp::App.controllers do
     html = html.gsub("\n", "<br>\n") if nl2br
     html = html.gsub(/<o:p>/, '')
     html = html.gsub(/<\/o:p>/, '')
+    
+    begin 
+      raise 'before premailer'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => html})
+    end    
+    
     begin
       html = Premailer.new(html, :with_html_string => true, :adapter => 'nokogiri', :input_encoding => 'UTF-8').to_inline_css
     rescue => e
       Airbrake.notify(e)
     end
+    
+    begin 
+      raise 'after premailer'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => html})
+    end      
 
     if (
         (mail.in_reply_to and (conversation = ConversationPostBcc.find_by(message_id: mail.in_reply_to).try(:conversation)) and conversation.group == group) or
@@ -79,11 +86,23 @@ ActivateApp::App.controllers do
       (halt 406) if !conversation.persisted? # failed to find/create a valid conversation - probably a dupe
       puts "created new conversation id #{conversation.id}"
     end
+    
+    begin 
+      raise 'before nokogiri'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => html})
+    end     
       
     html = Nokogiri::HTML.parse(html)
     html.search('style').remove
     # html.search('.gmail_extra').remove
     html = html.search('body').inner_html
+    
+    begin 
+      raise 'after nokogiri'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:html => html})
+    end         
              
     conversation_post = conversation.conversation_posts.create :body => html, :account => account, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{ENV['DOMAIN']}")
     if !conversation_post.persisted? # failed to create the conversation post
