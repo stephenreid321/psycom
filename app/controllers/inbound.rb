@@ -88,6 +88,13 @@ ActivateApp::App.controllers do
       (halt 406)
     end
     puts "created conversation post id #{conversation_post.id}"
+    
+    begin
+      raise 'mail'
+    rescue => e
+      Airbrake.notify(e, :parameters => {:data => mail.attachments})
+    end      
+    
     mail.attachments.each do |attachment|
       file = Tempfile.new(attachment.filename)
       begin
