@@ -20,7 +20,7 @@
 
         <%  if defined?(full_width) %>
           <div class="col-sm mb-1 mb-sm-0">   
-            <%= text_field_tag :account_tag_name, :class => 'input-sm form-control', :placeholder => I18n.t(:filter_by_account_tagship).capitalize, :value => params[:account_tag_name] %>
+            <%= text_field_tag :q, :class => 'input-sm form-control', :placeholder => 'Filter by keyword', :value => params[:q] %>
           </div>
         <% end %>
       </div>

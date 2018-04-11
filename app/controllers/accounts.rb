@@ -41,11 +41,16 @@ ActivateApp::App.controllers do
     else
       Account.publicly_accessible
     end 
-    @q = []    
-    @q << {:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(params[:organisation_name])}/i).pluck(:id)).pluck(:account_id)} if params[:organisation_name]
-    @q << {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{::Regexp.escape(params[:account_tag_name])}/i).pluck(:id)).pluck(:account_id)} if params[:account_tag_name]    
-    @accounts = @accounts.and(@q)    
-    @accounts = @accounts.or({:name => /#{::Regexp.escape(params[:name])}/i}, {:name_transliterated => /#{::Regexp.escape(params[:name])}/i}) if params[:name]            
+    @accounts = @accounts.where({:id.in => Affiliation.where(:organisation_id.in => Organisation.where(:name => /#{::Regexp.escape(params[:organisation_name])}/i).pluck(:id)).pluck(:account_id)}) if params[:organisation_name]
+    @accounts = @accounts.or(
+      {:id.in => AccountTagship.where(:account_tag_id.in => AccountTag.where(:name => /#{::Regexp.escape(params[:q])}/i).pluck(:id)).pluck(:account_id)},
+      {:headline => /#{::Regexp.escape(params[:q])}/i},
+      {:story => /#{::Regexp.escape(params[:q])}/i}
+    ) if params[:q]    
+    @accounts = @accounts.or(
+      {:name => /#{::Regexp.escape(params[:name])}/i},
+      {:name_transliterated => /#{::Regexp.escape(params[:name])}/i}
+    ) if params[:name]            
     @accounts = case @o
     when :name
       @accounts.order_by(:name.asc)
@@ -58,7 +63,7 @@ ActivateApp::App.controllers do
     partial :'accounts/results', locals: {full_width: params[:full_width]}
   end  
   
- get '/accounts/:id/message' do
+  get '/accounts/:id/message' do
     sign_in_required!
     @account = Account.find(params[:id]) || not_found
     if @account.unsubscribe_message

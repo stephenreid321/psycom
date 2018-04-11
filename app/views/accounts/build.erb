@@ -33,7 +33,16 @@
     <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>    
 
     <% if @account.persisted? %>
-      <%= partial :'accounts/affiliations', :locals => {:f => f} %>        
+      <%= partial :'accounts/affiliations', :locals => {:f => f} %>   
+
+      <% if ENV['ACCOUNT_TAGS_PREDEFINED'] %>
+        <% if AccountTag.count > 0  %>
+          <%= f.check_boxes_block :account_tag_ids, options: AccountTag.order('name asc').map { |account_tag| [account_tag.name, account_tag.id] }, checked: @account.account_tagships.map(&:account_tag_id) %>
+        <% end %>
+      <% else %>  
+        <%= partial :'accounts/tagships', :locals => {:f => f} %>
+      <% end %>  
+
       <style>#account_headline { height: 6em }</style>
       <script>
         $(function () {
@@ -51,14 +60,6 @@
       <%= f.url_block :facebook_profile_url %>
       <%= f.url_block :twitter_profile_url %>
       <%= f.url_block :linkedin_profile_url %>
-
-      <% if ENV['ACCOUNT_TAGS_PREDEFINED'] %>
-        <% if AccountTag.count > 0  %>
-          <%= f.check_boxes_block :account_tag_ids, options: AccountTag.order('name asc').map { |account_tag| [account_tag.name, account_tag.id] }, checked: @account.account_tagships.map(&:account_tag_id) %>
-        <% end %>
-      <% else %>  
-        <%= partial :'accounts/tagships', :locals => {:f => f} %>
-      <% end %>
 
       <%= f.check_box_block :unsubscribe_events %>
       <%= f.check_box_block :unsubscribe_new_member %>
