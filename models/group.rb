@@ -179,7 +179,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   def send_email
     mail = Mail.new
     mail.to = ENV['HELP_ADDRESS']
-    mail.from = self.email
+    mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
     mail.subject = "New group: #{self.name}"
       
     group = self
