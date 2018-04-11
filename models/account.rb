@@ -165,7 +165,7 @@ class Account
   end
     
   def self.marker_color
-    '3DA2E4'
+    '47a6e6'
   end
     
   def public_memberships

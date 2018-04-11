@@ -27,7 +27,7 @@ class Event
   end  
   
   def self.marker_color
-    '9C3DE4'
+    '8747e6'
   end  
       
   validates_presence_of :name, :start_time, :end_time

@@ -52,7 +52,7 @@ class Organisation
   end
   
   def self.marker_color
-    'E43D3D'
+    'e647a6'
   end
     
   def self.admin_fields
