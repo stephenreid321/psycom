@@ -92,7 +92,7 @@ ActivateApp::App.controllers do
     begin
       raise 'mail'
     rescue => e
-      Airbrake.notify(e, :parameters => {:data => mail.attachments})
+      Airbrake.notify(e, :parameters => {:data => mail.attachments.map { |attachment| [attachment.filename, attachment.cid] } })
     end      
     
     mail.attachments.each do |attachment|
