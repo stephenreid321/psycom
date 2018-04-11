@@ -79,27 +79,9 @@ ActivateApp::App.controllers do
     html.search('style').remove
     # html.search('.gmail_extra').remove
     html = html.search('body').inner_html
-    
-    begin 
-      raise 'after nokogiri'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => html})
-    end      
-     
+         
     conversation_post = conversation.conversation_posts.create :body => html, :account => account, :message_id => (mail.message_id or "#{SecureRandom.uuid}@#{ENV['DOMAIN']}")
-    
-    begin 
-      raise 'after create, html'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => html})
-    end   
-
-    begin 
-      raise 'after create, conversation_post.body'
-    rescue => e
-      Airbrake.notify(e, :parameters => {:html => conversation_post.body})
-    end       
-    
+        
     if !conversation_post.persisted? # failed to create the conversation post
       puts "failed to create conversation post, deleting conversation"
       conversation.destroy if new_conversation
