@@ -19,8 +19,8 @@
 <% points.select(&:coordinates).each { |point| %>
     points.push({
     id: '<%=point.id%>',
-            lat: <%=point.lat + rand*0.002 %>,
-            lng: <%=point.lng + rand*0.002 %>,
+            lat: <%=point.lat + rand*0.005 %>,
+            lng: <%=point.lng + rand*0.005 %>,
             color: '<%=point.class.marker_color%>',
             name: "<%=js_escape_html(point.try(:name) || point.try(:title))%>",
             content: '<%=js_escape_html(partial "maps/#{point.class.to_s.underscore}".to_sym, :object => point)%>'
