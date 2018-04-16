@@ -1,5 +1,5 @@
 <ol class="breadcrumb">
-  
+
   <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
   <li class="breadcrumb-item">
     <a href="/groups/<%=@group.slug%>"><%=@group.name%></a>    
@@ -16,13 +16,14 @@
 
     $('.status-tip').tooltip();
 
-    var accounts = <%=Account.where(:id.in => (current_account.network.pluck(:id) - @group.memberships.pluck(:account_id))).map { |account| {:name => account.name, :email => account.email} }.to_json%>
-    $('#add-single input[name=name]').typeahead({
-      source: accounts,
-      afterSelect: function (selected) {
-        $('#add-single input[name=email]').val(selected.email)
-      }
-    }).focus();
+    // var accounts = <%=Account.where(:id.in => (current_account.network.pluck(:id) - @group.memberships.pluck(:account_id))).map { |account| {:name => account.name, :email => account.email} }.to_json%>
+    // $('#add-single input[name=name]').typeahead({
+    //  source: accounts,
+    // afterSelect: function (selected) {
+    // $('#add-single input[name=email]').val(selected.email)
+    // }
+    // }).focus();
+
   })
 </script>
 
@@ -33,8 +34,8 @@
   </style>
   <div id="add-single">
     <p><a href="javascript:;" onclick="$('#add-single input').val('');
-                $('#add-single').hide();
-                $('#add-multiple').show();">Add multiple</a></p>        
+                  $('#add-single').hide();
+                  $('#add-multiple').show();">Add multiple</a></p>        
 
     <div class="row">
       <div class="col-sm-6">
