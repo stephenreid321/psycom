@@ -42,7 +42,7 @@ class ConversationPostBcc
             
   after_create :send_email
   def send_email
-    return unless ENV['SMTP_ADDRESS']
+    return unless ENV['MAILGUN_API_KEY']
     # set locals for ERB binding
     conversation_post_bcc = self
     conversation_post = conversation_post_bcc.conversation_post
@@ -51,9 +51,8 @@ class ConversationPostBcc
     previous_conversation_posts = conversation.visible_conversation_posts.order_by(:created_at.desc)[1..-1]
     
     mg_client = Mailgun::Client.new ENV['MAILGUN_API_KEY']
-    batch_message = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])
+    batch_message = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])    
     
-    batch_message.add_recipient(:to, group.email)    
     batch_message.from "#{conversation_post.account.name.gsub(',','')} <#{conversation_post.from_address}>"
     batch_message.subject conversation.visible_conversation_posts.count == 1 ? "[#{group.slug}] #{conversation.subject}" : "Re: [#{group.slug}] #{conversation.subject}"      
     if ENV['REPLY_TO_GROUP']
@@ -88,6 +87,7 @@ class ConversationPostBcc
     
     batch_message.body_html ERB.new(File.read(Padrino.root('app/views/emails/conversation_post.erb'))).result(binding)
 
+    batch_message.add_recipient(:to, group.email)    
     conversation_post_bcc_recipients.pluck(:email).each { |bcc|
       batch_message.add_recipient(:bcc, bcc)
     }    
