@@ -1,6 +1,5 @@
-<div class="text-center">
-  <%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 130px;'} %>
-</div>
+
+<%= partial :'accounts/square', :locals => {:account => account, :style => 'width: 130px;'} %>
 
 <h3><a href="/<%=account.username_or_id%>"><%=account.name%></a></h3>
 <ul class="fa-ul">    
