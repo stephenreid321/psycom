@@ -73,7 +73,7 @@ class ConversationPostBcc
           previous_conversation_post.conversation_post_bccs.order('created_at desc').map { |conversation_post_bcc|
             conversation_post_bcc.message_ids.map { |message_id|
               "<#{message_id}>"  
-            }
+            } if conversation_post_bcc.message_ids
           }
         }.flatten          
         batch_message.header 'References', references.join(' ')
@@ -87,7 +87,7 @@ class ConversationPostBcc
     batch_message.reply_to group.email
     conversation_post_bcc_recipients.pluck(:email).each { |bcc|
       batch_message.add_recipient(:to, bcc)
-    }    
+    }
     
     finalized = batch_message.finalize 
    
