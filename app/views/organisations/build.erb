@@ -11,8 +11,8 @@
 
 <script>
   $(function () {
-    var autocomplete = new google.maps.places.Autocomplete($('#organisation_address')[0]);
-    $('#organisation_address').keydown(function (e) {
+    var autocomplete = new google.maps.places.Autocomplete($('#organisation_location')[0]);
+    $('#organisation_location').keydown(function (e) {
       if (e.which == 13 && $('.pac-container:visible').length)
         return false;
     });
@@ -23,12 +23,18 @@
 
   <% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
-    <%= f.text_block :name %>
+    <%= f.text_block :name %>    
+    <%= f.select_block :organisation_type %>  
     <%= f.text_block :username %>
-    <%= f.text_block :address %>
-    <%= f.text_block :website %>
-    <%= f.select_block :organisation_type %>
+    <%= f.text_block :location %>  
+
     <%= f.image_block :picture, rotate: false %>
+
+    <%= f.text_block :website %>
+    <%= f.email_block :email %>  
+    <%= f.url_block :facebook_profile_url %>
+    <%= f.url_block :twitter_profile_url %>
+
     <%= f.submit_block destroy_url: ("/organisations/#{@organisation.id}/destroy" if admin? && @organisation.affiliations.empty?) %>
 
   <% end %>

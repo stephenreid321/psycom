@@ -30,6 +30,7 @@ class Account
   field :crypted_password, :type => String  
   field :password_reset_token, :type => String   
   field :admin, :type => Boolean
+  field :editor, :type => Boolean
   field :translator, :type => Boolean  
   field :prevent_new_memberships, :type => Boolean
   
@@ -273,16 +274,19 @@ class Account
     errors.add(:name, 'must not contain an @') if self.name and self.name.include?('@')
     self.username = self.username.downcase if self.username
     self.email = self.email.gsub(' ','') if self.email # strip unicode \u00a0
-    self.secret_token = SecureRandom.uuid if !self.secret_token
-    self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
+    self.secret_token = SecureRandom.uuid if !self.secret_token    
     self.name_transliterated = I18n.transliterate(self.name)
     
-    self.twitter_profile_url = "twitter.com/#{self.twitter_profile_url}" if self.twitter_profile_url and !self.twitter_profile_url.include?('twitter.com')      
-    errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')    
-    errors.add(:linkedin_profile_url, 'must contain linkedin.com') if self.linkedin_profile_url and !self.linkedin_profile_url.include?('linkedin.com')    
+    self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
+    
+    self.twitter_profile_url = "twitter.com/#{self.twitter_profile_url}" if self.twitter_profile_url and !self.twitter_profile_url.include?('twitter.com')         
     self.twitter_profile_url = self.twitter_profile_url.gsub('twitter.com/', 'twitter.com/@') if self.twitter_profile_url and !self.twitter_profile_url.include?('@')                
     self.twitter_profile_url = "http://#{self.twitter_profile_url}" if self.twitter_profile_url and !(self.twitter_profile_url =~ /\Ahttps?:\/\//)
+    
+    errors.add(:facebook_profile_url, 'must contain facebook.com') if self.facebook_profile_url and !self.facebook_profile_url.include?('facebook.com')        
     self.facebook_profile_url = "http://#{self.facebook_profile_url}" if self.facebook_profile_url and !(self.facebook_profile_url =~ /\Ahttps?:\/\//)   
+    
+    errors.add(:linkedin_profile_url, 'must contain linkedin.com') if self.linkedin_profile_url and !self.linkedin_profile_url.include?('linkedin.com')        
     self.linkedin_profile_url = "http://#{self.linkedin_profile_url}" if self.linkedin_profile_url and !(self.linkedin_profile_url =~ /\Ahttps?:\/\//)   
   end  
       
@@ -320,6 +324,7 @@ class Account
       :facebook_profile_url => :text,
       :linkedin_profile_url => :text,
       :admin => :check_box,
+      :editor => :check_box,
       :translator => :check_box,
       :time_zone => :select,
       :language_id => :lookup,
