@@ -11,7 +11,7 @@
 <% content_for :cover_left_right do %>
   <h1 class="mb-1"><a href="/o/<%=@organisation.username_or_id%>"><%=@organisation.name%></a></h1>
   <% if @organisation.organisation_type %>
-  <big><a href="/organisations?organisation_type=<%=@organisation.organisation_type%>" class="badge badge-primary"><%=@organisation.organisation_type%></a></big>
+    <big><a href="/organisations?organisation_type=<%=@organisation.organisation_type%>" class="badge badge-primary"><%=@organisation.organisation_type%></a></big>
   <% end %>           
 <% end %>
 
@@ -40,7 +40,35 @@
               <a target="_blank" href="<%=@organisation.website%>"><%=@organisation.website%></a>
             </td>  
           </tr>
-        <% end %>          
+        <% end %>      
+
+
+        <% if @organisation.email %>
+          <tr>
+            <td>Email</td>
+            <td>
+              <a target="_blank" href="<%=@organisation.email%>"><%=@organisation.email%></a>
+            </td>  
+          </tr>
+        <% end %>               
+
+        <% if @organisation.facebook_profile_url %>
+          <tr>
+            <td>Facebook</td>
+            <td>
+              <a target="_blank" href="<%=@organisation.facebook_profile_url%>"><%=@organisation.facebook_profile_url.split('/')[3..-1].join('/')%></a>
+            </td>  
+          </tr>
+        <% end %>     
+
+        <% if @organisation.twitter_profile_url %>
+          <tr>
+            <td>Twitter</td>
+            <td>
+              <a target="_blank" href="<%=@organisation.twitter_profile_url%>"><%=@organisation.twitter_profile_url.split('/')[3..-1].join('/').split('?').first%></a>
+            </td>  
+          </tr>
+        <% end %>           
 
       </table>     
 
