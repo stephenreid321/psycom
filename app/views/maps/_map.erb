@@ -135,7 +135,13 @@
           <%= check_box_tag :events, :value => true, :checked => params[:events] %>
           <%= I18n.t(:events).capitalize%>  <i class="fa fa-map-marker" style="color: <%= "##{Event.marker_color}" %>"></i>
         </label>
-      </div>      
+      </div>     
+      <div class="checkbox">
+        <label>
+          <%= check_box_tag :groups, :value => true, :checked => params[:groups] %>
+          <%= I18n.t(:groups).capitalize%>  <i class="fa fa-map-marker" style="color: <%= "##{Group.marker_color}" %>"></i>
+        </label>
+      </div>        
       <i class="fa fa-spin fa-circle-o-notch" style="display: none"></i>
     </form>
   <% end %>

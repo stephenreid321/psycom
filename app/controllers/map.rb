@@ -17,7 +17,10 @@ ActivateApp::App.controllers do
         else
           @points += Organisation.all
         end
-      end      
+      end  
+      if params[:groups]
+        @points += Group.where(:privacy.ne => 'secret').where(:unlisted.ne => true)
+      end          
       partial :'maps/map', :locals => {:points => @points, :global => params[:global]}
     else
       redirect '/'

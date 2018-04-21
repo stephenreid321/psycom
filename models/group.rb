@@ -2,9 +2,13 @@ class Group
   include Mongoid::Document
   include Mongoid::Timestamps
   extend Dragonfly::Model
+  
+  index({coordinates: "2dsphere"})
      
   field :name, :type => String  
   field :slug, :type => String
+  field :location, :type => String
+  field :coordinates, :type => Array  
   field :primary, :type => Boolean
   field :description, :type => String
   field :privacy, :type => String
@@ -15,6 +19,18 @@ class Group
   field :landing_tab, :type => String
   field :picture_uid, :type => String 
   field :conversation_creation_by_admins_only, :type => Boolean
+  
+  include Geocoder::Model::Mongoid
+  geocoded_by :location  
+  def lat; coordinates[1] if coordinates; end  
+  def lng; coordinates[0] if coordinates; end  
+  after_validation do
+    self.geocode || (self.coordinates = nil)
+  end  
+  
+  def self.marker_color
+    '54e645'
+  end
         
   dragonfly_accessor :picture do
     after_assign { |picture| self.picture = picture.thumb('500x500>') }
@@ -198,6 +214,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
     {
       :name => :text,
       :slug => :text,
+      :location => :text,
       :primary => :check_box,
       :description => :text_area,
       :picture => :image,
