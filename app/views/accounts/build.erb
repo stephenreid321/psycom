@@ -28,7 +28,8 @@
     <%= f.text_block :name %>
     <%= f.email_block :email %>
     <%= f.text_block :username %>
-    <%= f.text_block :location %>       
+    <%= f.text_block :location, :hint => ('If you do not provide a location, your profile will be private and visible only to you.' if !@account.location) %>   
+
     <%= f.select_block :time_zone %>
     <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>    
 
