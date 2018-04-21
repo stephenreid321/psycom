@@ -10,12 +10,12 @@ ActivateApp::App.controllers do
         @points += Event.future
       end        
       if params[:organisations]
-        if params[:organisation_types]
+        if !params[:organisation_types] or params[:organisation_types].count == (Organisation.organisation_types.count-1)
+          @points += Organisation.all          
+        else
           params[:organisation_types].keys.each { |t|
             @points += Organisation.where(organisation_type: t)
-          }
-        else
-          @points += Organisation.all
+          }          
         end
       end  
       if params[:groups]
