@@ -22,6 +22,19 @@ ActivateApp::App.controllers do
     partial :'organisations/results'    
   end  
   
+  get '/organisations/merge' do
+    erb :'organisations/merge'
+  end
+  
+  post '/organisations/merge' do
+    org1 = Organisation.find(params[:org1]) || not_found
+    org2 = Organisation.find(params[:org2]) || not_found
+    Event.where(organisation_id: org1.id).set(organisation_id: org2.id)
+    Affiliation.where(organisation_id: org1.id).set(organisation_id: org2.id)
+    org1.destroy
+    redirect back
+  end
+  
   get '/organisations/new' do
     sign_in_required!
     @organisation = Organisation.new

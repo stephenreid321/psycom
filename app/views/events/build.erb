@@ -34,7 +34,7 @@
     <script>
       $(function () {
         var organisations = <%=Organisation.all.map(&:name).to_json %>;
-        $('#event_organisation_name').typeahead({source: organisations}).attr('autocomplete', 'off');
+        $('#event_organisation_name').typeahead({source: organisations, autoSelect: false}).attr('autocomplete', 'off');
       })
     </script>
     <%= f.wysiwyg_block :details %>        

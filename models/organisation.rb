@@ -3,6 +3,9 @@ class Organisation
   include Mongoid::Timestamps
   extend Dragonfly::Model
   
+  has_many :events, :dependent => :destroy  
+  has_many :affiliations, :dependent => :restrict  
+  
   index({coordinates: "2dsphere"})
 
   field :name, :type => String
@@ -32,11 +35,7 @@ class Organisation
   validates_uniqueness_of :name, :case_sensitive => false   
   validates_format_of :username, :with => /\A[a-z0-9_\.]+\z/, :allow_nil => true
   validates_uniqueness_of :username, :allow_nil => true  
-  
-  has_many :events, :dependent => :destroy
-  
-  has_many :affiliations, :dependent => :restrict
-  
+    
   def members
     Account.where(:id.in => affiliations.pluck(:account_id))
   end  

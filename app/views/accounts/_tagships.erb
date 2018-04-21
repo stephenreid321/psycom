@@ -32,7 +32,7 @@
           i.addClass('form-control');
           i.addClass('typeahead');
           i.prop('autocomplete', 'off');
-          i.typeahead({source: account_tags});
+          i.typeahead({source: account_tags, autoSelect: false});
           var d = $('<div class="account_tagship"/>');
           i.appendTo(d);
           $('<span><i style="visibility:hidden" class="fa fa-times"></i></span>').appendTo(d);
@@ -41,7 +41,7 @@
         });
         icon.insertAfter('#account_tagships');
         var account_tags = <%=AccountTag.all.map(&:name).to_json %>;
-        $('.account_tagship .typeahead').typeahead({source: account_tags});
+        $('.account_tagship .typeahead').typeahead({source: account_tags, autoSelect: false});
       });
     </script>
   </div>

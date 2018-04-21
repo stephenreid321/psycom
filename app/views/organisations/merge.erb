@@ -1,0 +1,10 @@
+<% form_tag '/organisations/merge', :class => 'form-inline' do %>
+
+  Merge
+  <%= select_tag :org1, :options => Organisation.all.map { |organisation| [organisation.name, organisation.id] }, :class => 'form-control mx-1' %>
+  into
+  <%= select_tag :org2, :options => Organisation.all.map { |organisation| [organisation.name, organisation.id] }, :class => 'form-control mx-1' %>
+
+  <%= submit_tag 'Merge', :class => 'btn btn-primary' %>
+
+<% end %>

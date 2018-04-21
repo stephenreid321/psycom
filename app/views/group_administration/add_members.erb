@@ -16,13 +16,14 @@
 
     $('.status-tip').tooltip();
 
-    // var accounts = <%=Account.where(:id.in => (current_account.network.pluck(:id) - @group.memberships.pluck(:account_id))).map { |account| {:name => account.name, :email => account.email} }.to_json%>
-    // $('#add-single input[name=name]').typeahead({
-    //  source: accounts,
-    // afterSelect: function (selected) {
-    // $('#add-single input[name=email]').val(selected.email)
-    // }
-    // }).focus();
+    var accounts = <%=Account.where(:id.in => (current_account.network.pluck(:id) - @group.memberships.pluck(:account_id))).map { |account| {:name => account.name, :email => account.email} }.to_json%>
+    $('#add-single input[name=name]').typeahead({
+      source: accounts,
+      autoSelect: false,
+      afterSelect: function (selected) {
+        $('#add-single input[name=email]').val(selected.email)
+      }
+    }).focus();
 
   })
 </script>

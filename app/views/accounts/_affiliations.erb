@@ -40,7 +40,7 @@
           j.addClass('form-control');
           j.addClass('typeahead');
           j.prop('autocomplete', 'off');
-          j.typeahead({source: organisations});
+          j.typeahead({source: organisations, autoSelect: false});
           var d = $('<div class="affiliation"/>');
           i.appendTo(d);
           $('<span class="at"> <%=I18n.t(:at)%> </span>').appendTo(d);
@@ -50,7 +50,7 @@
         });
         icon.insertAfter('#affiliations');
         var organisations = <%=Organisation.all.map(&:name).to_json %>;
-        $('.affiliation .typeahead').typeahead({source: organisations});
+        $('.affiliation .typeahead').typeahead({source: organisations, autoSelect: false});
         if ($('.affiliation').length == 0)
           $(icon).click();
       });
