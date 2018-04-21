@@ -54,10 +54,7 @@ class ConversationPostBcc
     batch_message = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])    
     
     batch_message.from "#{conversation_post.account.name.gsub(',','')} <#{conversation_post.from_address}>"
-    batch_message.subject conversation.visible_conversation_posts.count == 1 ? "[#{group.slug}] #{conversation.subject}" : "Re: [#{group.slug}] #{conversation.subject}"      
-    if ENV['REPLY_TO_GROUP']
-      batch_message.reply_to = group.email 
-    end    
+    batch_message.subject conversation.visible_conversation_posts.count == 1 ? "[#{group.slug}] #{conversation.subject}" : "Re: [#{group.slug}] #{conversation.subject}"              
     
     {
       'Sender' => group.email('-noreply'),
@@ -87,9 +84,9 @@ class ConversationPostBcc
     
     batch_message.body_html ERB.new(File.read(Padrino.root('app/views/emails/conversation_post.erb'))).result(binding)
 
-    batch_message.add_recipient(:to, group.email)    
+    batch_message.reply_to = group.email
     conversation_post_bcc_recipients.pluck(:email).each { |bcc|
-      batch_message.add_recipient(:bcc, bcc)
+      batch_message.add_recipient(:to, bcc)
     }    
     
     finalized = batch_message.finalize 
