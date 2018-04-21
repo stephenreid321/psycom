@@ -96,9 +96,9 @@
       $('#map-form').submit(function (e) {
       var form = this;
       e.preventDefault();
-      $('.fa-spinner', this).show();
+      $('.fa-spin', this).show();
       $('#map').load('/map?' + $(this).serialize(), function () {
-      $('.fa-spinner', form).hide();
+      $('.fa-spin', form).hide();
       $('button[type=submit]', form).attr('disabled', false).html('<%= I18n.t(:search).capitalize%>');
       });
       return false;
