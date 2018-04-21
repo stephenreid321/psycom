@@ -18,7 +18,7 @@
 
   <% if !@account.public? %>
     <div class="alert alert-primary">
-      Since you haven't provided a location, this profile is private and only visible to you.
+      <%= @account.id == current_account.id ? "Since you haven't provided a location, this profile is private and visible only to you." : "Since this person hasn't provided a location, this profile is private and only visible to the individual and admins." %>
     </div>
   <% end %>    
 

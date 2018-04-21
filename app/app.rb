@@ -72,7 +72,7 @@ module ActivateApp
       elsif @account = Account.find_by(username: params[:slug]) or @account = Account.find(params[:slug])
         if !@account.public?
           unless current_account and (current_account.id == @account.id or current_account.admin?)
-            flash[:notice] = "You can't access that profile."
+            flash[:notice] = "That profile is private."
             session[:return_to] = request.url
             request.xhr? ? halt(403) : redirect((current_account ? '/' : '/sign_in'))
           end         
