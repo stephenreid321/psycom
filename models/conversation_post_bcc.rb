@@ -84,7 +84,7 @@ class ConversationPostBcc
     
     batch_message.body_html ERB.new(File.read(Padrino.root('app/views/emails/conversation_post.erb'))).result(binding)
 
-    batch_message.reply_to = group.email
+    batch_message.reply_to group.email
     conversation_post_bcc_recipients.pluck(:email).each { |bcc|
       batch_message.add_recipient(:to, bcc)
     }    
