@@ -1,4 +1,9 @@
 
+task :geocode => :environment do
+  Account.where(:location.ne => nil).where(:coordinates => nil).each { |a| a.save }
+  Organisation.where(:location.ne => nil).where(:coordinates => nil).each { |a| a.save }
+end 
+
 namespace :cleanup do
   task :organisations => :environment do
     Organisation.each { |organisation|
