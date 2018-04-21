@@ -77,7 +77,7 @@
       <% if @organisation.coordinates or @organisation.affiliations.any? { |affiliation| affiliation.account.coordinates } %>
         <div style="margin-top: 20px">
           <style>#map-canvas { height: 200px !important }</style>
-          <%= partial :'maps/map', :locals => {:points => [@organisation] + @organisation.affiliations.map(&:account)} %>      
+          <%= partial :'maps/map', :locals => {:points => ([@organisation] + @organisation.affiliations.map(&:account)), :centre => @organisation} %>      
         </div>
       <% end %>      
 

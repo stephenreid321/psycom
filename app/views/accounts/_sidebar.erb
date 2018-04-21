@@ -74,7 +74,7 @@
   <% if @account.coordinates and (accounts = @account.nearby_accounts).count > 0 %>
     <div style="margin-top: 20px">
       <style>#map-canvas { height: 200px !important }</style>     
-      <%= partial :'maps/map', :locals => {:points => accounts} %>      
+      <%= partial :'maps/map', :locals => {:points => accounts, :centre => @account} %>      
       <p style="color: #959595; margin-top: 5px">
         Map shows people within 25 miles of <%=@account.firstname%>.
         Locations are offset for privacy.

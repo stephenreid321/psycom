@@ -64,6 +64,9 @@
     map.setCenter(new google.maps.LatLng(53, - 1))
             map.setZoom(3)
     }
+<% elsif defined?(centre) %>
+    map.setCenter(new google.maps.LatLng(<%=centre.lat%>, <%=centre.lng%>))
+            map.setZoom(14)
 <% elsif !points.empty? %>
     map.fitBounds(bounds);
 <% end %>

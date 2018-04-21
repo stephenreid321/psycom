@@ -63,7 +63,7 @@
   <div class="col-sm-4">
     <% if @event.coordinates %>
       <style>#map-canvas { height: 50vh !important }</style>
-      <%= partial :'maps/map', :locals => {:points => [@event] + @event.nearby_accounts} %>
+      <%= partial :'maps/map', :locals => {:points => ([@event] + @event.nearby_accounts), :centre => @event} %>
     <% end %>
   </div>
 </div>
