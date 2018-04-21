@@ -30,7 +30,6 @@ class Account
   field :crypted_password, :type => String  
   field :password_reset_token, :type => String   
   field :admin, :type => Boolean
-  field :editor, :type => Boolean
   field :translator, :type => Boolean  
   field :prevent_new_memberships, :type => Boolean
   
@@ -324,7 +323,6 @@ class Account
       :facebook_profile_url => :text,
       :linkedin_profile_url => :text,
       :admin => :check_box,
-      :editor => :check_box,
       :translator => :check_box,
       :time_zone => :select,
       :language_id => :lookup,

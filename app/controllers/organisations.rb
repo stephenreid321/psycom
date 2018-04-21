@@ -23,10 +23,12 @@ ActivateApp::App.controllers do
   end  
   
   get '/organisations/merge' do
+    admins_only!
     erb :'organisations/merge'
   end
   
   post '/organisations/merge' do
+    admins_only!
     org1 = Organisation.find(params[:org1]) || not_found
     org2 = Organisation.find(params[:org2]) || not_found
     Event.where(organisation_id: org1.id).set(organisation_id: org2.id)
