@@ -24,9 +24,9 @@
   <% form_for @organisation, @organisation.new_record? ? "/organisations/new" : "/organisations/#{@organisation.id}/edit", :class => 'form-horizontal', :multipart => true do |f| %>
 
     <%= f.text_block :name %>    
-    <%= f.select_block :organisation_type %>  
-    <%= f.text_block :username %>
-    <%= f.text_block :location %>  
+    <%= f.text_block :username %>    
+    <%= f.text_block :location %>
+    <%= f.select_block :organisation_type %>        
 
     <%= f.image_block :picture, rotate: false %>
 

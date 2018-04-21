@@ -114,6 +114,18 @@
           <%= check_box_tag :organisations, :value => true, :checked => params[:organisations]  %>
           <%= I18n.t(:organisations).capitalize%> <i class="fa fa-map-marker" style="color: <%= "##{Organisation.marker_color}" %>"></i>
         </label>
+        <% if params[:organisations] %>
+          <div class="ml-3">         
+            <% Organisation.organisation_types.reject { |t| t.blank? }.each { |t| %>
+              <div class="checkbox">
+                <label>          
+                  <%= check_box_tag :"organisation_types[#{t}]", :value => true, :checked => !params[:organisation_types] || params[:organisation_types][t]  %>
+                  <%= t %>
+                </label>
+              </div>
+            <% } %>
+          </div> 
+        <% end %>
       </div>   
       <div class="checkbox">
         <label>

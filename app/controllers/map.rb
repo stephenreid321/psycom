@@ -10,7 +10,13 @@ ActivateApp::App.controllers do
         @points += Event.future
       end        
       if params[:organisations]
-        @points += Organisation.all
+        if params[:organisation_types]
+          params[:organisation_types].keys.each { |t|
+            @points += Organisation.where(organisation_type: t)
+          }
+        else
+          @points += Organisation.all
+        end
       end      
       partial :'maps/map', :locals => {:points => @points, :global => params[:global]}
     else
