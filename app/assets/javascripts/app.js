@@ -185,9 +185,9 @@ $(function () {
 
   $('#results-form').submit(function (e) {
     e.preventDefault();
-    $('#filter-spin').show();
+    $('#spinner').show();
     $('#results').load($(this).attr('action') + '?' + $(this).serialize(), function () {
-      $('#filter-spin').hide();
+      $('#spinner').hide();
     });
   });
 

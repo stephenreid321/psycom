@@ -96,9 +96,9 @@
       $('#map-form').submit(function (e) {
       var form = this;
       e.preventDefault();
-      $('.fa-spin', this).show();
+      $('#spinner').show();
       $('#map').load('/map?' + $(this).serialize(), function () {
-      $('.fa-spin', form).hide();
+      $('#spinner').hide();
       $('button[type=submit]', form).attr('disabled', false).html('<%= I18n.t(:search).capitalize%>');
       });
       return false;
@@ -142,7 +142,6 @@
           <%= I18n.t(:groups).capitalize%>  <i class="fa fa-map-marker" style="color: <%= "##{Group.marker_color}" %>"></i>
         </label>
       </div>        
-      <i class="fa fa-spin fa-circle-o-notch" style="display: none"></i>
     </form>
   <% end %>
 
