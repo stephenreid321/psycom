@@ -26,6 +26,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 
 # Email
+gem 'mailgun-ruby', require: 'mailgun'
 gem 'mail'
 gem 'premailer'
 gem 'incoming'

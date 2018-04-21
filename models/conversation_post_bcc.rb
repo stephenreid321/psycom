@@ -8,8 +8,10 @@ class ConversationPostBcc
   
   field :delivered_at, :type => Time
   field :message_id, :type => String
+  field :message_ids, :type => Array
   
   index({message_id: 1})
+  index({message_ids: 1})
     
   has_many :conversation_post_bcc_recipients, :dependent => :destroy
   accepts_nested_attributes_for :conversation_post_bcc_recipients
@@ -20,6 +22,7 @@ class ConversationPostBcc
     {
       :delivered_at => :datetime,
       :message_id => :text,
+      :message_ids => {:type => :text_area, :edit => :false},
       :conversation_post_id => :lookup,
       :conversation_post_bcc_recipients => :collection
     }
@@ -46,39 +49,52 @@ class ConversationPostBcc
     conversation = conversation_post.conversation
     group = conversation.group    
     previous_conversation_posts = conversation.visible_conversation_posts.order_by(:created_at.desc)[1..-1]
-                        
-    mail = Mail.new
-    mail.to = group.email
+    
+    mg_client = Mailgun::Client.new ENV['MAILGUN_API_KEY']
+    batch_message = Mailgun::BatchMessage.new(mg_client, ENV['MAILGUN_DOMAIN'])
+    
+    batch_message.add_recipient(:to, group.email)    
+    batch_message.from "#{conversation_post.account.name.gsub(',','')} <#{conversation_post.from_address}>"
+    batch_message.subject conversation.visible_conversation_posts.count == 1 ? "[#{group.slug}] #{conversation.subject}" : "Re: [#{group.slug}] #{conversation.subject}"      
     if ENV['REPLY_TO_GROUP']
-      mail.reply_to = group.email 
-    end
-    mail.from = "#{conversation_post.account.name.gsub(',','')} <#{conversation_post.from_address}>"
-    mail.sender = group.email('-noreply')
-    mail.subject = conversation.visible_conversation_posts.count == 1 ? "[#{group.slug}] #{conversation.subject}" : "Re: [#{group.slug}] #{conversation.subject}"
-    mail.headers({
-        'Precedence' => 'list',
-        'X-Auto-Response-Suppress' => 'OOF',
-        'Auto-Submitted' => 'auto-generated',
-        'List-Id' => "<#{group.slug}.list-id.#{ENV['MAIL_DOMAIN']}>",
-        'List-Unsubscribe' => "<http://#{ENV['MAIL_DOMAIN']}/groups/#{group.slug}/notification_level?level=none>"
-      })
-        
+      batch_message.reply_to = group.email 
+    end    
+    
+    {
+      'Sender' => group.email('-noreply'),
+      'Precedence' => 'list',
+      'X-Auto-Response-Suppress' => 'OOF',
+      'Auto-Submitted' => 'auto-generated',
+      'List-Id' => "<#{group.slug}.list-id.#{ENV['MAIL_DOMAIN']}>",
+      'List-Unsubscribe' => "<http://#{ENV['MAIL_DOMAIN']}/groups/#{group.slug}/notification_level?level=none>"
+    }.each { |name, data|
+      batch_message.header name, data
+    }
+                                                           
     if previous_conversation_posts
       begin
-        references = previous_conversation_posts.map { |previous_conversation_post| "<#{previous_conversation_post.conversation_post_bccs.order('created_at desc').first.try(:message_id)}>" }
-        mail.in_reply_to = references.first
-        mail.references = references.join(' ')
+        references = previous_conversation_posts.map { |previous_conversation_post|
+          previous_conversation_post.conversation_post_bccs.order('created_at desc').map { |conversation_post_bcc|
+            conversation_post_bcc.message_ids.map { |message_id|
+              "<#{message_id}>"  
+            }
+          }
+        }.flatten          
+        batch_message.header 'References', references.join(' ')
       rescue => e
         Airbrake.notify(e)
       end
     end
-    mail.html_part do
-      content_type 'text/html; charset=UTF-8'
-      body ERB.new(File.read(Padrino.root('app/views/emails/conversation_post.erb'))).result(binding)
-    end
-    mail.bcc = conversation_post_bcc_recipients.map(&:email)
-    mail = mail.deliver
-    update_attribute(:message_id, mail.message_id)
+    
+    batch_message.body_html ERB.new(File.read(Padrino.root('app/views/emails/conversation_post.erb'))).result(binding)
+
+    conversation_post_bcc_recipients.pluck(:email).each { |bcc|
+      batch_message.add_recipient(:bcc, bcc)
+    }    
+    
+    finalized = batch_message.finalize 
+   
+    update_attribute(:message_ids, finalized.keys)
     update_attribute(:delivered_at, Time.now)
   end
     
