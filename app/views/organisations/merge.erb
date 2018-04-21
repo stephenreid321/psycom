@@ -1,12 +1,11 @@
 <h1>Merge organisations</h1>
 
-<% form_tag '/organisations/merge', :class => 'form-inline' do %>
+<% form_tag '/organisations/merge' do %>
 
-  Merge
-  <%= select_tag :org1, :options => Organisation.order('name asc').map { |organisation| ["#{organisation.name} (#{organisation.username_or_id})", organisation.id] }, :class => 'form-control mx-1' %>
-  into
-  <%= select_tag :org2, :options => Organisation.order('name asc').map { |organisation| ["#{organisation.name} (#{organisation.username_or_id})", organisation.id] }, :class => 'form-control mx-1' %>
-
+  Merge <br />
+  <%= select_tag :org1, :options => Organisation.order('name asc').map { |organisation| ["#{organisation.name} (#{organisation.username_or_id})", organisation.id] }, :class => 'form-control my-1' %>
+  into <br />
+  <%= select_tag :org2, :options => Organisation.order('name asc').map { |organisation| ["#{organisation.name} (#{organisation.username_or_id})", organisation.id] }, :class => 'form-control my-1' %>
   <%= submit_tag 'Merge', :class => 'btn btn-primary' %>
 
 <% end %>
