@@ -35,7 +35,7 @@
     <%= f.url_block :facebook_profile_url %>
     <%= f.url_block :twitter_profile_url %>
 
-    <%= f.submit_block destroy_url: ("/organisations/#{@organisation.id}/destroy" if admin? && @organisation.affiliations.empty?) %>
+    <%= f.submit_block destroy_url: ("/organisations/#{@organisation.id}/destroy" if @organisation.affiliations.empty? || admin?) %>
 
   <% end %>
 
