@@ -26,8 +26,8 @@
   <thead>
     <tr>
       <th>Person</th>      
-      <th>Affiliation title</th>
       <th>Email</th>
+      <th>Affiliation title</th>      
       <th>Organisation name</th>
       <th>Organisation type</th>
       <th>Organisation website</th>
@@ -38,8 +38,8 @@
   <% @affiliations.each { |affiliation| organisation = affiliation.organisation; account = affiliation.account %>
     <tr>
       <td><%=account.name%></td>
-      <td><%=affiliation.title%></td>
       <td><%=account.email%></td>
+      <td><%=affiliation.title%></td>      
       <td><a href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></td>
       <td><span class="badge badge-primary"><%=organisation.organisation_type%></span></td>
       <td><a href="<%=organisation.website%>"><%=organisation.website%></a></td>
