@@ -53,7 +53,7 @@
       Enter your location to view people, organisations, events and groups near you:
       <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'mt-1 form-horizontal', :multipart => true do |f| %>
         <%= hidden_field_tag :return, :value => true %>
-        <%= f.text_block :location, :label_class => 'd-none', :hint => 'By providing your location, you will appear on the psychedelic.community map' %>   
+        <%= f.text_block :location, :label_class => 'd-none', :hint => ('By providing your location, you will appear on the psychedelic.community map' if current_account) %>   
         <%= f.submit_block button_text: (current_account ? 'Save': 'Next') %>
       <% end %>
     <% end %>
