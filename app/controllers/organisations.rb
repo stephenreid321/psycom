@@ -22,6 +22,16 @@ ActivateApp::App.controllers do
     partial :'organisations/results'    
   end  
   
+  get '/organisations/affiliations' do
+    admins_only!
+    @affiliations = Affiliation.all
+    @affiliations = @affiliations.where(:organisation_id.in => Organisation.where(:organisation_type => params[:organisation_type]).pluck(:id)) if params[:organisation_type]
+    @affiliations = @affiliations.where(:organisation_id.in => Organisation.where(:website => nil).pluck(:id)) if params[:missing_website]
+    @affiliations = @affiliations.where(:organisation_id.in => Organisation.where(:location => nil).pluck(:id)) if params[:missing_location]
+    @affiliations = @affiliations.where(:organisation_id.in => Organisation.where(:email => nil).pluck(:id)) if params[:missing_email]
+    erb :'organisations/affiliations'
+  end  
+  
   get '/organisations/merge' do
     admins_only!
     erb :'organisations/merge'

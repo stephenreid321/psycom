@@ -105,5 +105,12 @@ class Organisation
       picture.rotate(self.rotate_picture_by)
     end  
   end
+  
+  def self.human_attribute_name(attr, options={})  
+    {
+      :facebook_profile_url => 'Facebook URL',
+      :twitter_profile_url => 'Twitter URL'
+    }[attr.to_sym] || super  
+  end       
         
 end

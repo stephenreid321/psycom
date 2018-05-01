@@ -430,5 +430,13 @@ class Account
   def password_required
     crypted_password.blank? || self.password.present?
   end  
+  
+  def self.human_attribute_name(attr, options={})  
+    {
+      :facebook_profile_url => 'Facebook profile URL',
+      :twitter_profile_url => 'Twitter profile URL',
+      :linkedin_profile_url => 'LinkedIn profile URL',
+    }[attr.to_sym] || super  
+  end     
     
 end

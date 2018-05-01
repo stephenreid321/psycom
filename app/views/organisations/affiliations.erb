@@ -1,0 +1,48 @@
+<script>
+  $(function () {
+    $('#affiliations').dataTable({paging: false, searching: false, order: [[0, "desc"]]});
+  });
+</script>
+
+<% form_tag '', :class => 'form-inline', :method => 'get' do %>
+  <%= select_tag :organisation_type, :class => 'input-sm form-control mr-1', :options => Hash[[['All organisation types','']] + Organisation.organisation_types.reject { |ot| ot.blank? }.map { |ot| [ot,ot] }], :selected => params[:organisation_type] %>
+
+  <label class="mr-1">
+    Organisation missing website <%= check_box_tag :missing_website, :checked => params[:missing_website] %>
+  </label>
+
+  <label class="mr-1">
+    Organisation missing location <%= check_box_tag :missing_location, :checked => params[:missing_location] %>
+  </label>
+
+  <label class="mr-1">
+    Organisation missing email <%= check_box_tag :missing_email, :checked => params[:missing_email] %>
+  </label>
+
+  <%= submit_tag 'Submit', :class => 'btn btn-primary' %>
+<% end %>
+
+<table class="table" id="affiliations">
+  <thead>
+    <tr>
+      <th>Person</th>
+      <th>Email</th>
+      <th>Organisation name</th>
+      <th>Organisation type</th>
+      <th>Organisation website</th>
+      <th>Organisation location</th>
+      <th>Organisation email</th>
+    </tr>  
+  </thead>
+  <% @affiliations.each { |affiliation| %>
+    <tr>
+      <td><%=affiliation.account.name%></td>
+      <td><%=affiliation.account.email%></td>
+      <td><%=affiliation.organisation.name%></td>
+      <td><%=affiliation.organisation.organisation_type%></td>
+      <td><%=affiliation.organisation.website%></td>
+      <td><%=affiliation.organisation.location%></td>
+      <td><%=affiliation.organisation.email%></td>
+    </tr>
+  <% } %>  
+</table>
