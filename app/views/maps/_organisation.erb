@@ -1,2 +1,8 @@
-<img style="max-width: 64px;" class="rounded-circle" src="<%=organisation.picture ? organisation.picture.thumb('64x64#').url : '/images/square.png' %>">
-<a target="_parent" href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a>
+<div class="row align-items-center no-gutters">
+  <div class="col-auto mr-2">
+    <img style="max-width: 64px;" class="rounded-circle" src="<%=organisation.picture ? organisation.picture.thumb('64x64#').url : '/images/square.png' %>">
+  </div>
+  <div class="col">
+    <h5 class="mt-0"><a target="_parent" href="/o/<%=organisation.username_or_id%>"><%=organisation.name%></a></h5>
+  </div>
+</div>

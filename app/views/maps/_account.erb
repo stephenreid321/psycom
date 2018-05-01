@@ -1,2 +1,10 @@
-<%= partial :'accounts/square', :locals => {:account => account, :width=> '64px'} %>
-<a target="_parent" href="/<%=account.username_or_id%>"><%=account.name%></a>
+<div class="row align-items-center no-gutters">
+  <div class="col-auto mr-2">
+    <%= partial :'accounts/square', :locals => {:account => account, :width=> '64px'} %>
+  </div>
+  <div class="col">
+    <h5 class="mt-0"><a target="_parent" href="/<%=account.username_or_id%>"><%=account.name%></a></h5>
+  </div>
+</div>
+
+
