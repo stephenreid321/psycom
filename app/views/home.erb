@@ -23,12 +23,21 @@
     <h2>Near you</h2>
     <% if current_account and current_account.coordinates %>
       <h3>People <span class="badge badge-primary"><%=current_account.nearby_accounts.count%></span></h3>      
-      <% %w{Organisation Event Group}.each { |model_name| %>
-        <h3><%=model_name.pluralize%> <span class="badge badge-primary"><%=current_account.send("nearby_#{model_name.pluralize.downcase}").count%></span></h3>
-          <% current_account.send("nearby_#{model_name.pluralize.downcase}").each { |object| %>
-          <div class="mb-1"><%=partial :"maps/#{model_name.downcase}", :object => object %></div>
-        <% } %>
+
+      <h3>Organisations <span class="badge badge-primary"><%=current_account.nearby_organisations.count%></span></h3>
+      <% current_account.nearby_organisations.each { |object| %>
+        <div class="mb-1"><%=partial :"maps/organisation", :object => object %></div>
       <% } %>
+
+      <h3>Events <span class="badge badge-primary"><%=current_account.nearby_events.future.count%></span></h3>
+      <% current_account.nearby_events.future.each { |object| %>
+        <div class="mb-1"><%=partial :"maps/event", :object => object %></div>
+      <% } %>
+
+      <h3>Groups <span class="badge badge-primary"><%=current_account.nearby_groups.count%></span></h3>
+      <% current_account.nearby_groups.each { |object| %>
+        <div class="mb-1"><%=partial :"maps/group", :object => object %></div>
+      <% } %>          
     <% else %>
 
       <script>
