@@ -24,6 +24,7 @@ class Account
   
   field :unsubscribe_events, :type => Boolean
   field :unsubscribe_groups, :type => Boolean
+  field :unsubscribe_organisations, :type => Boolean
   field :unsubscribe_new_member, :type => Boolean
   field :unsubscribe_message, :type => Boolean
   
@@ -338,6 +339,7 @@ class Account
       :membership_requests => :collection,
       :unsubscribe_events => :check_box,
       :unsubscribe_groups => :check_box,
+      :unsubscribe_organisations => :check_box,
       :unsubscribe_new_member => :check_box,
       :unsubscribe_message => :check_box,      
     }
