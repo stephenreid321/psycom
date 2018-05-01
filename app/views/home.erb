@@ -38,6 +38,10 @@
       <% current_account.nearby_groups.each { |object| %>
         <div class="mb-1"><%=partial :"maps/group", :object => object %></div>
       <% } %>          
+
+      <p>List an <a href="/organisations/new">organisation</a> or <a href="/events/new">event</a> or <a href="/groups/new">create a group</a> 
+        and people nearby will be notified.</p>
+
     <% else %>
 
       <script>
