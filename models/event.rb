@@ -119,7 +119,7 @@ class Event
       mail = Mail.new
       mail.bcc = bcc
       mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-      mail.subject = 'New event near you'
+      mail.subject = 'Event listed near you'
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/event.erb'))).result(binding)
       html_part = Mail::Part.new do
