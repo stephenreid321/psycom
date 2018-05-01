@@ -307,7 +307,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
       mail = Mail.new
       mail.bcc = bcc
       mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-      mail.subject = 'New group near you'
+      mail.subject = 'Group listed near you'
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/group.erb'))).result(binding)
       html_part = Mail::Part.new do
