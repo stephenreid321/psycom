@@ -125,8 +125,7 @@ class Organisation
     end
   end
   def send_notification
-    return unless coordinates
-    return unless public? or (closed? and !unlisted)
+    return unless coordinates    
     organisation = self
     bcc = nearby_accounts.where(:unsubscribe_organisations.ne => true).pluck(:email)
     if bcc.count > 0      
