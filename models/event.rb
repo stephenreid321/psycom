@@ -16,7 +16,7 @@ class Event
   field :more_info, :type => String
   field :organisation_name, :type => String
   field :approved, :type => Boolean
-  field :sent_email, :type => Boolean
+  field :sent_notification, :type => Boolean
   
   include Geocoder::Model::Mongoid
   geocoded_by :location
@@ -55,7 +55,7 @@ class Event
       :organisation_name => :text,
       :organisation_id => :lookup,
       :approved => :check_box,
-      :sent_email => :check_box
+      :sent_notification => :check_box
     }
   end
         
@@ -97,11 +97,11 @@ class Event
   end
   
   after_save do
-    if self.approved and !self.sent_email
-      send_email
+    if self.approved and !self.sent_notification
+      send_notification
     end
   end
-  def send_email
+  def send_notification
     return unless coordinates
     event = self
     bcc = nearby_accounts.where(:unsubscribe_events.ne => true).pluck(:email)
@@ -120,8 +120,8 @@ class Event
       
       mail.deliver
     end
-    update_attribute(:sent_email, true)
+    update_attribute(:sent_notification, true)
   end
-  handle_asynchronously :send_email  
+  handle_asynchronously :send_notification  
     
 end

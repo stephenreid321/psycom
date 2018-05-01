@@ -190,26 +190,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   def create_default_didyouknows
     default_didyouknows.each { |d| didyouknows.create :body => d }
   end
-  
-  after_create :send_email
-  def send_email
-    mail = Mail.new
-    mail.to = ENV['HELP_ADDRESS']
-    mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-    mail.subject = "New group: #{self.name}"
-      
-    group = self
-    base_uri = ENV['BASE_URI']
-    html_part = Mail::Part.new do
-      content_type 'text/html; charset=UTF-8'
-      body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{base_uri}/groups/#{group.slug}">#{group.name}</a>}
-    end
-    mail.html_part = html_part
-      
-    mail.deliver
-  end
-  handle_asynchronously :send_email  
-      
+       
   def self.admin_fields
     {
       :name => :text,
@@ -286,5 +267,53 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
     }
   end
   handle_asynchronously :send_welcome_emails
+  
+  def nearby_accounts(d=25)
+    Account.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
+  end  
+  
+  after_create :send_admin_notification
+  def send_admin_notification
+    mail = Mail.new
+    mail.to = ENV['HELP_ADDRESS']
+    mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
+    mail.subject = "New group: #{self.name}"
+      
+    group = self
+    base_uri = ENV['BASE_URI']
+    html_part = Mail::Part.new do
+      content_type 'text/html; charset=UTF-8'
+      body %Q{#{group.account.name} (#{group.account.email}) created a new group: <a href="#{base_uri}/groups/#{group.slug}">#{group.name}</a>}
+    end
+    mail.html_part = html_part
+      
+    mail.deliver
+  end
+  handle_asynchronously :send_admin_notification 
+  
+  after_create :send_notification
+  def send_notification
+    return unless coordinates
+    return unless public? or (closed? and !unlisted)
+    group = self
+    bcc = nearby_accounts.where(:unsubscribe_groups.ne => true).pluck(:email)
+    if bcc.count > 0      
+      mail = Mail.new
+      mail.bcc = bcc
+      mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
+      mail.subject = 'New group near you'
+            
+      content = ERB.new(File.read(Padrino.root('app/views/emails/group.erb'))).result(binding)
+      html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
+      end
+      mail.html_part = html_part
+      
+      mail.deliver
+    end
+    update_attribute(:sent_notification, true)
+  end
+  handle_asynchronously :send_notification   
         
 end
