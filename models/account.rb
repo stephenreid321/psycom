@@ -360,30 +360,7 @@ class Account
   def nearby_groups(d=25)
     Group.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
   end      
-  
-  after_create :send_new_member_email
-  def send_new_member_email          
-    return unless coordinates
-    account = self      
-    bcc = nearby_accounts.where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
-    if bcc.count > 0        
-      mail = Mail.new
-      mail.bcc = bcc
-      mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-      mail.subject = 'Someone joined near you'
-            
-      content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
-      html_part = Mail::Part.new do
-        content_type 'text/html; charset=UTF-8'
-        body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
-      end
-      mail.html_part = html_part
-      
-      mail.deliver
-    end
-  end
-  handle_asynchronously :send_new_member_email  
-  
+    
   def affiliations_summary
     affiliations.map { |affiliation| "#{affiliation.title} at #{affiliation.organisation.name}" }.join(', ')
   end
@@ -454,5 +431,28 @@ class Account
       :linkedin_profile_url => 'LinkedIn profile URL',
     }[attr.to_sym] || super  
   end     
+  
+  after_create :send_new_member_email
+  def send_new_member_email          
+    return unless coordinates
+    account = self      
+    bcc = nearby_accounts.where(:id.ne => account.id).where(:unsubscribe_new_member.ne => true).pluck(:email)    
+    if bcc.count > 0        
+      mail = Mail.new
+      mail.bcc = bcc
+      mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
+      mail.subject = 'Someone joined near you'
+            
+      content = ERB.new(File.read(Padrino.root('app/views/emails/new_member.erb'))).result(binding)
+      html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body ERB.new(File.read(Padrino.root('app/views/layouts/email.erb'))).result(binding)     
+      end
+      mail.html_part = html_part
+      
+      mail.deliver
+    end
+  end
+  handle_asynchronously :send_new_member_email    
     
 end
