@@ -64,7 +64,7 @@ class Account
   has_many :likes, :dependent => :destroy
   
   def public?
-    location
+    location or coordinates
   end
   
   def self.publicly_accessible
