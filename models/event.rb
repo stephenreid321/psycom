@@ -87,14 +87,24 @@ class Event
     Account.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
   end  
   
-  after_create do
+  after_create :send_admin_notification
+  def send_admin_notification
     mail = Mail.new
     mail.to = ENV['HELP_ADDRESS']
     mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-    mail.subject = "New event: #{name}"
-    mail.body = "#{ENV['BASE_URI']}/events/#{id}"     
-    mail.deliver    
+    mail.subject = "New event: #{self.name}"
+      
+    event = self
+    base_uri = ENV['BASE_URI']
+    html_part = Mail::Part.new do
+      content_type 'text/html; charset=UTF-8'
+      body %Q{#{event.account.name} (#{event.account.email}) created a new event: <a href="#{base_uri}/events/#{event.id}">#{event.name}</a>}
+    end
+    mail.html_part = html_part
+      
+    mail.deliver
   end
+  handle_asynchronously :send_admin_notification 
   
   after_save do
     if self.approved and !self.sent_notification
