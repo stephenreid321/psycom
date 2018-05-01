@@ -13,7 +13,7 @@ ActivateApp::App.controllers do
       flash[:notice] = "Welcome to #{ENV['SITE_NAME']}!"
       redirect '/me'
     else
-      flash.now[:error] = 'Some errors prevented the account from being saved'
+      flash.now[:notice] = 'We need a few more details to finish creating your account'
       erb :'accounts/build'
     end
   end  
