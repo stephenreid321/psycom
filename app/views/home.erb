@@ -26,11 +26,10 @@
       <% %w{Organisation Event Group}.each { |model_name| %>
         <h3><%=model_name.pluralize%> <span class="badge badge-primary"><%=current_account.send("nearby_#{model_name.pluralize.downcase}").count%></span></h3>
           <% current_account.send("nearby_#{model_name.pluralize.downcase}").each { |object| %>
-            <%=partial :"maps/#{model_name.downcase}", :object => object %>
-          <% } %>
+          <div class="mb-1"><%=partial :"maps/#{model_name.downcase}", :object => object %></div>
         <% } %>
-      <% else %>
-      
+      <% } %>
+    <% else %>
 
       <script>
         $(function () {
