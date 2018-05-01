@@ -11,7 +11,7 @@ ActivateApp::App.controllers do
       SignIn.create(account: @account)
       session[:account_id] = @account.id.to_s     
       flash[:notice] = "Welcome to #{ENV['SITE_NAME']}!"
-      redirect '/me'
+      redirect '/'
     else
       flash.now[:notice] = 'We need a few more details to finish creating your account'
       erb :'accounts/build'
