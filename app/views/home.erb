@@ -50,7 +50,11 @@
         })
       </script>
 
-      Enter your location to view people, organisations, events and groups near you:
+      <% if current_account %>
+        Enter your location to view people, organisations, events and groups near you:
+      <% else %>
+        Sign up to view people, organisations, events and groups near you:
+      <% end %>
       <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'mt-1 form-horizontal', :multipart => true do |f| %>
         <%= hidden_field_tag :return, :value => true %>
         <%= f.text_block :location, :label_class => 'd-none', :hint => ('By providing a location, you will appear on the psychedelic.community map' if current_account) %>   
