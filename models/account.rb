@@ -345,6 +345,18 @@ class Account
     Account.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
   end  
   
+  def nearby_events(d=25)
+    Event.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
+  end  
+
+  def nearby_organisations(d=25)
+    Organisation.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
+  end  
+  
+  def nearby_groups(d=25)
+    Group.where(:coordinates => { "$geoWithin" => { "$centerSphere" => [coordinates, d / 3963.1676 ]}})
+  end      
+  
   after_create :send_new_member_email
   def send_new_member_email          
     return unless coordinates

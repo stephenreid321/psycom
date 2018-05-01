@@ -26,5 +26,9 @@ ActivateApp::App.controllers do
       redirect '/'
     end
   end 
+  
+  get '/point/:model/:id' do
+    partial "maps/#{params[:model].downcase}".to_sym, :object => params[:model].constantize.find(params[:id])
+  end
               
 end

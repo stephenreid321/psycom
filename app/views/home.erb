@@ -3,14 +3,35 @@
   <%= partial :carousel, :locals => {:slides => slides} %>
 <% end %>
 
-<script>
-  $(function () {
-    $('#map').load('/map?<%= {form: true, global: true, accounts: true, events: true, groups: true, organisations: true}.to_query %>')
-  });
-</script>
-<style>
-  @media(min-width: 768px) {
-    #map { height: 80vh }
-  }
-</style>
-<div id="map"><i class="fa fa-spin fa-circle-o-notch"></i></div>
+
+<div class="row">
+
+  <div class="col-md-9">
+    <script>
+      $(function () {
+        $('#map').load('/map?<%= {form: true, global: true, accounts: true, events: true, groups: true, organisations: true}.to_query %>')
+      });
+    </script>
+    <style>
+      @media(min-width: 768px) {
+        #map { height: 80vh }
+      }
+    </style>
+    <div id="map"><i class="fa fa-spin fa-circle-o-notch"></i></div>
+  </div>
+  <div class="col-md-3">
+    <h2>Near you</h2>
+    <% if current_account %>
+    <h3>People <span class="badge badge-primary"><%=current_account.nearby_accounts.count%></span></h3>
+    Check the map for people near you
+      <% %w{Organisation Event Group}.each { |model_name| %>
+        <h3><%=model_name.pluralize%> <span class="badge badge-primary"><%=current_account.send("nearby_#{model_name.pluralize.downcase}").count%></span></h3>
+        <% current_account.send("nearby_#{model_name.pluralize.downcase}").each { |object| %>
+          <%=partial :"maps/#{model_name.downcase}", :object => object %>
+        <% } %>
+      <% } %>
+    <% else %>
+        <a href="/sign_up">Sign up</a> or <a href="/sign_in">sign in</a> to view organisations, events and groups near you.
+    <% end %>                
+  </div>
+</div>

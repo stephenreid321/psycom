@@ -23,7 +23,8 @@
             lng: <%=point.lng + rand*0.005 %>,
             color: '<%=point.class.marker_color%>',
             name: "<%=js_escape_html(point.try(:name) || point.try(:title))%>",
-            content: '<%=js_escape_html(partial "maps/#{point.class.to_s.underscore}".to_sym, :object => point)%>'
+            model: "<%=js_escape_html(point.class.to_s)%>",
+            id: "<%=js_escape_html(point.id.to_s)%>",
     })
 <% } %>
 
@@ -43,12 +44,16 @@
   position: new google.maps.LatLng(point.lat, point.lng),
           title: point.name,
           icon: pinImage,
-          content: point.content
+          model: point.model,
+          id: point.id
   });
   google.maps.event.addListener(marker, 'click', function (marker) {
   return function () {
-  infowindow.setContent('<div class="infowindow">' + marker.content + '</div>');
-  infowindow.open(map, marker);
+  infowindow.setContent('<i class="fa fa-spin fa-circle-o-notch"></i>');
+  infowindow.open(map, marker);    
+  $.get('/point/' + marker.model + '/' + marker.id, function(data) {
+  infowindow.setContent('<div class="infowindow">' + data + '</div>'); 
+  })
   }
   }(marker));
   bounds.extend(marker.getPosition());
