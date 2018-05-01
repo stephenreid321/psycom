@@ -132,7 +132,7 @@ class Organisation
       mail = Mail.new
       mail.bcc = bcc
       mail.from = "#{ENV['SITE_NAME']} <#{ENV['HELP_ADDRESS']}>"
-      mail.subject = 'New organisation near you'
+      mail.subject = 'Organisation listed near you'
             
       content = ERB.new(File.read(Padrino.root('app/views/emails/organisation.erb'))).result(binding)
       html_part = Mail::Part.new do

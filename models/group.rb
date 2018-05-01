@@ -19,6 +19,7 @@ class Group
   field :landing_tab, :type => String
   field :picture_uid, :type => String 
   field :conversation_creation_by_admins_only, :type => Boolean
+  field :sent_notification, :type => Boolean
   
   include Geocoder::Model::Mongoid
   geocoded_by :location  
@@ -213,7 +214,8 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
       :account_id => :lookup,
       :memberships => :collection,
       :membership_requests => :collection,
-      :conversations => :collection
+      :conversations => :collection,
+      :sent_notification => :check_box
     }
   end
   
@@ -291,7 +293,11 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   end
   handle_asynchronously :send_admin_notification 
   
-  after_create :send_notification
+  after_save do
+    if !self.sent_notification
+      send_notification
+    end
+  end
   def send_notification
     return unless coordinates
     return unless public? or (closed? and !unlisted)
