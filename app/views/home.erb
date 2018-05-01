@@ -21,17 +21,33 @@
   </div>
   <div class="col-md-3">
     <h2>Near you</h2>
-    <% if current_account %>
-    <h3>People <span class="badge badge-primary"><%=current_account.nearby_accounts.count%></span></h3>
-    Check the map for people near you
+    <% if current_account and current_account.coordinates %>
+      <h3>People <span class="badge badge-primary"><%=current_account.nearby_accounts.count%></span></h3>      
       <% %w{Organisation Event Group}.each { |model_name| %>
         <h3><%=model_name.pluralize%> <span class="badge badge-primary"><%=current_account.send("nearby_#{model_name.pluralize.downcase}").count%></span></h3>
-        <% current_account.send("nearby_#{model_name.pluralize.downcase}").each { |object| %>
-          <%=partial :"maps/#{model_name.downcase}", :object => object %>
+          <% current_account.send("nearby_#{model_name.pluralize.downcase}").each { |object| %>
+            <%=partial :"maps/#{model_name.downcase}", :object => object %>
+          <% } %>
         <% } %>
-      <% } %>
-    <% else %>
-        <a href="/sign_up">Sign up</a> or <a href="/sign_in">sign in</a> to view organisations, events and groups near you.
-    <% end %>                
+      <% else %>
+      
+
+      <script>
+        $(function () {
+          var autocomplete = new google.maps.places.Autocomplete($('#account_location')[0]);
+          $('#account_location').keydown(function (e) {
+            if (e.which == 13 && $('.pac-container:visible').length)
+              return false;
+          });
+        })
+      </script>
+
+      Enter your location to view people, organisations, events and groups near you:
+      <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'mt-1 form-horizontal', :multipart => true do |f| %>
+        <%= hidden_field_tag :return, :value => true %>
+        <%= f.text_block :location, :label_class => 'd-none', :hint => 'By providing your location, you will appear on the psychedelic.community map' %>   
+        <%= f.submit_block button_text: (current_account ? 'Save': 'Next') %>
+      <% end %>
+    <% end %>
   </div>
 </div>

@@ -274,7 +274,7 @@ class Account
     self.username = self.username.downcase if self.username
     self.email = self.email.gsub(' ','') if self.email # strip unicode \u00a0
     self.secret_token = SecureRandom.uuid if !self.secret_token    
-    self.name_transliterated = I18n.transliterate(self.name)
+    self.name_transliterated = I18n.transliterate(self.name) if self.name
     
     self.website = "http://#{self.website}" if self.website and !(self.website =~ /\Ahttps?:\/\//)
     
