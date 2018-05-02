@@ -7,7 +7,7 @@ end
 namespace :cleanup do
   task :organisations => :environment do
     Organisation.each { |organisation|
-      if organisation.affiliations.count == 0 and !organisation.username and !organisation.location and !organisation.website and !organisation.email and !organisation.picture and !organsation.facebook_profile_url and !organisation.twitter_profile_url
+      if organisation.affiliations.count == 0 and !organisation.username and !organisation.location and !organisation.website and !organisation.email and !organisation.picture and !organisation.facebook_profile_url and !organisation.twitter_profile_url
         organisation.destroy 
       end
     }
