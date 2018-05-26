@@ -1,3 +1,5 @@
+require "uri"
+
 class Event
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -124,4 +126,14 @@ class Event
   end
   handle_asynchronously :send_email  
     
+  def gcal_url
+    string = "http://www.google.com/calendar/event?action=TEMPLATE" + 
+    "&text=#{ name }" + 
+    "&dates=#{ start_time.strftime("%G%m%dT%H%M00") + "/" + end_time.strftime("%G%m%dT%H%M00") }" +
+    "&details=#{ details }" +
+    "&location=#{ location }" +
+    "&trp=false&sprop=&sprop=name:"
+
+    URI.escape(string)
+  end
 end

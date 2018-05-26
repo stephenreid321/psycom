@@ -60,22 +60,16 @@
     <%= @event.details  %>  
 
     <div>
-      <a href="http://www.google.com/calendar/event?action=TEMPLATE&text=<%= 
-      @event.name 
-      %>&dates=<%=
-      @event.start_time.strftime("%G%m%dT%H%M00") + "/" + @event.end_time.strftime("%G%m%dT%H%M00") 
-      %>&details=<%= @event.details 
-      %>&location=<%= @event.location 
-      %>&trp=false&sprop=&sprop=name:"
-      target="_blank" rel="nofollow">Add to my calendar</a>
+      <a href="<%= @event.gcal_url %>" target="_blank" rel="nofollow">Add to my calendar</a>
     </div>
   </div>
-  
+
   <div class="col-sm-4">
     <% if @event.coordinates %>
       <style>#map-canvas { height: 50vh !important }</style>
       <%= partial :'maps/map', :locals => {:points => ([@event] + @event.nearby_accounts), :centre => @event} %>
     <% end %>
   </div>
+
 </div>
 
