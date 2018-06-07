@@ -28,15 +28,15 @@ ActivateApp::App.controllers do
     @o = (params[:o] ? params[:o] : 'date').to_sym    
     @accounts = case scope      
     when 'group'
-      group = Group.find(scope_id)
+      group = Group.find(scope_id) || not_found
       membership_required!(group) unless group.public?
       group.members
     when 'conversation'
-      conversation = Conversation.find(scope_id)
+      conversation = Conversation.find(scope_id) || not_found
       membership_required!(conversation.group) unless conversation.group.public?
       conversation.participants
     when 'organisation'
-      organisation = Organisation.find(scope_id)
+      organisation = Organisation.find(scope_id) || not_found
       organisation.members
     else
       Account.publicly_accessible
