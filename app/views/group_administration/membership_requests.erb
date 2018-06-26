@@ -81,10 +81,7 @@
           </button>
           <ul class="dropdown-menu">
             <li class="dropdown-item">
-              <a title="Accept request but wait until first sign in before receiving emails" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>?accept=true">Accept</a>
-            </li>          
-            <li class="dropdown-item">
-              <a title="Accept request and confirm the membership so this person starts receiving emails immediately" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>?accept=true&status=confirmed">Accept and confirm</a>
+              <a title="Accept request" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>?accept=true">Accept</a>
             </li>          
             <li class="dropdown-item">
               <a title="Silently reject request" href="/groups/<%=@group.slug%>/process_membership_request/<%=membership_request.id%>">Silently reject request</a>

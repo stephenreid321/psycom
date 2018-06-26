@@ -5,7 +5,6 @@ class Membership
   field :admin, :type => Boolean
   field :receive_membership_requests, :type => Boolean  
   field :notification_level, :type => String
-  field :status, :type => String
   field :reminder_sent, :type => Time
   field :welcome_email_pending, :type => Boolean
   field :muted, :type => Boolean
@@ -14,7 +13,7 @@ class Membership
   belongs_to :account, index: true, class_name: "Account", inverse_of: :memberships
   belongs_to :group, index: true
           
-  validates_presence_of :status, :notification_level
+  validates_presence_of :notification_level
   validates_uniqueness_of :account, :scope => :group
       
   def self.admin_fields
@@ -28,7 +27,6 @@ class Membership
       :reminder_sent => :datetime,
       :welcome_email_pending => :check_box,
       :muted => :check_box,
-      :status => :select,
       :notification_level => :select
     }
   end
@@ -42,17 +40,10 @@ class Membership
     if self.group and !self.notification_level
       self.notification_level = group.default_notification_level
     end
-    if self.account and !self.status
-      self.status = (account.sign_ins.count == 0 ? 'pending' : 'confirmed')
-    end
     
     errors.add(:account, 'is prevented from having new memberships') if self.account.prevent_new_memberships and !self.account.groups_to_join
   end
-  
-  def self.statuses
-    ['pending', 'confirmed']
-  end
-  
+   
   def self.notification_levels
     ['none', 'each', 'daily', 'weekly']
   end
@@ -60,11 +51,7 @@ class Membership
   def send_welcome_email
     group = self.group
       
-    sign_in_details = ''
-    if status == 'pending'
-      sign_in_details << "You need to sign in to start receiving email notifications. "
-    end
-        
+    sign_in_details = ''        
     if account.sign_ins.count == 0
       password = Account.generate_password(8)
       account.update_attribute(:password, password) 

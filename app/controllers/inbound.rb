@@ -12,7 +12,7 @@ ActivateApp::App.controllers do
                                    
     # skip messages from people that aren't in the group
     account = Account.find_by(email: /^#{::Regexp.escape(from)}$/i)     
-    if !account or !account.memberships.find_by(:group => group, :status => 'confirmed', :muted.ne => true)
+    if !account or !account.memberships.find_by(:group => group, :muted.ne => true)
       begin
         mail = Mail.new(
           :to => from,

@@ -127,7 +127,7 @@ class Account
       if @groups_to_join
             
         @groups_to_join.each { |group_id|
-          memberships.create(:group_id => group_id, :status => ('confirmed' if (account.sign_ins.count == 0 and account.confirm_memberships.to_i == 1)))
+          memberships.create(:group_id => group_id)
         }
                                         
         sign_in_details = ''              
@@ -175,7 +175,7 @@ class Account
   end  
           
   def network    
-    Account.where(:id.in => memberships.map(&:group).map { |group| group.memberships.only(:account_id).where(:status => 'confirmed') }.flatten.map(&:account_id))
+    Account.where(:id.in => memberships.map(&:group).map { |group| group.memberships.only(:account_id) }.flatten.map(&:account_id))
   end
   
   def people

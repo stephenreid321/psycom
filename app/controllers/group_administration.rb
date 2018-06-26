@@ -43,9 +43,7 @@ ActivateApp::App.controllers do
     @o = params[:o] ? params[:o].to_sym : :name
     @d = params[:d] ? params[:d].to_sym : :asc
     @admins_only = params[:admins_only]
-    @not_yet_receiving_emails = params[:not_yet_receiving_emails]
     @accounts = Account.where(:id.in => (@admins_only ? @group.admins.pluck(:id) : @group.memberships.pluck(:account_id)))
-    @accounts = @accounts.where(:id.nin => @group.memberships.where(:status => 'confirmed').pluck(:account_id)) if @not_yet_receiving_emails
     @accounts = @accounts.or([{:name => /#{::Regexp.escape(@q)}/i}, {:email => /#{::Regexp.escape(@q)}/i}]) if @q
     @accounts = @accounts.order("#{@o} #{@d}")    
     @cols = {'Name' => :name, 'Email' => :email, 'Twitter' => nil, 'Affiliations' => nil, I18n.t(:account_tagships).capitalize => nil, 'Joined' => nil, 'Last signed in' => nil, 'Actions' => nil, 'Notifications' => nil}
@@ -200,7 +198,6 @@ ActivateApp::App.controllers do
       
       @membership = @group.memberships.build :account => @account
       @membership.admin = true if params[:admin]
-      @membership.status = 'confirmed' if params[:status] == 'confirmed'
       @membership.added_by = current_account
       @membership.welcome_email_pending = true
       @membership.save
@@ -278,14 +275,10 @@ ActivateApp::App.controllers do
     if params[:accept]
       account = membership_request.account           
       membership_request.update_attribute(:status, 'accepted')
-      membership = @group.memberships.create(:account => account, :status => params[:status])            
+      membership = @group.memberships.create(:account => account)            
       (flash[:error] = "The membership could not be created" and redirect back) unless membership.persisted?
       
-      sign_in_details = ''
-      if membership.status == 'pending'
-        sign_in_details << "You need to sign in to start receiving email notifications. "
-      end
-        
+      sign_in_details = ''        
       if account.sign_ins.count == 0
         password = Account.generate_password(8)
         account.update_attribute(:password, password) 

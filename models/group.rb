@@ -154,7 +154,7 @@ You have been granted membership of the group [group_name] ([group_email]) on [s
   end
       
   def members
-    Account.where(:id.in => memberships.where(:status => 'confirmed').pluck(:account_id))
+    Account.where(:id.in => memberships.pluck(:account_id))
   end
   
   def people
