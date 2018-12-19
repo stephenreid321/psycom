@@ -13,6 +13,7 @@
       ['Groups',         
         [[I18n.t(:all_groups).capitalize, '/groups'], []] + (current_account ? current_account.memberships.map(&:group).sort_by { |group| group.name.downcase.naturalized }.map { |group| [group.name, "/groups/#{group.slug}"] } : [])
         ],        
+      # ['Cryptofund', '/cryptofund']
       ].compact, ul_class: 'navbar-nav'
   %>    
 

@@ -28,7 +28,14 @@
     <%= f.text_block :name %>
     <%= f.email_block :email %>
     <%= f.text_block :username %>
-    <%= f.text_block :location, :hint => 'By providing a location, you will appear on the psychedelic.community map' %>
+    <%= f.text_block :location %>
+  
+  <script>
+    $(function() {
+      $('<div class="alert alert-primary">By providing a location, you will appear on the psychedelic.community map and make your profile public/indexable by search engines</div>').insertAfter('label[for=account_location]')      
+    })
+  </script>  
+
 
     <%= f.select_block :time_zone %>
     <%= f.image_block :picture, rotate: false, hint: ('Connect an account above to automatically grab a picture' if !@account.picture and Provider.all.any? { |provider| provider.registered? }) %>    
