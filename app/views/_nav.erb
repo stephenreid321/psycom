@@ -9,11 +9,9 @@
     ul_nav [
       [I18n.t(:people).capitalize, '/people'],
       [I18n.t(:organisations).capitalize, '/organisations'],
-      [I18n.t(:events).capitalize, '/events'],          
       ['Groups',         
         [[I18n.t(:all_groups).capitalize, '/groups'], []] + (current_account ? current_account.memberships.map(&:group).sort_by { |group| group.name.downcase.naturalized }.map { |group| [group.name, "/groups/#{group.slug}"] } : [])
         ],        
-      # ['Cryptofund', '/cryptofund']
       ].compact, ul_class: 'navbar-nav'
   %>    
 

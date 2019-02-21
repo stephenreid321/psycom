@@ -3,7 +3,6 @@ class Organisation
   include Mongoid::Timestamps
   extend Dragonfly::Model
   
-  has_many :events, :dependent => :destroy  
   has_many :affiliations, :dependent => :destroy  
   
   index({coordinates: "2dsphere"})

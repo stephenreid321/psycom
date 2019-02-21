@@ -6,9 +6,6 @@ ActivateApp::App.controllers do
       if params[:accounts]
         @points += Account.publicly_accessible
       end
-      if params[:events]
-        @points += Event.future
-      end        
       if params[:organisations]
         if !params[:organisation_types] or params[:organisation_types].count == (Organisation.organisation_types.count-1)
           @points += Organisation.all          
