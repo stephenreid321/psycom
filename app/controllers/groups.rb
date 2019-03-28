@@ -1,9 +1,10 @@
 ActivateApp::App.controllers do
          
-  get '/groups/new' do
+  get '/groups/new' do    
     ENV['GROUP_CREATION_BY_ADMINS_ONLY'] ? admins_only! : sign_in_required!
     @group = Group.new
-    erb :'groups/build'
+    #    erb :'groups/build'
+    erb :'groups/deprecated'
   end
   
   post '/groups/new' do

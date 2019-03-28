@@ -1,0 +1,18 @@
+<ol class="breadcrumb">
+
+  <li class="breadcrumb-item"><a href="/groups"><%=I18n.t(:groups).capitalize%></a></li>
+  <% if @group.persisted? %>
+    <li class="breadcrumb-item">
+      <a href="/groups/<%=@group.slug%>/"><%= @group.name%></a>
+    </li>      
+    <li class="breadcrumb-item active">
+      <%=I18n.t(:edit).capitalize%>
+    </li>
+  <% else %>
+    <li class="breadcrumb-item active">
+      <%=I18n.t(:new_group).capitalize%>
+    </li>    
+  <% end %>
+</ol>
+
+<p class="lead">We are no longer accepting new groups on psychedelic.community. <a href="/groups">View existing groups</a></p>
