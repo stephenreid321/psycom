@@ -26,3 +26,5 @@ I18n.enforce_available_locales = false
 if Language.count == 0 
   Language.create :name => 'English', :code => 'en', :default => true
 end
+
+Geocoder.configure(lookup: :google, api_key: ENV['GOOGLE_MAPS_API_KEY'])
