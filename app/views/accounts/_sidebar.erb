@@ -2,17 +2,6 @@
 <div class="table-hr-container">
   <table class="table table-hr" >
 
-    <% if !@account.affiliations.empty? %>
-      <tr>
-        <td>Affiliations</td>
-        <td>  
-          <% @account.affiliations.each { |affiliation|%>
-            <%=affiliation.title%> at <a href="/o/<%=affiliation.organisation.username_or_id%>"><%=affiliation.organisation.name%></a> <br />
-          <% } %>        
-        </td>
-      </tr>
-    <% end %>    
-
     <% if @account.public_memberships.count > 0 %>
       <tr>
         <td><%=I18n.t(:member_of).capitalize%> </td>
