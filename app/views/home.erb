@@ -9,7 +9,7 @@
   <div class="col-md-9">
     <script>
       $(function () {
-        $('#map').load('/map?<%= {form: true, global: true, accounts: true, groups: true, organisations: true}.to_query %>')
+        $('#map').load('/map?<%= {form: true, global: true, accounts: true, groups: true}.to_query %>')
       });
     </script>
     <style>
@@ -24,18 +24,10 @@
     <% if current_account and current_account.coordinates %>
       <h3>People <span class="badge badge-primary"><%=current_account.nearby_accounts.count%></span></h3>      
 
-      <h3>Organisations <span class="badge badge-primary"><%=current_account.nearby_organisations.count%></span></h3>
-      <% current_account.nearby_organisations.each { |object| %>
-        <div class="mb-1"><%=partial :"maps/organisation", :object => object %></div>
-      <% } %>
-
       <h3>Groups <span class="badge badge-primary"><%=current_account.nearby_groups.count%></span></h3>
       <% current_account.nearby_groups.each { |object| %>
         <div class="mb-1"><%=partial :"maps/group", :object => object %></div>
       <% } %>          
-
-      <p>List an <a href="/organisations/new">organisation</a> or <a href="/groups/new">create a group</a> 
-        and people nearby will be notified.</p>
 
     <% else %>
 
@@ -50,9 +42,9 @@
       </script>
 
       <% if current_account %>
-        Enter your location to view people, organisations and groups near you:
+        Enter your location to view people and groups near you:
       <% else %>
-        Sign up to view people, organisations and groups near you:
+        Sign up to view people and groups near you:
       <% end %>
       <% form_for @account, @account.new_record? ? '/sign_up' : '/me/edit', :id => 'me-form', :class => 'mt-1 form-horizontal', :multipart => true do |f| %>
         <%= hidden_field_tag :return, :value => true %>
